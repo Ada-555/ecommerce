@@ -93,7 +93,7 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('profiles/', include('profiles.urls')),
     path('avatar/', include('avatar.urls')),
-    # path('newsletter/', include('newsletter.urls')),
+    path('newsletter/', include('newsletter.urls')),
     # path('', include('comparison.urls')),
     # path('', include('subscriptions.urls')),
     # Affiliate URLs disabled until app is implemented
