@@ -6,6 +6,8 @@ from django.contrib import messages
 from django.conf import settings
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
+from django.views.decorators.cache import never_cache
+from django_ratelimit.decorators import ratelimit
 
 from .forms import OrderForm
 from .models import Order, OrderLineItem
@@ -20,6 +22,7 @@ import json
 
 
 @require_POST
+@ratelimit(key='post:client_secret', rate='10/m', method='POST', block=True)
 def cache_checkout_data(request):
     """ Cache checkout """
     try:
@@ -38,6 +41,9 @@ def cache_checkout_data(request):
         return HttpResponse(content=e, status=400)
 
 
+@never_cache
+@ratelimit(key='post:full_name', rate='5/m', method='POST', block=True)
+@ratelimit(key='ip', rate='30/m', method='POST', block=True)
 def checkout(request):
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
     stripe_secret_key = settings.STRIPE_SECRET_KEY

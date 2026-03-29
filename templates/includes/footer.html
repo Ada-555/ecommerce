@@ -89,7 +89,15 @@
             <!-- Copyright -->
             <div class="col-md-4 text-center text-md-end">
                 <p class="text-silver small mb-0">
-                    &copy; 2026 <span class="text-white fw-bold">Orderimo</span> &mdash; All Rights Reserved
+                    {% with request.session.active_store|default:'orderimo' as active_store %}
+                {% if active_store == 'petshop-ie' %}
+                &copy; 2026 <span class="text-white fw-bold">PetShop Ireland</span> — Delivering to Ireland 🇮🇪
+                {% elif active_store == 'digitalhub' %}
+                &copy; 2026 <span class="text-white fw-bold">DigitalHub</span> — Instant Digital Delivery
+                {% else %}
+                &copy; 2026 <span class="text-white fw-bold">Orderimo</span> — All Rights Reserved
+                {% endif %}
+                {% endwith %}
                 </p>
             </div>
         </div>

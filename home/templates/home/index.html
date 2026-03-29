@@ -3,27 +3,102 @@
 
 {% block extra_title %}| Home{% endblock %}
 
-{% block page_header %}
-<div class="container header-container">
-    <div class="row">
-        <div class="col"></div>
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb" class="breadcrumbs-nav w-100">
+    <div class="container">
+        <ol class="breadcrumb mb-0 small">
+            <li class="breadcrumb-item active text-white" aria-current="page">Home</li>
+        </ol>
     </div>
-</div>
+</nav>
 {% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
+<!-- Hero Section — Store-specific banners -->
 <section class="hero-section position-relative overflow-hidden">
+
+    {% with request.session.active_store|default:'orderimo' as active_store %}
+
+    {# PETSHOP IRELAND HERO #}
+    {% if active_store == 'petshop-ie' %}
+    <div class="hero-banner-petshop py-5">
+        <div class="container py-5">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <span class="badge text-white px-3 py-2 rounded-pill" style="background:#FFA500;">
+                            <i class="fa-solid fa-paw me-1"></i> 🇮🇪 Irish-Owned & Operated
+                        </span>
+                    </div>
+                    <h1 class="display-4 brand-font text-white mb-3">
+                        <strong>PetShop Ireland</strong>
+                    </h1>
+                    <p class="lead mb-4" style="color:#e8f5e9;">
+                        Ireland's Best Pet Supplies — Delivered Fast! Everything your furry, feathery, and fishy friends need.
+                    </p>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="{% url 'products' %}" class="btn btn-lg text-white rounded-pill px-4" style="background:#FFA500;">
+                            <i class="fa-solid fa-bag-shopping me-2"></i>Shop Pet Supplies
+                        </a>
+                        <a href="#stores" class="btn btn-lg btn-outline-light rounded-pill px-4">
+                            <i class="fa-solid fa-paw me-2"></i>Browse Stores
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center mt-4 mt-lg-0">
+                    <div class="display-1 mb-3">🐾</div>
+                    <p class="text-white">Free delivery on orders over €{{ free_delivery_threshold }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# DIGITALHUB HERO #}
+    {% elif active_store == 'digitalhub' %}
+    <div class="hero-banner-digitalhub py-5">
+        <div class="container py-5">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <span class="badge text-white px-3 py-2 rounded-pill" style="background:#FF69B4;">
+                            <i class="fa-solid fa-bolt me-1"></i> Instant Digital Delivery
+                        </span>
+                    </div>
+                    <h1 class="display-4 brand-font text-white mb-3">
+                        <strong>DigitalHub</strong>
+                    </h1>
+                    <p class="lead mb-4" style="color:#f3e5f5;">
+                        E-books, Online Courses & Digital Downloads — Instant Access, Lifetime Updates.
+                    </p>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="{% url 'products' %}" class="btn btn-lg text-white rounded-pill px-4" style="background:#800080;">
+                            <i class="fa-solid fa-bag-shopping me-2"></i>Browse Digital Products
+                        </a>
+                        <a href="#stores" class="btn btn-lg btn-outline-light rounded-pill px-4">
+                            <i class="fa-solid fa-store me-2"></i>Browse Stores
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center mt-4 mt-lg-0">
+                    <div class="display-1 mb-3">💜</div>
+                    <p class="text-white">Instant download after purchase — no shipping required!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# DEFAULT ORDERIMO HERO #}
+    {% else %}
     <div class="container py-5">
         <div class="row align-items-center py-5">
             <div class="col-lg-6">
                 <div class="mb-3">
                     <span class="badge bg-purple text-white px-3 py-2 rounded-pill">
-                        <i class="fa-solid fa-store me-1"></i> One Platform. Three Stores.
+                        <i class="fa-solid fa-store me-1"></i> One Platform. Multiple Stores.
                     </span>
                 </div>
                 <h1 class="display-4 brand-font text-white mb-3 neon-text">
-                    Shop Smarter with <strong>Orderimo</strong>
+                    <strong>Orderimo</strong> — One Platform, Multiple Stores
                 </h1>
                 <p class="lead text-silver mb-4">
                     Discover curated products from three distinct brands — tech gadgets from Plurino, home essentials from HomeNest, and streetwear from StyleVault.
@@ -45,6 +120,9 @@
             </div>
         </div>
     </div>
+    {% endif %}
+
+    {% endwith %}
 </section>
 
 <!-- Trust Badges -->
@@ -52,19 +130,19 @@
     <div class="container">
         <div class="row text-center g-4">
             <div class="col-6 col-md-3">
-                <i class="fa-solid fa-shield-halved text-info fa-2x mb-2"></i>
+                <i class="fa-solid fa-shield-halved text-cyan fa-2x mb-2"></i>
                 <p class="small text-silver mb-0">Secure Checkout</p>
             </div>
             <div class="col-6 col-md-3">
-                <i class="fa-solid fa-truck-fast text-info fa-2x mb-2"></i>
+                <i class="fa-solid fa-truck-fast text-cyan fa-2x mb-2"></i>
                 <p class="small text-silver mb-0">Fast Delivery</p>
             </div>
             <div class="col-6 col-md-3">
-                <i class="fa-solid fa-rotate-left text-info fa-2x mb-2"></i>
-                <p class="small text-silver mb-0">Free Returns</p>
+                <i class="fa-solid fa-rotate-left text-cyan fa-2x mb-2"></i>
+                <p class="small text-silver mb-0">30-Day Returns</p>
             </div>
             <div class="col-6 col-md-3">
-                <i class="fa-solid fa-headset text-info fa-2x mb-2"></i>
+                <i class="fa-solid fa-headset text-cyan fa-2x mb-2"></i>
                 <p class="small text-silver mb-0">24/7 Support</p>
             </div>
         </div>
@@ -169,25 +247,43 @@
             {% for product in featured_products %}
             <div class="col-6 col-md-3">
                 <div class="card h-100 bg-dark text-white rounded-4 overflow-hidden product-card">
-                    {% if product.image %}
-                    <div class="position-relative overflow-hidden">
-                        <img src="{{ product.image.url }}" class="card-img-top product-card-img" alt="{{ product.name }}">
+                    <div class="position-relative">
+                        {% if product.image %}
+                        <a href="{% url 'product_detail' product.id %}">
+                            <img src="{{ product.image.url }}" class="card-img-top product-card-img"
+                                 alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+                        </a>
+                        {% else %}
+                        <div class="bg-secondary d-flex align-items-center justify-content-center" style="height:200px;">
+                            <i class="fa-solid fa-image text-white fa-3x"></i>
+                        </div>
+                        {% endif %}
+                        {% if product.new_arrival %}
+                        <span class="badge bg-success position-absolute top-0 end-0 m-2 rounded-pill px-2 py-1 small">
+                            <i class="fa-solid fa-sparkles me-1"></i>New
+                        </span>
+                        {% elif product.featured %}
+                        <span class="badge bg-purple position-absolute top-0 end-0 m-2 rounded-pill px-2 py-1 small">
+                            <i class="fa-solid fa-star me-1"></i>Featured
+                        </span>
+                        {% endif %}
                     </div>
-                    {% else %}
-                    <div class="bg-secondary d-flex align-items-center justify-content-center" style="height:180px;">
-                        <i class="fa-solid fa-image text-white fa-3x"></i>
-                    </div>
-                    {% endif %}
                     <div class="card-body p-3">
-                        <p class="small text-muted mb-1">{{ product.category.friendly_name|default:product.category.name|default:"General" }}</p>
-                        <h6 class="card-title text-white mb-1">{{ product.name }}</h6>
+                        <p class="small text-muted mb-1">
+                            {{ product.category.friendly_name|default:product.category.name|default:"General" }}
+                        </p>
+                        <h6 class="card-title text-white mb-1 text-truncate">{{ product.name }}</h6>
+                        {% if product.brand %}
+                        <p class="small text-silver mb-1">{{ product.brand }}</p>
+                        {% endif %}
                         <div class="d-flex align-items-center gap-2 mb-2">
                             <span class="text-info fw-bold">€{{ product.price }}</span>
                             {% if product.rating %}
                             <small class="text-warning"><i class="fa-solid fa-star"></i> {{ product.rating|floatformat:1 }}</small>
                             {% endif %}
                         </div>
-                        <a href="{% url 'product_detail' product.id %}" class="btn btn-sm btn-outline-light rounded-pill w-100">
+                        <a href="{% url 'product_detail' product.id %}"
+                           class="btn btn-sm btn-outline-light rounded-pill w-100">
                             View
                         </a>
                     </div>
@@ -208,7 +304,7 @@
                 <h2 class="brand-font text-white neon-text mb-1">New Arrivals</h2>
                 <p class="text-silver small mb-0">Fresh finds, just landed</p>
             </div>
-            <a href="{% url 'products' %}?sort=new" class="btn btn-sm btn-outline-light rounded-pill">
+            <a href="{% url 'products' %}?sort=newest" class="btn btn-sm btn-outline-light rounded-pill">
                 View All <i class="fa-solid fa-arrow-right ms-1"></i>
             </a>
         </div>
@@ -216,30 +312,129 @@
             {% for product in new_products %}
             <div class="col-6 col-md-3">
                 <div class="card h-100 bg-dark text-white rounded-4 overflow-hidden product-card">
-                    {% if product.image %}
-                    <div class="position-relative overflow-hidden">
+                    <div class="position-relative">
+                        {% if product.image %}
+                        <a href="{% url 'product_detail' product.id %}">
+                            <img src="{{ product.image.url }}" class="card-img-top product-card-img"
+                                 alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+                        </a>
+                        {% else %}
+                        <div class="bg-secondary d-flex align-items-center justify-content-center" style="height:200px;">
+                            <i class="fa-solid fa-image text-white fa-3x"></i>
+                        </div>
+                        {% endif %}
                         <span class="badge bg-success position-absolute top-0 end-0 m-2 rounded-pill px-2 py-1 small">
                             <i class="fa-solid fa-sparkles me-1"></i>New
                         </span>
-                        <img src="{{ product.image.url }}" class="card-img-top product-card-img" alt="{{ product.name }}">
                     </div>
-                    {% else %}
-                    <div class="bg-secondary d-flex align-items-center justify-content-center position-relative" style="height:180px;">
-                        <span class="badge bg-success position-absolute top-0 end-0 m-2 rounded-pill px-2 py-1 small">New</span>
-                        <i class="fa-solid fa-image text-white fa-3x"></i>
-                    </div>
-                    {% endif %}
                     <div class="card-body p-3">
-                        <p class="small text-muted mb-1">{{ product.category.friendly_name|default:product.category.name|default:"General" }}</p>
-                        <h6 class="card-title text-white mb-1">{{ product.name }}</h6>
+                        <p class="small text-muted mb-1">
+                            {{ product.category.friendly_name|default:product.category.name|default:"General" }}
+                        </p>
+                        <h6 class="card-title text-white mb-1 text-truncate">{{ product.name }}</h6>
+                        {% if product.brand %}
+                        <p class="small text-silver mb-1">{{ product.brand }}</p>
+                        {% endif %}
                         <div class="d-flex align-items-center gap-2 mb-2">
                             <span class="text-info fw-bold">€{{ product.price }}</span>
                         </div>
-                        <a href="{% url 'product_detail' product.id %}" class="btn btn-sm btn-outline-light rounded-pill w-100">
+                        <a href="{% url 'product_detail' product.id %}"
+                           class="btn btn-sm btn-outline-light rounded-pill w-100">
                             View
                         </a>
                     </div>
                 </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Best Sellers -->
+{% if best_sellers %}
+<section class="py-5 bg-darker">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="brand-font text-white neon-text mb-1">Best Sellers</h2>
+                <p class="text-silver small mb-0">Most popular with our customers</p>
+            </div>
+            <a href="{% url 'products' %}?sort=popular" class="btn btn-sm btn-outline-light rounded-pill">
+                View All <i class="fa-solid fa-arrow-right ms-1"></i>
+            </a>
+        </div>
+        <div class="row g-3">
+            {% for product in best_sellers %}
+            <div class="col-6 col-md-3">
+                <div class="card h-100 bg-dark text-white rounded-4 overflow-hidden product-card">
+                    <div class="position-relative">
+                        {% if product.image %}
+                        <a href="{% url 'product_detail' product.id %}">
+                            <img src="{{ product.image.url }}" class="card-img-top product-card-img"
+                                 alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+                        </a>
+                        {% else %}
+                        <div class="bg-secondary d-flex align-items-center justify-content-center" style="height:200px;">
+                            <i class="fa-solid fa-image text-white fa-3x"></i>
+                        </div>
+                        {% endif %}
+                        <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-2 rounded-pill px-2 py-1 small">
+                            <i class="fa-solid fa-fire me-1"></i>Hot
+                        </span>
+                    </div>
+                    <div class="card-body p-3">
+                        <p class="small text-muted mb-1">
+                            {{ product.category.friendly_name|default:product.category.name|default:"General" }}
+                        </p>
+                        <h6 class="card-title text-white mb-1 text-truncate">{{ product.name }}</h6>
+                        {% if product.brand %}
+                        <p class="small text-silver mb-1">{{ product.brand }}</p>
+                        {% endif %}
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <span class="text-info fw-bold">€{{ product.price }}</span>
+                            {% if product.rating %}
+                            <small class="text-warning"><i class="fa-solid fa-star"></i> {{ product.rating|floatformat:1 }}</small>
+                            {% endif %}
+                        </div>
+                        <a href="{% url 'product_detail' product.id %}"
+                           class="btn btn-sm btn-outline-light rounded-pill w-100">
+                            View
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Shop by Category -->
+{% if categories %}
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-4">
+            <h2 class="brand-font text-white neon-text mb-1">Shop by Category</h2>
+            <p class="text-silver small mb-0">Browse our full range</p>
+        </div>
+        <div class="row g-3">
+            {% for category in categories %}
+            <div class="col-6 col-md-3">
+                <a href="{% url 'category_detail' category.name %}"
+                   class="text-decoration-none">
+                    <div class="card bg-dark text-white rounded-4 overflow-hidden category-card h-100">
+                        <div class="card-body p-3 text-center">
+                            <div class="mb-2">
+                                <i class="fa-solid fa-folder text-cyan fa-2x"></i>
+                            </div>
+                            <h6 class="text-white mb-1">{{ category.friendly_name|default:category.name }}</h6>
+                            <p class="text-muted small mb-0">
+                                <i class="fa-solid fa-arrow-right me-1"></i>Shop Now
+                            </p>
+                        </div>
+                    </div>
+                </a>
             </div>
             {% endfor %}
         </div>
@@ -254,10 +449,10 @@
             <div class="col-lg-6 text-center">
                 <h2 class="brand-font text-white neon-text mb-2">Stay in the Loop</h2>
                 <p class="text-silver mb-4">Get the latest products, exclusive deals, and store news delivered to your inbox.</p>
-                <form class="d-flex gap-2 justify-content-center" method="GET" action="#">
+                <form class="d-flex gap-2 justify-content-center flex-wrap" method="GET" action="#">
                     <label for="newsletter-email" class="visually-hidden">Email address</label>
-                    <input id="newsletter-email" type="email" name="email" class="form-control rounded-pill w-auto" 
-                           style="min-width: 250px;" placeholder="Enter your email" required>
+                    <input id="newsletter-email" type="email" name="email" class="form-control rounded-pill"
+                           style="min-width: 250px; max-width: 320px;" placeholder="Enter your email" required>
                     <button type="submit" class="btn btn-primary rounded-pill px-4">
                         Subscribe
                     </button>

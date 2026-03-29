@@ -76,12 +76,14 @@ INSTALLED_APPS = [
     'blog',
     'avatar',
     'accounts',
+    'stores',
     # other
     'crispy_forms',
     'crispy_bootstrap5',
     'storages',
     'ckeditor',  # for editing text input
     'rest_framework',
+    'django_ratelimit',
 ]
 
 MIDDLEWARE = [
@@ -269,8 +271,33 @@ else:
 SITE_LOGO = 'favicon/android-chrome-192x192.png'
 
 
-# Custom Jazzmin Settings
-JAZZMIN_SETTINGS = {
+# =============================================================================
+# SECURITY HARDENING (Phase 8)
+# =============================================================================
+
+# Clickjacking protection
+X_FRAME_OPTIONS = 'DENY'
+
+# XSS protection (legacy but still useful)
+SECURE_BROWSER_XSS_FILTER = True
+
+# Content type sniffing protection
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_CONTENT_TYPE_OPTIONS = 'nosniff'
+
+# Session security
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+
+# CSRF security
+CSRF_COOKIE_HTTPONLY = True
+
+# Account security (allauth)
+ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5
+ACCOUNT_RATE_LIMIT_LKUP_FMT = 'rate_limit:login:{request.META.HTTP_X_FORWARDED_FOR}'
+
+# Wagtail Admin customization
+WAGTAILADMIN_SETTINGS = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)
     "site_title": "Orderimo Admin",
 

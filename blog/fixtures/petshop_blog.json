@@ -1,0 +1,32 @@
+[
+  {
+    "model": "blog.blogpage",
+    "pk": 101,
+    "fields": {
+      "title": "Setting Up Your First Fish Tank: A Complete Beginner's Guide",
+      "content": "<p>Starting your first aquarium can feel overwhelming, but with the right guidance, you'll have a thriving underwater world in no time. Here's everything you need to know.</p><h3>Choose the Right Tank Size</h3><p>For beginners, we recommend a tank between 60-100 litres. Smaller tanks are actually harder to maintain because water parameters fluctuate more quickly. A larger volume of water is more stable and forgiving of small mistakes.</p><h3>Essential Equipment</h3><p>You'll need: a filter (essential for biological filtration), a heater (for tropical fish), a light timer (12 hours on/off), water conditioner, and a good-quality fish food. Don't forget to cycle your tank before adding fish!</p><h3>The Nitrogen Cycle</h3><p>This is the most important step. Cycling your tank builds up beneficial bacteria that convert toxic ammonia into nitrite, then into less harmful nitrate. This process takes 4-6 weeks. Use a liquid test kit to monitor parameters.</p><h3>Best Starter Fish</h3><p>Hardy species like Neon Tetras, Guppies, Platies, and Corydoras catfish are excellent first fish. Avoid sensitive species until your tank is fully cycled and matured.</p><h3>Feeding Tips</h3><p>Less is more! Feed small amounts once or twice daily. Uneaten food pollutes the water and can cause ammonia spikes. A good quality flake or pellet food forms the basis of their diet, supplemented with occasional frozen foods.</p>",
+      "image": "",
+      "created_at": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "blog.blogpage",
+    "pk": 102,
+    "fields": {
+      "title": "Best Dog Breeds for Irish Apartment Living",
+      "content": "<p>Living in a flat or apartment in Ireland doesn't mean you can't enjoy the companionship of a dog. Here are the breeds that adapt best to apartment life while still being active and affectionate.</p><h3>Considerations for Apartment Dogs</h3><p>Space is only one factor. Noise levels (barking), exercise needs, and adaptability to being alone for periods are equally important. Ireland's variable weather also means considering dogs that don't need extensive outdoor time in harsh conditions.</p><h3>Top 5 Breeds for Irish Flats</h3><p><strong>1. Cavalier King Charles Spaniel</strong> — Gentle, small, and adaptable. They love cuddles and short walks. Perfect for apartment life.</p><p><strong>2. French Bulldog</strong> — Compact, quiet (relatively), and low exercise needs. Great for city living. Just watch the heat in summer.</p><p><strong>3. Shih Tzu</strong> — Originally bred for Chinese royalty, these friendly dogs are perfect indoors. Daily grooming required.</p><p><strong>4. Basset Hound</strong> — Surprisingly good apartment dogs. They're lazy indoors but need daily walks. That earsome face is irresistible!</p><p><strong>5. Greyhound</strong> — Yes, retired racing greyhounds make excellent apartment dogs. They sleep 18 hours a day and are surprisingly low maintenance.</p><h3>What About Rescue Dogs?</h3><p>Adult rescue dogs are often the best choice for apartments — their energy levels and temperament are already known. Contact your local ISPCA centre to find your perfect match.</p>",
+      "image": "",
+      "created_at": "2026-02-08T14:30:00Z"
+    }
+  },
+  {
+    "model": "blog.blogpage",
+    "pk": 103,
+    "fields": {
+      "title": "Cat Care 101: Everything New Cat Owners Need to Know",
+      "content": "<p>Congratulations on your new feline companion! Cats make wonderful, relatively low-maintenance pets. Here's what you need to know to keep your cat happy and healthy.</p><h3>Nutrition</h3><p>Feed high-quality cat food appropriate for your cat's age. Kittens need kitten formula, adults need adult, and senior cats benefit from senior formulas. Always ensure fresh water is available. Many cats prefer running water — consider a cat water fountain.</p><h3>Litter Box Basics</h3><p>The golden rule: one litter box per cat, plus one extra. Place them in quiet, accessible locations away from food. Scoop daily and fully change the litter weekly. Clumping litter is generally easier to maintain.</p><h3>Enrichment & Play</h3><p>Cats need mental and physical stimulation. Provide scratching posts, climbing trees, and interactive toys. Play sessions with wand toys mimic hunting and strengthen your bond. Rotate toys to keep things interesting. A bored cat can develop behavioural problems.</p><h3>Health Check-Ups</h3><p>Annual vet check-ups are essential even for indoor cats. Keep vaccinations up to date and discuss flea/worming treatments with your vet. Spaying or neutering is important for health and behavioural reasons.</p><h3>Creating a Cat-Friendly Home</h3><p>Cats love vertical space — cat trees and shelves are great investments. Window perches let them watch the world safely. Provide hiding spots for stressed cats. Remove toxic plants like lilies from your home.</p>",
+      "image": "",
+      "created_at": "2026-03-01T09:15:00Z"
+    }
+  }
+]

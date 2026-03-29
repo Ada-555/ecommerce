@@ -1,0 +1,302 @@
+[
+  {
+    "model": "products.category",
+    "pk": 50,
+    "fields": {
+      "name": "ebooks",
+      "friendly_name": "E-books",
+      "description": "PDF guides, manuals, and e-books across all topics — business, lifestyle, health and more.",
+      "display_order": 1
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 51,
+    "fields": {
+      "name": "online_courses",
+      "friendly_name": "Online Courses",
+      "description": "Video-based online courses and access codes for professional and personal development.",
+      "display_order": 2
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 52,
+    "fields": {
+      "name": "software",
+      "friendly_name": "Software",
+      "description": "Digital tools, plugins, and software licences available for instant download.",
+      "display_order": 3
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 53,
+    "fields": {
+      "name": "templates",
+      "friendly_name": "Templates",
+      "description": "Ready-to-use templates for Canva, Excel, Notion, and more productivity tools.",
+      "display_order": 4
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 54,
+    "fields": {
+      "name": "stock_media",
+      "friendly_name": "Stock Media",
+      "description": "Stock photos, music tracks, and video clips for creative projects and commercial use.",
+      "display_order": 5
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 201,
+    "fields": {
+      "sku": "DH-EBOOK-001",
+      "name": "The Complete Freelancer's Blueprint 2026",
+      "description": "Your ultimate guide to building a sustainable freelance career. This comprehensive 200-page e-book covers client acquisition, pricing strategies, contract templates, tax tips, and systems to scale your income to €10K/month. Delivered as a PDF with free lifetime updates.",
+      "has_sizes": false,
+      "price": 29.99,
+      "category": 50,
+      "rating": 4.9,
+      "image_url": "",
+      "image": "",
+      "stock_quantity": 9999,
+      "low_stock_threshold": 0,
+      "brand": "DigitalHub Publishing",
+      "featured": true,
+      "new_arrival": false,
+      "best_seller": true,
+      "views_count": 1240,
+      "weight_kg": null,
+      "is_digital": true,
+      "download_file": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 202,
+    "fields": {
+      "sku": "DH-COURSE-001",
+      "name": "Full-Stack Web Development Bootcamp",
+      "description": "32 hours of video content covering HTML, CSS, JavaScript, React, Node.js, and MongoDB. Includes downloadable source code, 10 real-world projects, and a certificate of completion. Lifetime access with quarterly content updates. Access code sent immediately after purchase.",
+      "has_sizes": false,
+      "price": 99.99,
+      "category": 51,
+      "rating": 4.7,
+      "image_url": "",
+      "image": "",
+      "stock_quantity": 9999,
+      "low_stock_threshold": 0,
+      "brand": "CodeMaster Academy",
+      "featured": true,
+      "new_arrival": true,
+      "best_seller": false,
+      "views_count": 876,
+      "weight_kg": null,
+      "is_digital": true,
+      "download_file": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 203,
+    "fields": {
+      "sku": "DH-TEMPLATE-001",
+      "name": "Ultimate Notion Life OS — 2026 Edition",
+      "description": "Transform your productivity with this complete Notion workspace template. Includes habit tracker, project manager, financial dashboard, reading list, travel planner, and 50+ page templates. Works with free Notion account. Instructions and video walkthrough included.",
+      "has_sizes": false,
+      "price": 19.99,
+      "category": 53,
+      "rating": 4.8,
+      "image_url": "",
+      "image": "",
+      "stock_quantity": 9999,
+      "low_stock_threshold": 0,
+      "brand": "ProductivityHub",
+      "featured": true,
+      "new_arrival": false,
+      "best_seller": true,
+      "views_count": 2100,
+      "weight_kg": null,
+      "is_digital": true,
+      "download_file": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 204,
+    "fields": {
+      "sku": "DH-EBOOK-002",
+      "name": "Dropshipping Empire: Build Your €10K/Month Store",
+      "description": "The step-by-step guide to building a profitable dropshipping business from scratch. Learn niche research, supplier sourcing, store design, Facebook ads, and email marketing. Includes 15 pre-built store templates and 50 winning product ideas. PDF format with lifetime updates.",
+      "has_sizes": false,
+      "price": 39.99,
+      "category": 50,
+      "rating": 4.6,
+      "image_url": "",
+      "image": "",
+      "stock_quantity": 9999,
+      "low_stock_threshold": 0,
+      "brand": "DigitalHub Publishing",
+      "featured": false,
+      "new_arrival": false,
+      "best_seller": false,
+      "views_count": 654,
+      "weight_kg": null,
+      "is_digital": true,
+      "download_file": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 205,
+    "fields": {
+      "sku": "DH-SOFTWARE-001",
+      "name": "SEO PowerSuite Pro — Lifetime Licence",
+      "description": "Professional SEO toolkit with keyword research, site auditing, backlink analysis, and rank tracking. One-time purchase lifetime licence — no monthly fees. Works on Windows and Mac. Instant download with installation guide and 24/7 email support.",
+      "has_sizes": false,
+      "price": 79.99,
+      "category": 52,
+      "rating": 4.5,
+      "image_url": "",
+      "image": "",
+      "stock_quantity": 9999,
+      "low_stock_threshold": 0,
+      "brand": "SEO Tools Pro",
+      "featured": false,
+      "new_arrival": true,
+      "best_seller": false,
+      "views_count": 445,
+      "weight_kg": null,
+      "is_digital": true,
+      "download_file": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 206,
+    "fields": {
+      "sku": "DH-MEDIA-001",
+      "name": "Premium Stock Photo Bundle — 500 Images",
+      "description": "500 high-resolution (4K) stock photos covering business, technology, lifestyle, nature, and food. Commercial licence included — use in client projects, websites, and marketing materials. Delivered as a ZIP download with folders organised by category.",
+      "has_sizes": false,
+      "price": 24.99,
+      "category": 54,
+      "rating": 4.4,
+      "image_url": "",
+      "image": "",
+      "stock_quantity": 9999,
+      "low_stock_threshold": 0,
+      "brand": "PixelVault Media",
+      "featured": false,
+      "new_arrival": false,
+      "best_seller": false,
+      "views_count": 312,
+      "weight_kg": null,
+      "is_digital": true,
+      "download_file": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 207,
+    "fields": {
+      "sku": "DH-COURSE-002",
+      "name": "Social Media Marketing Masterclass",
+      "description": "Learn to build an engaged following and convert followers into customers across Instagram, TikTok, LinkedIn and YouTube. 18 hours of content covering content strategy, Reels, paid ads, and analytics. Includes swipe files, caption templates, and content calendar.",
+      "has_sizes": false,
+      "price": 59.99,
+      "category": 51,
+      "rating": 4.7,
+      "image_url": "",
+      "image": "",
+      "stock_quantity": 9999,
+      "low_stock_threshold": 0,
+      "brand": "Growth Academy",
+      "featured": true,
+      "new_arrival": false,
+      "best_seller": false,
+      "views_count": 789,
+      "weight_kg": null,
+      "is_digital": true,
+      "download_file": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 208,
+    "fields": {
+      "sku": "DH-TEMPLATE-002",
+      "name": "Canva Social Media Kit — 200 Templates",
+      "description": "200 professionally designed Canva templates for Instagram posts, stories, Reels covers, Facebook ads, LinkedIn banners, and YouTube thumbnails. Simply drag and drop your images and text. Commercial use licence included. New templates added monthly.",
+      "has_sizes": false,
+      "price": 34.99,
+      "category": 53,
+      "rating": 4.9,
+      "image_url": "",
+      "image": "",
+      "stock_quantity": 9999,
+      "low_stock_threshold": 0,
+      "brand": "DesignPro Templates",
+      "featured": true,
+      "new_arrival": false,
+      "best_seller": true,
+      "views_count": 1876,
+      "weight_kg": null,
+      "is_digital": true,
+      "download_file": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 209,
+    "fields": {
+      "sku": "DH-EBOOK-003",
+      "name": "The Irish Tax & Small Business Guide 2026",
+      "description": "Essential guide for Irish freelancers, sole traders, and small business owners. Covers tax returns, VAT registration, RCT compliance, expenses, and Revenue guidelines. Updated for 2026 tax year. Includes checklists and sample forms. PDF format.",
+      "has_sizes": false,
+      "price": 14.99,
+      "category": 50,
+      "rating": 4.8,
+      "image_url": "",
+      "image": "",
+      "stock_quantity": 9999,
+      "low_stock_threshold": 0,
+      "brand": "DigitalHub Publishing",
+      "featured": false,
+      "new_arrival": true,
+      "best_seller": false,
+      "views_count": 534,
+      "weight_kg": null,
+      "is_digital": true,
+      "download_file": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 210,
+    "fields": {
+      "sku": "DH-MUSIC-001",
+      "name": "Royalty-Free Music Pack — 100 Tracks",
+      "description": "100 royalty-free music tracks for YouTube, podcasts, videos, and commercial projects. Genres include ambient, upbeat, corporate, cinematic and acoustic. Licence covers YouTube, social media, and client projects. No attribution required. Delivered as MP3 + WAV ZIP.",
+      "has_sizes": false,
+      "price": 19.99,
+      "category": 54,
+      "rating": 4.5,
+      "image_url": "",
+      "image": "",
+      "stock_quantity": 9999,
+      "low_stock_threshold": 0,
+      "brand": "SoundScape Studios",
+      "featured": false,
+      "new_arrival": false,
+      "best_seller": false,
+      "views_count": 278,
+      "weight_kg": null,
+      "is_digital": true,
+      "download_file": ""
+    }
+  }
+]

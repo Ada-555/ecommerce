@@ -10,7 +10,7 @@ class ProductForm(forms.ModelForm):
 
     class Meta:
         model = Product
-        fields = '__all__'
+        exclude = ['stock_quantity', 'low_stock_threshold', 'views_count', 'sku', 'featured', 'new_arrival', 'best_seller', 'weight_kg']
 
     image = forms.ImageField(
         label='Image', required=False, widget=CustomClearableFileInput

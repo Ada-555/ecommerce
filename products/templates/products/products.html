@@ -3,6 +3,44 @@
 
 {% block extra_title %}| Products{% endblock %}
 
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb" class="breadcrumbs-nav w-100">
+    <div class="container">
+        <ol class="breadcrumb mb-0 small">
+            <li class="breadcrumb-item">
+                <a href="{% url 'home' %}" class="text-cyan text-decoration-none">
+                    <i class="fa-solid fa-house me-1"></i>Home
+                </a>
+            </li>
+            <li class="breadcrumb-item active text-white" aria-current="page">Products</li>
+        </ol>
+    </div>
+</nav>
+{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "{{ request.build_absolute_uri|slice:":-1" }}"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Products",
+            "item": "{{ request.build_absolute_uri }}"
+        }
+    ]
+}
+</script>
+{% endblock %}
+
 {% block page_header %}
 <div class="page-header w-100">
     <div class="container">
@@ -23,6 +61,34 @@
 {% block content %}
 <div class="container mb-5">
 
+    <!-- No results with suggestions -->
+    {% if page_obj and page_obj.paginator.count == 0 and search_term %}
+    <div class="row mb-4">
+        <div class="col text-center">
+            <div class="alert alert-info rounded-pill py-3 px-4 d-inline-flex align-items-center gap-2">
+                <i class="fa-solid fa-circle-question text-cyan"></i>
+                <span>No results for "<strong>{{ search_term }}</strong>"</span>
+            </div>
+            {% if suggested_query %}
+            <p class="text-silver mt-2 mb-1">
+                Did you mean:
+                <a href="{% url 'products' %}?q={{ suggested_query }}" class="text-cyan">
+                    "{{ suggested_query }}"
+                </a>?
+            </p>
+            {% endif %}
+            {% if suggested_category %}
+            <p class="text-silver mb-0">
+                Try browsing
+                <a href="{% url 'category_detail' suggested_category.name %}" class="text-cyan">
+                    {{ suggested_category.friendly_name|default:suggested_category.name }}
+                </a>
+            </p>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
     <!-- Category chips -->
     {% if current_categories %}
     <div class="row mb-3">
@@ -37,6 +103,19 @@
                 <i class="fa-solid fa-xmark me-1"></i>Clear
             </a>
         </div>
+    </div>
+    {% endif %}
+
+    <!-- Category match banner -->
+    {% if search_term and suggested_category %}
+    <div class="alert alert-secondary rounded-3 py-2 px-3 mb-3 text-center">
+        <i class="fa-solid fa-folder text-cyan me-1"></i>
+        Browse
+        <a href="{% url 'category_detail' suggested_category.name %}"
+           class="text-cyan fw-bold text-decoration-none">
+            {{ suggested_category.friendly_name|default:suggested_category.name }}
+        </a>
+        for "{{ search_term }}"
     </div>
     {% endif %}
 
@@ -71,44 +150,63 @@
         {% for product in page_obj %}
         {% include "products/delete_page_modal.html" %}
         <div class="col-6 col-md-4 col-lg-3">
-            <div class="card product-card h-100 border-0">
+            <div class="card product-card h-100 border-0 rounded-4 overflow-hidden">
                 <!-- Image -->
                 <div class="product-card-img-wrapper position-relative">
                     <a href="{% url 'product_detail' product.id %}" class="d-block">
                         {% if product.image %}
                         <img class="card-img-top product-card-img" src="{{ product.image.url }}"
-                            alt="{{ product.name }}" loading="lazy">
+                            alt="{{ product.name }}" loading="lazy"
+                            style="height: 200px; object-fit: cover;">
                         {% else %}
-                        <img class="card-img-top product-card-img" src="{{ MEDIA_URL }}noimage.png"
-                            alt="{{ product.name }}" loading="lazy">
+                        <div class="bg-secondary d-flex align-items-center justify-content-center"
+                             style="height: 200px;">
+                            <i class="fa-solid fa-image text-white fa-3x"></i>
+                        </div>
                         {% endif %}
                     </a>
-                    {% if product.category %}
-                    <span class="position-absolute badge bg-dark top-0 start-0 m-2"
-                        style="font-size: 0.65rem;">
-                        <i class="fa-solid fa-tag me-1"></i>{{ product.category.friendly_name|default:product.category.name }}
-                    </span>
-                    {% endif %}
-                    <!-- Stock Badge -->
+
+                    <!-- Stock Badge — green/yellow/red dot + label -->
                     {% with product.stock_status as status %}
                     {% if status == "Out of Stock" %}
-                    <span class="position-absolute badge bg-danger top-0 end-0 m-2" style="font-size: 0.6rem;">
-                        <i class="fa-solid fa-circle-exclamation me-1"></i>Out of Stock
+                    <span class="position-absolute badge bg-danger top-0 end-0 m-2 rounded-pill px-2 py-1"
+                          style="font-size: 0.6rem;">
+                        <i class="fa-solid fa-circle me-1" style="font-size: 0.4rem; vertical-align: middle;"></i>
+                        Out of Stock
                     </span>
                     {% elif status == "Low Stock" %}
-                    <span class="position-absolute badge bg-warning text-dark top-0 end-0 m-2" style="font-size: 0.6rem;">
-                        <i class="fa-solid fa-circle-exclamation me-1"></i>Low Stock
+                    <span class="position-absolute badge bg-warning text-dark top-0 end-0 m-2 rounded-pill px-2 py-1"
+                          style="font-size: 0.6rem;">
+                        <i class="fa-solid fa-circle me-1" style="font-size: 0.4rem; vertical-align: middle;"></i>
+                        Low Stock
+                    </span>
+                    {% else %}
+                    <span class="position-absolute badge bg-success top-0 end-0 m-2 rounded-pill px-2 py-1"
+                          style="font-size: 0.6rem;">
+                        <i class="fa-solid fa-circle me-1" style="font-size: 0.4rem; vertical-align: middle;"></i>
+                        In Stock
                     </span>
                     {% endif %}
                     {% endwith %}
+
                     <!-- Featured badge -->
                     {% if product.featured %}
-                    <span class="position-absolute badge bg-purple top-0 end-0 me-2 mt-2" style="top: 24px; font-size: 0.6rem;">
+                    <span class="position-absolute badge bg-purple top-0 start-0 m-2 rounded-pill px-2 py-1"
+                          style="font-size: 0.6rem; top: 24px;">
                         <i class="fa-solid fa-star me-1"></i>Featured
                     </span>
                     {% endif %}
-                    <!-- Quick Add overlay -->
-                    {% if product.is_in_stock %}
+
+                    <!-- New Arrival badge -->
+                    {% if product.new_arrival %}
+                    <span class="position-absolute badge bg-success top-0 start-0 m-2 rounded-pill px-2 py-1"
+                          style="font-size: 0.6rem; {% if product.featured %}top: 48px;{% else %}top: 24px;{% endif %}">
+                        <i class="fa-solid fa-sparkles me-1"></i>New
+                    </span>
+                    {% endif %}
+
+                    <!-- Quick Add overlay (if no sizes and in stock) -->
+                    {% if not product.has_sizes and product.is_in_stock %}
                     <div class="quick-add-overlay position-absolute bottom-0 start-0 end-0 p-2 text-center">
                         <a href="{% url 'product_detail' product.id %}"
                             class="btn btn-sm btn-primary rounded-pill w-90">
@@ -117,23 +215,36 @@
                     </div>
                     {% endif %}
                 </div>
+
                 <!-- Body -->
-                <div class="card-body pb-2">
+                <div class="card-body pb-2 bg-darker">
+                    {% if product.brand %}
+                    <p class="text-muted small mb-1 text-truncate">{{ product.brand }}</p>
+                    {% endif %}
                     <a href="{% url 'product_detail' product.id %}" class="text-decoration-none">
                         <h6 class="card-title text-white mb-1 text-truncate">{{ product.name }}</h6>
                     </a>
+                    <!-- Rating stars (gold) -->
                     {% if product.rating %}
-                    <small class="text-gold">
-                        <i class="fa-solid fa-star me-1"></i>{{ product.rating|floatformat:1 }}/5
-                    </small>
+                    <span class="text-gold small">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= product.rating|floatformat:0 %}
+                                <i class="fa-solid fa-star"></i>
+                            {% else %}
+                                <i class="fa-regular fa-star"></i>
+                            {% endif %}
+                        {% endfor %}
+                        <span class="text-muted ms-1">{{ product.rating|floatformat:1 }}/5</span>
+                    </span>
                     {% else %}
-                    <small class="text-muted">No rating</small>
+                    <span class="text-muted small">No rating yet</span>
                     {% endif %}
                 </div>
+
                 <!-- Footer -->
-                <div class="card-footer bg-transparent border-0 pt-0">
+                <div class="card-footer bg-darker border-0 pt-0">
                     <div class="d-flex justify-content-between align-items-center">
-                        <span class="fw-bold text-white fs-5">€{{ product.price }}</span>
+                        <span class="fw-bold text-cyan fs-5">€{{ product.price }}</span>
                         <div class="d-flex gap-1">
                             {% if request.user.is_superuser %}
                             <a href="{% url 'edit_product' product.id %}"
@@ -222,7 +333,12 @@
             <p class="text-muted">
                 {% if search_term %}No results for "<strong>{{ search_term }}</strong>"{% else %}Nothing here yet{% endif %}
             </p>
-            <a href="{% url 'products' %}" class="btn btn-purple mt-2">
+            {% if suggested_category %}
+            <a href="{% url 'category_detail' suggested_category.name %}" class="btn btn-purple mt-2 me-2">
+                <i class="fa-solid fa-folder me-2"></i>Browse {{ suggested_category.friendly_name|default:suggested_category.name }}
+            </a>
+            {% endif %}
+            <a href="{% url 'products' %}" class="btn btn-outline-light mt-2">
                 <i class="fa-solid fa-arrow-left me-2"></i>Browse All Products
             </a>
         </div>
@@ -266,12 +382,17 @@
 
     // Back to top button
     const btt = document.getElementById('back-to-top');
-    window.addEventListener('scroll', function () {
-        if (window.scrollY > 300) {
-            btt.style.display = 'block';
-        } else {
-            btt.style.display = 'none';
-        }
-    });
+    if (btt) {
+        window.addEventListener('scroll', function () {
+            if (window.scrollY > 300) {
+                btt.style.display = 'block';
+            } else {
+                btt.style.display = 'none';
+            }
+        });
+        btt.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
 </script>
 {% endblock %}

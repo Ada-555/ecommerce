@@ -8,6 +8,24 @@
 <meta name="robots" content="noindex,nofollow">
 {% endblock %}
 
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb" class="breadcrumbs-nav w-100">
+    <div class="container">
+        <ol class="breadcrumb mb-0 small">
+            <li class="breadcrumb-item">
+                <a href="{% url 'home' %}" class="text-cyan text-decoration-none">
+                    <i class="fa-solid fa-house me-1"></i>Home
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{% url 'view_bag' %}" class="text-cyan text-decoration-none">Bag</a>
+            </li>
+            <li class="breadcrumb-item active text-white" aria-current="page">Checkout</li>
+        </ol>
+    </div>
+</nav>
+{% endblock %}
+
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'checkout/css/checkout.css' %}">
 {% endblock %}
@@ -27,6 +45,67 @@
 {% endblock %}
 
 {% block content %}
+<!-- Progress Stepper -->
+<div class="container mb-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8">
+            <div class="d-flex align-items-center justify-content-between stepper-wrapper">
+                <!-- Step 1: Bag -->
+                <div class="stepper-item text-center flex-fill">
+                    <div class="stepper-circle completed">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                    </div>
+                    <p class="small mb-0 mt-1 text-silver">Bag</p>
+                </div>
+                <div class="stepper-line flex-grow-1"></div>
+                <!-- Step 2: Details -->
+                <div class="stepper-item text-center flex-fill">
+                    <div class="stepper-circle active">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <p class="small mb-0 mt-1 text-white fw-bold">Details</p>
+                </div>
+                <div class="stepper-line flex-grow-1"></div>
+                <!-- Step 3: Payment -->
+                <div class="stepper-item text-center flex-fill">
+                    <div class="stepper-circle">
+                        <i class="fa-solid fa-credit-card"></i>
+                    </div>
+                    <p class="small mb-0 mt-1 text-silver">Payment</p>
+                </div>
+                <div class="stepper-line flex-grow-1"></div>
+                <!-- Step 4: Done -->
+                <div class="stepper-item text-center flex-fill">
+                    <div class="stepper-circle">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <p class="small mb-0 mt-1 text-silver">Done</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Trust signals bar -->
+<div class="container mb-4">
+    <div class="d-flex flex-wrap gap-3 justify-content-center align-items-center">
+        <div class="d-flex align-items-center gap-1 text-silver small">
+            <i class="fa-solid fa-shield-halved text-cyan"></i>
+            <span>Secure Checkout</span>
+        </div>
+        <span class="text-muted">|</span>
+        <div class="d-flex align-items-center gap-1 text-silver small">
+            <i class="fa-solid fa-rotate-left text-cyan"></i>
+            <span>30-Day Returns</span>
+        </div>
+        <span class="text-muted">|</span>
+        <div class="d-flex align-items-center gap-1 text-silver small">
+            <i class="fa-solid fa-truck text-cyan"></i>
+            <span>Free delivery over €80</span>
+        </div>
+    </div>
+</div>
+
 <div class="container mb-5">
     <div class="row g-4">
 
@@ -126,9 +205,17 @@
             </div>
         </div>
 
-        <!-- Order Summary (right) -->
+        <!-- Order Summary (right — sticky sidebar on desktop) -->
         <div class="col-12 col-lg-5">
-            <div class="card product-card p-3">
+            <div class="card product-card p-3 sticky-lg-top" style="top: 80px;">
+                <!-- Secure badge -->
+                <div class="text-center mb-3">
+                    <span class="badge bg-success rounded-pill px-3 py-2">
+                        <i class="fa-solid fa-lock me-1"></i>
+                        Secure Checkout
+                    </span>
+                </div>
+
                 <h4 class="text-white mb-3">
                     <i class="fa-solid fa-receipt me-2 text-cyan"></i>Order Summary
                     <span class="badge bg-purple float-end">{{ product_count }} item{{ product_count|pluralize }}</span>
@@ -163,10 +250,21 @@
 
                 <hr class="custom-hr my-3">
 
-                <p class="text-muted small mb-0">
-                    <i class="fa-solid fa-shield-halved me-1 text-cyan"></i>
-                    Your payment is secured by Stripe. We never store your card details.
-                </p>
+                <!-- Trust signals -->
+                <div class="d-flex flex-column gap-2 mb-2">
+                    <div class="d-flex align-items-center gap-2 text-silver small">
+                        <i class="fa-solid fa-shield-halved text-cyan"></i>
+                        <span>Your payment is secured by Stripe</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 text-silver small">
+                        <i class="fa-solid fa-rotate-left text-cyan"></i>
+                        <span>30-day returns on all orders</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 text-silver small">
+                        <i class="fa-solid fa-truck text-cyan"></i>
+                        <span>Free delivery on orders over €80</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -212,7 +310,6 @@
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Processing...';
 
-        // Handle cache_checkout_data if needed (for custom fields)
         stripe.confirmCardPayment('{{ client_secret }}', {
             payment_method: {
                 card: card,

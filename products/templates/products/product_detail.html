@@ -3,25 +3,46 @@
 
 {% block extra_title %}| {{ product.name }}{% endblock %}
 
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb" class="breadcrumbs-nav w-100">
+    <div class="container">
+        <ol class="breadcrumb mb-0 small">
+            <li class="breadcrumb-item">
+                <a href="{% url 'home' %}" class="text-cyan text-decoration-none">
+                    <i class="fa-solid fa-house me-1"></i>Home
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{% url 'products' %}" class="text-cyan text-decoration-none">Products</a>
+            </li>
+            {% if product.category %}
+            <li class="breadcrumb-item">
+                <a href="{% url 'category_detail' product.category.name %}"
+                   class="text-cyan text-decoration-none">
+                    {{ product.category.friendly_name|default:product.category.name }}
+                </a>
+            </li>
+            {% endif %}
+            <li class="breadcrumb-item active text-white" aria-current="page">
+                {{ product.name|truncatechars:30 }}
+            </li>
+        </ol>
+    </div>
+</nav>
+{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{{ product_schema|safe }}
+</script>
+{% endblock %}
+
 {% block page_header %}
 <div class="page-header w-100">
     <div class="container">
         <div class="row">
             <div class="col text-center">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb justify-content-center mb-0">
-                        <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-cyan">Home</a></li>
-                        <li class="breadcrumb-item"><a href="{% url 'products' %}" class="text-cyan">Products</a></li>
-                        {% if product.category %}
-                        <li class="breadcrumb-item">
-                            <a href="{% url 'products' %}?category={{ product.category.name }}" class="text-cyan">
-                                {{ product.category.friendly_name|default:product.category.name }}
-                            </a>
-                        </li>
-                        {% endif %}
-                        <li class="breadcrumb-item active text-white" aria-current="page">{{ product.name|truncatechars:30 }}</li>
-                    </ol>
-                </nav>
+                <h1 class="display-6">{{ product.name|truncatechars:50 }}</h1>
             </div>
         </div>
     </div>
@@ -49,6 +70,7 @@
                 </div>
                 {% endif %}
             </div>
+            <!-- Rating stars -->
             {% if product.rating %}
             <div class="mt-3 text-center">
                 <span class="text-gold">
@@ -72,16 +94,21 @@
                 <h2 class="display-6 text-white mb-2">{{ product.name }}</h2>
                 <div class="d-flex align-items-center gap-3 mb-3 flex-wrap">
                     <span class="display-5 fw-bold text-cyan">€{{ product.price }}</span>
+                    {% if product.brand %}
+                    <span class="badge bg-secondary rounded-pill px-3 py-2">
+                        <i class="fa-solid fa-tag me-1"></i>{{ product.brand }}
+                    </span>
+                    {% endif %}
                     {% if product.category %}
-                    <a href="{% url 'products' %}?category={{ product.category.name }}"
+                    <a href="{% url 'category_detail' product.category.name %}"
                         class="badge badge-purple text-decoration-none align-self-center">
-                        <i class="fa-solid fa-tag me-1"></i>
+                        <i class="fa-solid fa-folder me-1"></i>
                         {{ product.category.friendly_name|default:product.category.name }}
                     </a>
                     {% endif %}
                 </div>
 
-                <!-- Stock Status -->
+                <!-- Stock Status — prominently displayed -->
                 <div class="mb-3">
                     {% with product.stock_status as status %}
                     {% if status == "In Stock" %}
@@ -90,7 +117,8 @@
                     </span>
                     {% elif status == "Low Stock" %}
                     <span class="badge bg-warning text-dark rounded-pill px-3 py-2">
-                        <i class="fa-solid fa-circle-exclamation me-1"></i>Low Stock — Only {{ product.stock_quantity }} left!
+                        <i class="fa-solid fa-circle-exclamation me-1"></i>
+                        Only {{ product.stock_quantity }} left!
                     </span>
                     {% else %}
                     <span class="badge bg-danger rounded-pill px-3 py-2">
@@ -98,6 +126,9 @@
                     </span>
                     {% endif %}
                     {% endwith %}
+                    {% if product.sku %}
+                    <span class="text-muted small ms-2">SKU: {{ product.sku }}</span>
+                    {% endif %}
                 </div>
 
                 <!-- Admin actions -->
@@ -113,40 +144,83 @@
                 </div>
                 {% endif %}
 
-                <!-- Description -->
-                <div class="mb-4">
-                    <h5 class="text-white mb-2">Description</h5>
-                    <p class="text-silver">{{ product.description|linebreaks }}</p>
-                </div>
-
                 <!-- Add to Bag form -->
                 <form action="{% url 'add_to_bag' product.id %}" method="POST" class="add-to-bag-form">
                     {% csrf_token %}
                     <input type="hidden" name="redirect_url" value="{{ request.path }}">
 
-                    <!-- Size selector -->
-                    {% if product.has_sizes %}
+                    <!-- SIZE buttons (if product has variants) -->
+                    {% if product.has_variants %}
+                    {% with product.variants.all as variants %}
+                    {% if variants %}
+                    {% regroup variants by size as size_list %}
+                    {% if size_list|length > 1 %}
                     <div class="mb-3">
-                        <label for="id_product_size" class="form-label text-white fw-bold">Size:</label>
-                        <select class="form-select w-auto" name="product_size" id="id_product_size" style="min-width: 120px;">
-                            <option value="xs">XS</option>
-                            <option value="s">S</option>
-                            <option value="m" selected>M</option>
-                            <option value="l">L</option>
-                            <option value="xl">XL</option>
-                            <option value="xxl">XXL</option>
-                        </select>
+                        <label class="form-label text-white fw-bold">Size:</label>
+                        <div class="d-flex flex-wrap gap-2" role="group" aria-label="Size selection">
+                            {% for size_group in size_list %}
+                            <input type="radio" class="btn-check" name="product_size"
+                                   id="size-{{ size_group.grouper|lower }}"
+                                   value="{{ size_group.grouper }}"
+                                   {% if forloop.first %}checked{% endif %}>
+                            <label class="btn btn-outline-light rounded-pill px-3"
+                                   for="size-{{ size_group.grouper|lower }}">
+                                {{ size_group.grouper|upper }}
+                            </label>
+                            {% endfor %}
+                        </div>
                     </div>
                     {% endif %}
 
-                    <!-- Quantity + Add to Bag -->
-                    <div class="row g-3 align-items-end">
+                    {% regroup variants by color as color_list %}
+                    {% if color_list|length > 1 %}
+                    <div class="mb-3">
+                        <label class="form-label text-white fw-bold">Color:</label>
+                        <div class="d-flex flex-wrap gap-2" role="group" aria-label="Color selection">
+                            {% for color_group in color_list %}
+                            <input type="radio" class="btn-check" name="product_color"
+                                   id="color-{{ color_group.grouper|slugify }}"
+                                   value="{{ color_group.grouper }}"
+                                   {% if forloop.first %}checked{% endif %}>
+                            <label class="btn btn-outline-light rounded-pill px-3"
+                                   for="color-{{ color_group.grouper|slugify }}">
+                                {{ color_group.grouper }}
+                            </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endif %}
+                    {% endwith %}
+                    {% elif product.has_sizes %}
+                    <!-- Fallback: basic size selector -->
+                    <div class="mb-3">
+                        <label class="form-label text-white fw-bold">Size:</label>
+                        <div class="d-flex flex-wrap gap-2" role="group" aria-label="Size selection">
+                            <input type="radio" class="btn-check" name="product_size" id="size-xs" value="xs">
+                            <label class="btn btn-outline-light rounded-pill px-3" for="size-xs">XS</label>
+                            <input type="radio" class="btn-check" name="product_size" id="size-s" value="s">
+                            <label class="btn btn-outline-light rounded-pill px-3" for="size-s">S</label>
+                            <input type="radio" class="btn-check" name="product_size" id="size-m" value="m" checked>
+                            <label class="btn btn-outline-light rounded-pill px-3" for="size-m">M</label>
+                            <input type="radio" class="btn-check" name="product_size" id="size-l" value="l">
+                            <label class="btn btn-outline-light rounded-pill px-3" for="size-l">L</label>
+                            <input type="radio" class="btn-check" name="product_size" id="size-xl" value="xl">
+                            <label class="btn btn-outline-light rounded-pill px-3" for="size-xl">XL</label>
+                            <input type="radio" class="btn-check" name="product_size" id="size-xxl" value="xxl">
+                            <label class="btn btn-outline-light rounded-pill px-3" for="size-xxl">XXL</label>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Quantity stepper -->
+                    <div class="row g-3 align-items-end mb-3">
                         <div class="col-auto">
                             <label for="id_qty_{{ product.id }}" class="form-label text-white fw-bold">Quantity:</label>
                             <div class="input-group" style="width: 160px;">
                                 <button class="btn btn-outline-light decrement-qty rounded-start-pill"
                                     data-item_id="{{ product.id }}" id="decrement-qty_{{ product.id }}"
-                                    aria-label="Decrease quantity">
+                                    aria-label="Decrease quantity" type="button">
                                     <i class="fa-solid fa-minus"></i>
                                 </button>
                                 <input class="form-control text-center qty_input" type="number" name="quantity"
@@ -154,16 +228,23 @@
                                     id="id_qty_{{ product.id }}" aria-label="Quantity">
                                 <button class="btn btn-outline-light increment-qty rounded-end-pill"
                                     data-item_id="{{ product.id }}" id="increment-qty_{{ product.id }}"
-                                    aria-label="Increase quantity">
+                                    aria-label="Increase quantity" type="button">
                                     <i class="fa-solid fa-plus"></i>
                                 </button>
                             </div>
                         </div>
-                        <div class="col">
-                            <button type="submit" class="btn btn-glow w-100 rounded-pill py-2 fw-bold">
-                                <i class="fa-solid fa-bag-shopping me-2"></i>Add to Bag
-                            </button>
-                        </div>
+                    </div>
+
+                    <!-- Add to Bag + Save for later -->
+                    <div class="d-flex gap-2 flex-wrap">
+                        <button type="submit" class="btn btn-glow rounded-pill py-2 px-4 fw-bold"
+                                {% if not product.is_in_stock %}disabled{% endif %}>
+                            <i class="fa-solid fa-bag-shopping me-2"></i>
+                            {% if product.is_in_stock %}Add to Bag{% else %}Out of Stock{% endif %}
+                        </button>
+                        <a href="#" class="btn btn-outline-light rounded-pill py-2 px-3" title="Save for later">
+                            <i class="fa-regular fa-heart"></i>
+                        </a>
                     </div>
                 </form>
 
@@ -176,55 +257,92 @@
                         <i class="fa-solid fa-bag-shopping me-2"></i>View Bag
                     </a>
                 </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Product Details Accordion -->
-    <div class="row mt-5">
-        <div class="col-12">
-            <h3 class="text-white mb-3">Product Details</h3>
-            <div class="accordion" id="productAccordion">
-                <div class="accordion-item bg-dark border-0 mb-2 rounded-4 overflow-hidden">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button bg-purple text-white collapsed" type="button"
-                            data-bs-toggle="collapse" data-bs-target="#descAccordion">
-                            <i class="fa-solid fa-align-left me-2"></i>Description
-                        </button>
-                    </h2>
-                    <div id="descAccordion" class="accordion-collapse collapse" data-bs-parent="#productAccordion">
-                        <div class="accordion-body text-silver">
-                            {{ product.description|linebreaks }}
+                <!-- Product Details Accordion -->
+                <div class="mt-4">
+                    <div class="accordion" id="product-accordion">
+                        <!-- Description -->
+                        <div class="accordion-item bg-darker border-0 mb-2 rounded-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button bg-darker text-white collapsed"
+                                        type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#desc-collapse"
+                                        aria-expanded="false">
+                                    <i class="fa-solid fa-align-left me-2 text-cyan"></i>
+                                    Description
+                                </button>
+                            </h2>
+                            <div id="desc-collapse" class="accordion-collapse collapse"
+                                 data-bs-parent="#product-accordion">
+                                <div class="accordion-body text-silver">
+                                    {{ product.description|linebreaks }}
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="accordion-item bg-dark border-0 mb-2 rounded-4 overflow-hidden">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button bg-purple text-white collapsed" type="button"
-                            data-bs-toggle="collapse" data-bs-target="#shippingAccordion">
-                            <i class="fa-solid fa-truck me-2"></i>Shipping & Delivery
-                        </button>
-                    </h2>
-                    <div id="shippingAccordion" class="accordion-collapse collapse" data-bs-parent="#productAccordion">
-                        <div class="accordion-body text-silver">
-                            <p class="mb-1"><i class="fa-solid fa-truck-fast text-cyan me-2"></i>Standard delivery: 3-5 business days</p>
-                            <p class="mb-1"><i class="fa-solid fa-box text-cyan me-2"></i>Express delivery: 1-2 business days</p>
-                            <p class="mb-0"><i class="fa-solid fa-gift text-cyan me-2"></i>Free delivery on orders over €{{ free_delivery_threshold }}</p>
+                        <!-- Shipping & Delivery -->
+                        <div class="accordion-item bg-darker border-0 mb-2 rounded-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button bg-darker text-white collapsed"
+                                        type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#shipping-collapse"
+                                        aria-expanded="false">
+                                    <i class="fa-solid fa-truck me-2 text-cyan"></i>
+                                    Shipping & Delivery
+                                </button>
+                            </h2>
+                            <div id="shipping-collapse" class="accordion-collapse collapse"
+                                 data-bs-parent="#product-accordion">
+                                <div class="accordion-body text-silver">
+                                    <ul class="mb-0 ps-3">
+                                        <li>Free delivery on orders over €{{ free_delivery_threshold }}</li>
+                                        <li>Standard delivery: 3-5 business days</li>
+                                        <li>Express delivery available at checkout</li>
+                                        <li>Track your order in real-time</li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="accordion-item bg-dark border-0 mb-2 rounded-4 overflow-hidden">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button bg-purple text-white collapsed" type="button"
-                            data-bs-toggle="collapse" data-bs-target="#returnsAccordion">
-                            <i class="fa-solid fa-rotate-left me-2"></i>Returns Policy
-                        </button>
-                    </h2>
-                    <div id="returnsAccordion" class="accordion-collapse collapse" data-bs-parent="#productAccordion">
-                        <div class="accordion-body text-silver">
-                            <p class="mb-1"><i class="fa-solid fa-check text-success me-2"></i>30-day return policy</p>
-                            <p class="mb-1"><i class="fa-solid fa-box-open text-success me-2"></i>Items must be in original condition</p>
-                            <p class="mb-0"><i class="fa-solid fa-euro-sign text-success me-2"></i>Full refund to original payment method</p>
+                        <!-- Returns Policy -->
+                        <div class="accordion-item bg-darker border-0 mb-2 rounded-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button bg-darker text-white collapsed"
+                                        type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#returns-collapse"
+                                        aria-expanded="false">
+                                    <i class="fa-solid fa-rotate-left me-2 text-cyan"></i>
+                                    Returns Policy
+                                </button>
+                            </h2>
+                            <div id="returns-collapse" class="accordion-collapse collapse"
+                                 data-bs-parent="#product-accordion">
+                                <div class="accordion-body text-silver">
+                                    <p class="mb-0">We accept returns within 30 days of purchase.
+                                    Items must be unused and in original packaging.
+                                    Contact our support team to initiate a return.
+                                    Refunds are processed within 5-7 business days.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- FAQ -->
+                        <div class="accordion-item bg-darker border-0 rounded-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button bg-darker text-white collapsed"
+                                        type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#faq-collapse"
+                                        aria-expanded="false">
+                                    <i class="fa-solid fa-circle-question me-2 text-cyan"></i>
+                                    FAQ
+                                </button>
+                            </h2>
+                            <div id="faq-collapse" class="accordion-collapse collapse"
+                                 data-bs-parent="#product-accordion">
+                                <div class="accordion-body text-silver">
+                                    <p class="mb-1"><strong>Q: Is this product covered by a warranty?</strong></p>
+                                    <p class="mb-2">A: Yes, all products come with a standard 12-month manufacturer warranty.</p>
+                                    <p class="mb-1"><strong>Q: Can I order in bulk?</strong></p>
+                                    <p class="mb-0">A: Yes, contact us for bulk pricing on orders over 10 units.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -236,30 +354,90 @@
     {% if related_products %}
     <div class="row mt-5">
         <div class="col-12">
-            <h3 class="text-white mb-3">
-                <i class="fa-solid fa-rotate-right me-2"></i>You May Also Like
+            <h3 class="text-white mb-4">
+                <i class="fa-solid fa-up-down-left-right text-cyan me-2"></i>
+                You May Also Like
             </h3>
-            <div class="row g-3">
-                {% for rp in related_products %}
-                <div class="col-6 col-md-3">
-                    <div class="card product-card h-100 border-0">
-                        <div class="product-card-img-wrapper position-relative">
-                            <a href="{% url 'product_detail' rp.id %}" class="d-block">
-                                {% if rp.image %}
-                                <img src="{{ rp.image.url }}" class="card-img-top product-card-img" alt="{{ rp.name }}">
-                                {% else %}
-                                <img src="{{ MEDIA_URL }}noimage.png" class="card-img-top product-card-img" alt="{{ rp.name }}">
-                                {% endif %}
-                            </a>
-                        </div>
-                        <div class="card-body p-2">
-                            <h6 class="text-white small mb-1 text-truncate">{{ rp.name }}</h6>
+        </div>
+        <div class="row g-3">
+            {% for rp in related_products %}
+            <div class="col-6 col-md-3">
+                <div class="card product-card h-100 border-0 rounded-4 overflow-hidden bg-darker">
+                    <div class="position-relative">
+                        <a href="{% url 'product_detail' rp.id %}" class="d-block">
+                            {% if rp.image %}
+                            <img src="{{ rp.image.url }}" class="card-img-top"
+                                 alt="{{ rp.name }}"
+                                 style="height: 160px; object-fit: cover;">
+                            {% else %}
+                            <div class="bg-secondary d-flex align-items-center justify-content-center"
+                                 style="height: 160px;">
+                                <i class="fa-solid fa-image text-white fa-2x"></i>
+                            </div>
+                            {% endif %}
+                        </a>
+                        {% with rp.stock_status as status %}
+                        {% if status == "Out of Stock" %}
+                        <span class="position-absolute badge bg-danger top-0 end-0 m-1 rounded-pill px-1 py-0 small">Out of Stock</span>
+                        {% elif status == "Low Stock" %}
+                        <span class="position-absolute badge bg-warning text-dark top-0 end-0 m-1 rounded-pill px-1 py-0 small">Low Stock</span>
+                        {% endif %}
+                        {% endwith %}
+                    </div>
+                    <div class="card-body p-2">
+                        <p class="text-white small fw-bold mb-1 text-truncate">{{ rp.name }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
                             <span class="text-cyan fw-bold">€{{ rp.price }}</span>
+                            {% if rp.rating %}
+                            <span class="text-gold small">
+                                <i class="fa-solid fa-star"></i> {{ rp.rating|floatformat:1 }}
+                            </span>
+                            {% endif %}
                         </div>
+                        <a href="{% url 'product_detail' rp.id %}"
+                           class="btn btn-sm btn-purple rounded-pill w-100 mt-2">
+                            View
+                        </a>
                     </div>
                 </div>
-                {% endfor %}
             </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Recently Viewed -->
+    {% if recently_viewed %}
+    <div class="row mt-5">
+        <div class="col-12">
+            <h3 class="text-white mb-4">
+                <i class="fa-solid fa-clock-rotate-left text-cyan me-2"></i>
+                Recently Viewed
+            </h3>
+        </div>
+        <div class="row g-3">
+            {% for rp in recently_viewed %}
+            <div class="col-6 col-md-3 col-lg-2">
+                <div class="card product-card h-100 border-0 rounded-4 overflow-hidden bg-darker">
+                    <a href="{% url 'product_detail' rp.id %}" class="d-block">
+                        {% if rp.image %}
+                        <img src="{{ rp.image.url }}" class="card-img-top"
+                             alt="{{ rp.name }}"
+                             style="height: 120px; object-fit: cover;">
+                        {% else %}
+                        <div class="bg-secondary d-flex align-items-center justify-content-center"
+                             style="height: 120px;">
+                            <i class="fa-solid fa-image text-white fa-2x"></i>
+                        </div>
+                        {% endif %}
+                    </a>
+                    <div class="card-body p-2">
+                        <p class="text-white small fw-bold mb-1 text-truncate">{{ rp.name }}</p>
+                        <span class="text-cyan fw-bold">€{{ rp.price }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
         </div>
     </div>
     {% endif %}

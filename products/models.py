@@ -35,14 +35,17 @@ class Product(models.Model):
     image = models.ImageField(null=True, blank=True)
 
     # New stock fields
-    stock_quantity = models.IntegerField(default=0)
-    low_stock_threshold = models.IntegerField(default=5)
+    stock_quantity = models.IntegerField(default=0, blank=True)
+    low_stock_threshold = models.IntegerField(default=5, blank=True)
     brand = models.CharField(max_length=100, blank=True, default='')
     featured = models.BooleanField(default=False)
     new_arrival = models.BooleanField(default=False)
     best_seller = models.BooleanField(default=False)
-    views_count = models.IntegerField(default=0)
+    views_count = models.IntegerField(default=0, blank=True)
     weight_kg = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    # Digital product fields
+    is_digital = models.BooleanField(default=False)
+    download_file = models.FileField(upload_to='downloads/', blank=True, null=True)
 
     def __str__(self):
         return self.name

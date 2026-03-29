@@ -64,3 +64,50 @@ select option[value=""] {
     margin: 0;
     height: 100%;
 }
+
+/* Checkout Stepper */
+.stepper-wrapper {
+    position: relative;
+}
+
+.stepper-item {
+    position: relative;
+    z-index: 1;
+}
+
+.stepper-circle {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    font-size: 1rem;
+    border: 2px solid rgba(0, 210, 255, 0.3);
+    background: rgba(0, 210, 255, 0.1);
+    color: rgba(0, 210, 255, 0.5);
+    transition: all 0.3s ease;
+}
+
+.stepper-circle.completed {
+    background: #00d2ff;
+    border-color: #00d2ff;
+    color: #000;
+}
+
+.stepper-circle.active {
+    background: rgba(0, 210, 255, 0.2);
+    border-color: #00d2ff;
+    color: #00d2ff;
+    box-shadow: 0 0 12px rgba(0, 210, 255, 0.4);
+}
+
+.stepper-line {
+    height: 2px;
+    background: rgba(128, 0, 128, 0.4);
+    margin: 0 4px;
+    margin-top: -22px;
+    position: relative;
+    top: 22px;
+}

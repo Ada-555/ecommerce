@@ -53,6 +53,8 @@
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <!-- Brand CSS -->
     <link rel="stylesheet" href="{% static 'css/brands.css' %}">
+    <!-- Store Themes CSS -->
+    <link rel="stylesheet" href="{% static 'css/store_themes.css' %}">
     {% endblock %}
 
     {% block extra_css %}{% endblock %}
@@ -77,7 +79,7 @@
     {% block extra_js %}{% endblock %}
 </head>
 
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100 store-{{ request.session.active_store|default:'orderimo' }}">
 
     <!-- Navigation -->
     <header class="container-fluid fixed-top top-nav-wrapper px-0">
@@ -184,6 +186,32 @@
                 Free delivery on orders over €{{ free_delivery_threshold }}
             </small>
         </div>
+
+        <!-- Store Switcher -->
+        <div class="store-switcher-bar py-1 text-center" style="background: rgba(0,0,0,0.3);">
+            <div class="container">
+                <div class="d-flex align-items-center justify-content-center gap-3 flex-wrap">
+                    <span class="text-silver small">Browse stores:</span>
+                    <div class="btn-group">
+                        <a href="{% url 'set_active_store' 'orderimo' %}"
+                           class="btn btn-sm {% if request.session.active_store == 'orderimo' or not request.session.active_store %}btn-cyan{% else %}btn-outline-cyan{% endif %} rounded-pill px-3"
+                           style="{% if request.session.active_store != 'orderimo' and request.session.active_store %}opacity:0.7{% endif %}">
+                            <i class="fa-solid fa-store me-1"></i>Orderimo
+                        </a>
+                        <a href="{% url 'set_active_store' 'petshop-ie' %}"
+                           class="btn btn-sm {% if request.session.active_store == 'petshop-ie' %}btn-success{% else %}btn-outline-success{% endif %} rounded-pill px-3"
+                           style="{% if request.session.active_store != 'petshop-ie' %}opacity:0.7{% endif %}">
+                            🐾 PetShop IE
+                        </a>
+                        <a href="{% url 'set_active_store' 'digitalhub' %}"
+                           class="btn btn-sm {% if request.session.active_store == 'digitalhub' %}btn-purple{% else %}btn-outline-light{% endif %} rounded-pill px-3"
+                           style="{% if request.session.active_store != 'digitalhub' %}opacity:0.7{% endif %}">
+                            💜 DigitalHub
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </header>
 
     <!-- Mobile Header (visible only on mobile) -->
@@ -206,7 +234,6 @@
     {% endblock %}
 
     <!-- Structured Data: BreadcrumbList -->
-    {% block structured_data %}
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -227,7 +254,6 @@
         ]
     }
     </script>
-    {% endblock %}
 
     <!-- Toast Messages -->
     {% if messages %}

@@ -1,0 +1,100 @@
+/* ============================================
+   Multi-Store Theme CSS
+   Each store has its own CSS custom properties
+   ============================================ */
+
+/* Default Orderimo - Cyan/Neon */
+.store-orderimo {
+  --brand-primary: #00FFFF;
+  --brand-secondary: #00CCCC;
+  --brand-accent: #FF00FF;
+  --brand-bg: #1a0033;
+}
+
+/* PetShop Ireland - Green/Earthy */
+.store-petshop-ie {
+  --brand-primary: #228B22;
+  --brand-secondary: #90EE90;
+  --brand-accent: #FFA500;
+  --brand-bg: #0a1f0a;
+}
+
+/* DigitalHub - Purple/Modern */
+.store-digitalhub {
+  --brand-primary: #800080;
+  --brand-secondary: #DA70D6;
+  --brand-accent: #FF69B4;
+  --brand-bg: #1a0026;
+}
+
+/* Store switcher nav */
+.store-switcher-dropdown .dropdown-menu {
+  border: 1px solid rgba(255,255,255,0.1);
+  background: #1a0033;
+}
+
+.store-switcher-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  color: #ccc;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.store-switcher-item:hover {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+}
+
+.store-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.store-dot-cyan { background: #00FFFF; }
+.store-dot-green { background: #228B22; }
+.store-dot-purple { background: #800080; }
+
+/* Theme-specific hero banners */
+.hero-banner-petshop {
+  background: linear-gradient(135deg, #228B22, #90EE90);
+  color: white;
+}
+
+.hero-banner-digitalhub {
+  background: linear-gradient(135deg, #800080, #DA70D6);
+  color: white;
+}
+
+/* Cyan button variants */
+.btn-cyan {
+  background-color: #00FFFF;
+  color: #000;
+  border-color: #00FFFF;
+}
+.btn-cyan:hover {
+  background-color: #00CCCC;
+  border-color: #00CCCC;
+  color: #000;
+}
+.btn-outline-cyan {
+  background-color: transparent;
+  color: #00FFFF;
+  border-color: #00FFFF;
+}
+.btn-outline-cyan:hover {
+  background-color: #00FFFF;
+  color: #000;
+}
+
+/* Purple button variant (additional) */
+.store-digitalhub .btn-purple,
+.btn-purple {
+  background-color: #800080;
+  color: #fff;
+  border-color: #800080;
+}

@@ -1,0 +1,312 @@
+[
+  {
+    "model": "products.category",
+    "pk": 40,
+    "fields": {
+      "name": "dogs",
+      "friendly_name": "Dogs",
+      "description": "Everything your canine companion needs — beds, collars, toys, food and treats.",
+      "display_order": 1
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 41,
+    "fields": {
+      "name": "cats",
+      "friendly_name": "Cats",
+      "description": "Cat supplies including litter, toys, food, beds and scratching posts.",
+      "display_order": 2
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 42,
+    "fields": {
+      "name": "fish_aquatics",
+      "friendly_name": "Fish & Aquatics",
+      "description": "Aquarium tanks, filters, fish food, plants and decor for your underwater world.",
+      "display_order": 3
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 43,
+    "fields": {
+      "name": "small_pets",
+      "friendly_name": "Small Pets",
+      "description": "Hutches, food, toys and accessories for rabbits, guinea pigs and hamsters.",
+      "display_order": 4
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 44,
+    "fields": {
+      "name": "birds",
+      "friendly_name": "Birds",
+      "description": "Bird cages, food, toys, perches and accessories for all feathered friends.",
+      "display_order": 5
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 45,
+    "fields": {
+      "name": "pet_food",
+      "friendly_name": "Pet Food",
+      "description": "Premium pet food brands including Pedigree, Royal Canin, Felix, and more.",
+      "display_order": 6
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 101,
+    "fields": {
+      "sku": "PSI-DOG-BED-001",
+      "name": "Orthopedic Memory Foam Dog Bed — Large",
+      "description": "Give your dog the comfort they deserve with this premium orthopedic memory foam dog bed. Features a removable, machine-washable cover, non-slip bottom, and supportive foam that relieves joint pressure. Perfect for older dogs or large breeds. Available in forest green.",
+      "has_sizes": false,
+      "price": 59.99,
+      "category": 40,
+      "rating": 4.6,
+      "image_url": "",
+      "image": "",
+      "stock_quantity": 25,
+      "low_stock_threshold": 5,
+      "brand": "PetComfort",
+      "featured": true,
+      "new_arrival": false,
+      "best_seller": true,
+      "views_count": 342,
+      "weight_kg": 3.2,
+      "is_digital": false,
+      "download_file": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 102,
+    "fields": {
+      "sku": "PSI-CAT-LITTER-001",
+      "name": "Clump & Seal Cat Litter — 12kg",
+      "description": "Multi-cat strength clumping litter with odor seal technology. Forms tight clumps for easy scooping and locks in odors for up to 14 days. Low-dust formula is gentle on paws and respiratory systems. Made from natural bentonite clay.",
+      "has_sizes": false,
+      "price": 24.99,
+      "category": 41,
+      "rating": 4.4,
+      "image_url": "",
+      "image": "",
+      "stock_quantity": 48,
+      "low_stock_threshold": 10,
+      "brand": "FreshPaws",
+      "featured": false,
+      "new_arrival": false,
+      "best_seller": true,
+      "views_count": 215,
+      "weight_kg": 12.5,
+      "is_digital": false,
+      "download_file": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 103,
+    "fields": {
+      "sku": "PSI-AQUA-TANK-001",
+      "name": "AquaLife 60L Curved Glass Aquarium",
+      "description": "A stunning 60-litre curved glass aquarium perfect for tropical fish. Features energy-efficient LED lighting with day/night cycle, quiet internal filter, and heater included. The modern curved front offers a panoramic view of your underwater world.",
+      "has_sizes": false,
+      "price": 89.99,
+      "category": 42,
+      "rating": 4.7,
+      "image_url": "",
+      "image": "",
+      "stock_quantity": 12,
+      "low_stock_threshold": 3,
+      "brand": "AquaLife",
+      "featured": true,
+      "new_arrival": true,
+      "best_seller": false,
+      "views_count": 178,
+      "weight_kg": 15.0,
+      "is_digital": false,
+      "download_file": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 104,
+    "fields": {
+      "sku": "PSI-DOG-TOY-001",
+      "name": "Interactive Puzzle Feeder Dog Toy",
+      "description": "Keep your dog mentally stimulated with this interactive puzzle feeder. Multiple difficulty levels challenge your dog to work for their treats. Durable, food-safe plastic is easy to clean. Reduces boredom and anxiety. Suitable for all breeds.",
+      "has_sizes": false,
+      "price": 19.99,
+      "category": 40,
+      "rating": 4.3,
+      "image_url": "",
+      "image": "",
+      "stock_quantity": 67,
+      "low_stock_threshold": 10,
+      "brand": "BrainPet",
+      "featured": false,
+      "new_arrival": false,
+      "best_seller": false,
+      "views_count": 95,
+      "weight_kg": 0.5,
+      "is_digital": false,
+      "download_file": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 105,
+    "fields": {
+      "sku": "PSI-BIRD-CAGE-001",
+      "name": "Deluxe Wrought Iron Bird Cage — Medium",
+      "description": "Elegant wrought iron cage perfect for canaries, finches, and lovebirds. Features a wrought iron finish, easy-clean droppings tray, two food/water cups, and swing-out perch. Bar spacing is safe for small birds. Assembly required.",
+      "has_sizes": false,
+      "price": 49.99,
+      "category": 44,
+      "rating": 4.5,
+      "image_url": "",
+      "image": "",
+      "stock_quantity": 18,
+      "low_stock_threshold": 5,
+      "brand": "FeatherSafe",
+      "featured": false,
+      "new_arrival": true,
+      "best_seller": false,
+      "views_count": 88,
+      "weight_kg": 4.8,
+      "is_digital": false,
+      "download_file": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 106,
+    "fields": {
+      "sku": "PSI-PETF-PED-001",
+      "name": "Pedigree Adult Dog Food — 10kg",
+      "description": "Complete nutrition for adult dogs. Made with real chicken and vegetables, this premium kibble supports healthy digestion, strong bones, and a shiny coat. Contains antioxidants for immune support and omega-6 for healthy skin and coat.",
+      "has_sizes": false,
+      "price": 34.99,
+      "category": 45,
+      "rating": 4.2,
+      "image_url": "",
+      "image": "",
+      "stock_quantity": 55,
+      "low_stock_threshold": 10,
+      "brand": "Pedigree",
+      "featured": true,
+      "new_arrival": false,
+      "best_seller": true,
+      "views_count": 402,
+      "weight_kg": 10.2,
+      "is_digital": false,
+      "download_file": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 107,
+    "fields": {
+      "sku": "PSI-CAT-TOY-001",
+      "name": "Cat Doodle Dongle Cat Toy — 5 Pack",
+      "description": "Five irresistible cat toys including feathers, balls, and crinkle mice. Lightweight and bouncy, these toys encourage active play and exercise. Each toy has a different texture and sound to keep your cat fascinated for hours.",
+      "has_sizes": false,
+      "price": 9.99,
+      "category": 41,
+      "rating": 4.1,
+      "image_url": "",
+      "image": "",
+      "stock_quantity": 120,
+      "low_stock_threshold": 20,
+      "brand": "PurrPlay",
+      "featured": false,
+      "new_arrival": false,
+      "best_seller": false,
+      "views_count": 67,
+      "weight_kg": 0.2,
+      "is_digital": false,
+      "download_file": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 108,
+    "fields": {
+      "sku": "PSI-HAMSTER-HUT-001",
+      "name": "Multi-Level Wooden Hamster Hutch",
+      "description": "A spacious, multi-level wooden hamster cage with connecting ramps, exercise wheel, water bottle, and hideout house. Made from natural, untreated wood with safe, non-toxic finishes. Easy to clean with removable trays. Suitable for hamsters and guinea pigs.",
+      "has_sizes": false,
+      "price": 44.99,
+      "category": 43,
+      "rating": 4.6,
+      "image_url": "",
+      "image": "",
+      "stock_quantity": 22,
+      "low_stock_threshold": 5,
+      "brand": "SmallPetHome",
+      "featured": false,
+      "new_arrival": true,
+      "best_seller": false,
+      "views_count": 134,
+      "weight_kg": 2.8,
+      "is_digital": false,
+      "download_file": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 109,
+    "fields": {
+      "sku": "PSI-FISH-FOOD-001",
+      "name": "Tropical Flake Fish Food — 500g",
+      "description": "Complete staple food for tropical freshwater fish. High-protein formula with spirulina for enhanced colour. Flakes float longer for surface and mid-level feeders. Rich in vitamins C and E to support immune health. Suitable for tetras, guppies, cichlids and more.",
+      "has_sizes": false,
+      "price": 12.99,
+      "category": 42,
+      "rating": 4.4,
+      "image_url": "",
+      "image": "",
+      "stock_quantity": 80,
+      "low_stock_threshold": 15,
+      "brand": "AquaNutrition",
+      "featured": false,
+      "new_arrival": false,
+      "best_seller": false,
+      "views_count": 56,
+      "weight_kg": 0.5,
+      "is_digital": false,
+      "download_file": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 110,
+    "fields": {
+      "sku": "PSI-ROYAL-DOG-001",
+      "name": "Royal Canin Medium Adult Dog Food — 4kg",
+      "description": "Tailored nutrition for medium breed adult dogs (11–25kg). Contains adapted protein and fibre content for healthy digestion, and EPA-DHA fatty acids for healthy skin and coat. Kibble shape and texture are specially designed for medium breed jaw mechanics.",
+      "has_sizes": false,
+      "price": 39.99,
+      "category": 45,
+      "rating": 4.8,
+      "image_url": "",
+      "image": "",
+      "stock_quantity": 35,
+      "low_stock_threshold": 8,
+      "brand": "Royal Canin",
+      "featured": true,
+      "new_arrival": false,
+      "best_seller": true,
+      "views_count": 289,
+      "weight_kg": 4.1,
+      "is_digital": false,
+      "download_file": ""
+    }
+  }
+]

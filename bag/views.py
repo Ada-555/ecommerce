@@ -105,15 +105,25 @@ def remove_from_bag(request, item_id):
             size = request.POST['product_size']
         bag = request.session.get('bag', {})
 
+        # Check if item exists in bag
+        if str(item_id) not in bag:
+            messages.warning(request, f'{product.name} was not in your bag')
+            return HttpResponse(status=200)
+
         if size:
-            del bag[item_id]['items_by_size'][size]
-            if not bag[item_id]['items_by_size']:
-                bag.pop(item_id)
-            messages.success(
-                request,
-                f'Removed size {size.upper()} {product.name} from your bag')
+            if (str(item_id) in bag and
+                    'items_by_size' in bag[str(item_id)] and
+                    size in bag[str(item_id)]['items_by_size']):
+                del bag[str(item_id)]['items_by_size'][size]
+                if not bag[str(item_id)]['items_by_size']:
+                    bag.pop(str(item_id))
+                messages.success(
+                    request,
+                    f'Removed size {size.upper()} {product.name} from your bag')
+            else:
+                messages.warning(request, f'Size {size} of {product.name} was not in your bag')
         else:
-            bag.pop(item_id)
+            bag.pop(str(item_id), None)
             messages.success(
                 request, f'Removed {product.name} from your bag')
 

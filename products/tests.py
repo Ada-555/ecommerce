@@ -24,7 +24,8 @@ class CategoryModelTests(TestCase):
 
     def test_category_friendly_name_optional(self):
         cat = Category.objects.create(name="no_friendly")
-        self.assertEqual(cat.get_friendly_name(), None)
+        # When friendly_name is blank, get_friendly_name falls back to name
+        self.assertEqual(cat.get_friendly_name(), "no_friendly")
 
     def test_category_name_uniqueness(self):
         """Category names are not enforced unique at model level."""

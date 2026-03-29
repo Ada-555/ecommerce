@@ -7,6 +7,10 @@ urlpatterns = [
         views.all_products,
         name='products'),
     path(
+        'category/<slug:slug>/',
+        views.category_detail,
+        name='category_detail'),
+    path(
         '<int:product_id>/',
         views.product_detail,
         name='product_detail'),
