@@ -26,7 +26,7 @@
 | 1 | Wishlist — heart icon, save for later | wishlist-retry | `wishlist/` | 🟡 Running |
 | 2 | Phase 12 Reviews — templates, star rating, verified buyer | phase12-frontend | `products/templates/` | 🟡 Running |
 | 3 | Multi-coupon + Subscriptions | agent-payments | `coupons/`, `subscriptions/` | 🟡 Running |
-| 4 | Order Tracking — verify + finish | order-tracking-retry | `tracking/` | 🟡 Running |
+| 4 | Order Tracking — verify + finish | order-tracking-retry | `tracking/` | ✅ Done |
 
 ---
 
@@ -63,7 +63,7 @@
 | 08:44 | phase12-frontend | 🟡 Running — templates only |
 | 08:44 | agent-payments | 🟡 Started — coupons + subscriptions |
 | 08:45 | wishlist-retry | 🟡 Running — wishlist app |
-| 08:45 | order-tracking-retry | 🟡 Running — tracking app |
+| 08:45 | order-tracking-retry | ✅ Done — tracking URL, status fields, template, email integration |
 
 ---
 
@@ -73,4 +73,4 @@
 
 ---
 
-_Last updated: 2026-03-29 08:45 GMT+1_
+_Last updated: 2026-03-29 08:47 GMT+1_
