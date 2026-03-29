@@ -36,7 +36,7 @@
 
 | # | Task | Status | Agent | Notes |
 |---|------|--------|-------|-------|
-| 11 | **Crypto payments — BTC, USDC, XMR via Stripe** | 🟡 IN PROGRESS | crypto-payments | Kay's priority — launched 08:17 |
+| 11 | **Crypto payments — BTC, USDC, XMR via Stripe** | ✅ DONE | crypto-payments | BTC/USDC via Stripe Checkout Session, XMR via CoinGate redirect; crypto fields added to Order model; payment method selector in checkout; crypto info on success page; CoinGate callback handler; admin updated |
 | 12 | Newsletter signup — Mailchimp or equivalent | ⏳ NEXT | — | |
 | 13 | Subscription products — recurring billing | 🔜 SOON | — | |
 | 14 | GA4 analytics dashboard — revenue, conversions, top products | 🔜 SOON | — | |
@@ -55,6 +55,7 @@
 | 2026-03-29 08:00 | order-tracking, email, wishlist | Initial runs timed out (10m) | ⚠️ Timeout |
 | 2026-03-29 08:18 | order-tracking-retry, email-notifications-retry, wishlist-retry | Respawning with 30min timeouts — resuming from partial work | 🟡 Running |
 | 2026-03-29 08:19 | crypto-payments | Starting crypto payments (BTC, USDC, XMR) | 🟩 Started |
+| 2026-03-29 08:31 | crypto-payments | Verified implementation complete; updated TASKS.md | ✅ Done |
 | 2026-03-29 08:30 | orderimo-phase12-reviews | KILLED — 2.5h stuck in git loop, Review model already existed | ❌ Killed |
 | 2026-03-29 08:32 | phase12-frontend | Spawned frontend-only agent (20min) — templates only | 🟡 Running |
 
