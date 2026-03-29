@@ -78,6 +78,15 @@
                 </div>
                 <a href="/orderimo/blog/" class="nav-link-custom">Blog</a>
                 <a href="/orderimo/about/" class="nav-link-custom">About</a>
+                <!-- Search Form -->
+                <form method="GET" action="/orderimo/search/" class="d-flex align-items-center ms-2">
+                    <div class="input-group input-group-sm" style="max-width: 220px;">
+                        <input type="text" name="q" class="form-control" placeholder="Search..." aria-label="Search" style="background:rgba(255,255,255,0.08);border:1px solid var(--border);color:#e0e0e0;border-radius:50px 0 0 50px;font-size:0.85rem;">
+                        <button class="btn btn-sm" type="submit" style="background:var(--primary);color:#fff;border-radius:0 50px 50px 0;font-size:0.8rem;">
+                            <i class="fa-solid fa-search"></i>
+                        </button>
+                    </div>
+                </form>
             </div>
             
             <div class="d-flex align-items-center gap-2">
@@ -111,6 +120,15 @@
         <!-- Mobile nav -->
         <div class="collapse" id="mobileNav">
             <div class="pb-3 d-lg-none">
+                <!-- Mobile Search -->
+                <form method="GET" action="/orderimo/search/" class="mb-3">
+                    <div class="input-group">
+                        <input type="text" name="q" class="form-control" placeholder="Search products..." aria-label="Search" style="background:rgba(255,255,255,0.08);border:1px solid var(--border);color:#e0e0e0;">
+                        <button class="btn" type="submit" style="background:var(--primary);color:#fff;">
+                            <i class="fa-solid fa-search"></i>
+                        </button>
+                    </div>
+                </form>
                 <a href="/orderimo/" class="nav-link-custom d-block py-1">Home</a>
                 <a href="/orderimo/products/" class="nav-link-custom d-block py-1">All Products</a>
                 <a href="/orderimo/products/?category=electronics" class="nav-link-custom d-block py-1 ps-3" style="font-size:0.85rem;">Electronics</a>

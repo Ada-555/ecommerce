@@ -7,7 +7,26 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="petnav">
-      <ul class="navbar-nav ms-auto gap-2">
+      <!-- Mobile Search -->
+      <form method="GET" action="/petshop/search/" class="mb-3 d-lg-none">
+        <div class="input-group">
+          <input type="text" name="q" class="form-control" placeholder="Search products..." style="background:rgba(255,255,255,0.08);border:1px solid var(--border);color:var(--text);">
+          <button class="btn" type="submit" style="background:var(--pet-primary, #228B22);color:#fff;">
+            <i class="fa-solid fa-search"></i>
+          </button>
+        </div>
+      </form>
+      <!-- Desktop Search -->
+      <form method="GET" action="/petshop/search/" class="d-flex ms-3 mb-2 mb-lg-0 d-none d-lg-flex" style="max-width: 280px; flex-grow: 1;">
+        <div class="input-group" style="border-radius: 50px; overflow: hidden;">
+          <input type="text" name="q" class="form-control" placeholder="Search products, brands..." aria-label="Search" style="background:rgba(255,255,255,0.08);border:1px solid var(--border);color:var(--text);padding: 0.5rem 1rem;">
+          <button class="btn" type="submit" style="background:var(--pet-primary, #228B22);color:#fff;padding: 0.5rem 1rem;">
+            <i class="fa-solid fa-search"></i>
+          </button>
+        </div>
+      </form>
+
+      <ul class="navbar-nav ms-auto gap-2 mt-2 mt-lg-0">
         <li class="nav-item"><a class="nav-link nav-link-pet" href="/petshop/">Home</a></li>
         <li class="nav-item dropdown">
           <a class="nav-link nav-link-pet dropdown-toggle" href="#" data-bs-toggle="dropdown">🐶 Dogs</a>

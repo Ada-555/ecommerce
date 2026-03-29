@@ -107,6 +107,15 @@
                         <a href="{{ item.url }}" class="nav-link-store">{{ item.label }}</a>
                     {% endif %}
                 {% endfor %}
+                <!-- Search Form -->
+                <form method="GET" action="/{{ store_slug }}/search/" class="d-flex align-items-center ms-2">
+                    <div class="input-group input-group-sm" style="max-width: 220px;">
+                        <input type="text" name="q" class="form-control" placeholder="Search..." aria-label="Search" style="background:rgba(255,255,255,0.08);border:1px solid var(--border);color:var(--text);border-radius:50px 0 0 50px;font-size:0.85rem;">
+                        <button class="btn btn-sm" type="submit" style="background:var(--primary);color:#fff;border-radius:0 50px 50px 0;font-size:0.8rem;">
+                            <i class="fa-solid fa-search"></i>
+                        </button>
+                    </div>
+                </form>
             </div>
             <div class="d-flex align-items-center gap-2">
                 {% if user.is_authenticated %}
@@ -137,6 +146,15 @@
         </div>
         <div class="collapse" id="mobileNav">
             <div class="pb-3 d-lg-none">
+                <!-- Mobile Search -->
+                <form method="GET" action="/{{ store_slug }}/search/" class="mb-3">
+                    <div class="input-group">
+                        <input type="text" name="q" class="form-control" placeholder="Search products..." aria-label="Search" style="background:rgba(255,255,255,0.08);border:1px solid var(--border);color:var(--text);">
+                        <button class="btn" type="submit" style="background:var(--primary);color:#fff;">
+                            <i class="fa-solid fa-search"></i>
+                        </button>
+                    </div>
+                </form>
                 {% for item in nav_items %}
                     {% if item.children %}
                         <a href="#" class="nav-link-store d-block py-1">{{ item.label }}</a>

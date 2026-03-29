@@ -1,0 +1,162 @@
+{% extends "stores/store_base.html" %}
+{% load static %}
+
+{% block store_custom_css %}
+.header-section {
+    background: linear-gradient(135deg, var(--dark), color-mix(in srgb, var(--primary) 10%, var(--dark)));
+}
+{% endblock %}
+
+{% block content %}
+<div class="header-section py-5 text-center">
+    <div class="container py-4">
+        <h1 class="display-6 fw-bold text-white mb-2" style="font-family:var(--heading-font),sans-serif;">
+            {% if search_term %}
+                Search results for "{{ search_term }}"
+            {% else %}
+                All Products
+            {% endif %}
+        </h1>
+        {% if page_obj.paginator.count > 0 %}
+        <p class="text-muted">{{ page_obj.paginator.count }} product{{ page_obj.paginator.count|pluralize }} found</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="container py-5">
+    <!-- Sorting & Search Bar -->
+    <div class="row mb-4 align-items-center">
+        <div class="col-12 col-md-6 mb-2 mb-md-0">
+            <form method="GET" action="{{ store_search_url }}" class="search-form">
+                <div class="input-group">
+                    <label for="search-input-page" class="visually-hidden">Search products</label>
+                    <input id="search-input-page" class="form-control" type="text" name="q"
+                        placeholder="Search products, categories..." aria-label="Search"
+                        value="{% if search_term %}{{ search_term }}{% endif %}">
+                    <button class="btn btn-store" type="submit">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
+                {% if current_categories %}
+                    {% for cat in current_categories %}
+                        <input type="hidden" name="category" value="{{ cat.name }}">
+                    {% endfor %}
+                {% endif %}
+                {% if current_sorting and current_sorting != 'None_None' %}
+                    <input type="hidden" name="sort" value="{{ current_sorting }}">
+                {% endif %}
+            </form>
+        </div>
+        <div class="col-12 col-md-6 text-md-end">
+            <span class="text-muted small">{{ page_obj.paginator.count }} results</span>
+        </div>
+    </div>
+
+    <!-- Sort Options -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex flex-wrap gap-2 align-items-center">
+                <span class="text-muted small">Sort by:</span>
+                <a href="{{ store_search_url }}?q={{ search_term|default:'' }}&sort=name&direction=asc{% if current_categories %}&category={{ current_categories.0.name }}{% endif %}"
+                   class="btn btn-sm {% if current_sorting == 'name_asc' %}btn-store{% else %}btn-outline-store{% endif %}">
+                    Name A-Z
+                </a>
+                <a href="{{ store_search_url }}?q={{ search_term|default:'' }}&sort=name&direction=desc{% if current_categories %}&category={{ current_categories.0.name }}{% endif %}"
+                   class="btn btn-sm {% if current_sorting == 'name_desc' %}btn-store{% else %}btn-outline-store{% endif %}">
+                    Name Z-A
+                </a>
+                <a href="{{ store_search_url }}?q={{ search_term|default:'' }}&sort=price&direction=asc{% if current_categories %}&category={{ current_categories.0.name }}{% endif %}"
+                   class="btn btn-sm {% if current_sorting == 'price_asc' %}btn-store{% else %}btn-outline-store{% endif %}">
+                    Price: Low
+                </a>
+                <a href="{{ store_search_url }}?q={{ search_term|default:'' }}&sort=price&direction=desc{% if current_categories %}&category={{ current_categories.0.name }}{% endif %}"
+                   class="btn btn-sm {% if current_sorting == 'price_desc' %}btn-store{% else %}btn-outline-store{% endif %}">
+                    Price: High
+                </a>
+                <a href="{{ store_search_url }}?q={{ search_term|default:'' }}&sort=category&direction=asc{% if current_categories %}&category={{ current_categories.0.name }}{% endif %}"
+                   class="btn btn-sm {% if current_sorting == 'category_asc' %}btn-store{% else %}btn-outline-store{% endif %}">
+                    Category
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Products Grid -->
+    {% if page_obj %}
+    <div class="row g-4">
+        {% for product in page_obj %}
+        <div class="col-6 col-md-4 col-lg-3">
+            {% include "stores/product_card.html" %}
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+    <nav class="mt-5" aria-label="Search results pagination">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="{{ store_search_url }}?q={{ search_term|default:'' }}&page={{ page_obj.previous_page_number }}&sort={% if current_sorting and current_sorting != 'None_None' %}{{ current_sorting }}{% endif %}" style="color:var(--primary);">
+                    <i class="fa-solid fa-chevron-left"></i> Prev
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled"><span class="page-link"><i class="fa-solid fa-chevron-left"></i> Prev</span></li>
+            {% endif %}
+
+            <li class="page-item active">
+                <span class="page-link" style="background:var(--primary);border-color:var(--primary);">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                </span>
+            </li>
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="{{ store_search_url }}?q={{ search_term|default:'' }}&page={{ page_obj.next_page_number }}&sort={% if current_sorting and current_sorting != 'None_None' %}{{ current_sorting }}{% endif %}" style="color:var(--primary);">
+                    Next <i class="fa-solid fa-chevron-right"></i>
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled"><span class="page-link">Next <i class="fa-solid fa-chevron-right"></i></span></li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+
+    {% else %}
+    <!-- No results -->
+    <div class="text-center py-5">
+        <i class="fa-solid fa-magnifying-glass fa-4x mb-3" style="color:var(--muted);"></i>
+        <h3 class="text-white mb-2">No products found</h3>
+        <p class="text-muted mb-3">
+            {% if search_term %}
+                We couldn't find anything matching "{{ search_term }}".
+            {% else %}
+                No products available in this store yet.
+            {% endif %}
+        </p>
+
+        {% if suggested_query or suggested_category %}
+        <div class="mt-4">
+            <p class="text-muted">Did you mean?</p>
+            {% if suggested_query %}
+            <a href="{{ store_search_url }}?q={{ suggested_query }}" class="btn btn-outline-store me-2">
+                "{{ suggested_query }}"
+            </a>
+            {% endif %}
+            {% if suggested_category %}
+            <a href="{{ store_search_url }}?q={{ suggested_category.name }}" class="btn btn-outline-store">
+                {{ suggested_category.friendly_name|default:suggested_category.name }}
+            </a>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <a href="/{{ store_slug }}/products/" class="btn btn-store mt-4">
+            Browse All Products
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

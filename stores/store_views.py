@@ -1,5 +1,19 @@
-from django.shortcuts import render
-from products.models import Product
+from difflib import SequenceMatcher
+
+from django.core.paginator import Paginator
+from django.shortcuts import render, redirect, reverse
+from django.contrib import messages
+from django.db.models import Q
+from django.db.models.functions import Lower
+
+from products.models import Product, Category
+
+
+STORE_NAME_MAP = {
+    'orderimo': 'Orderimo',
+    'petshop-ie': 'PetShop Ireland',
+    'digitalhub': 'DigitalHub',
+}
 
 
 STORE_NAME_MAP = {
@@ -190,6 +204,24 @@ def digital_home(request):
     return render(request, 'stores/digital/home.html', ctx)
 
 
+def store_search(request, store_slug):
+    """Search view — delegates to store_products with search query."""
+    store_map = {'orderimo': 'orderimo', 'petshop': 'petshop-ie', 'digital': 'digitalhub'}
+    db_store = store_map.get(store_slug, 'orderimo')
+    query = request.GET.get('q', '')
+    products = Product.objects.filter(store=db_store).select_related('category')
+    if query:
+        from django.db.models import Q
+        products = products.filter(Q(name__icontains=query) | Q(description__icontains=query))
+    store_name_map = {'orderimo': 'Orderimo', 'petshop': 'PetShop Ireland', 'digital': 'DigitalHub'}
+    store_name = store_name_map.get(store_slug, store_slug.title())
+    ctx = _build_context(store_slug, db_store, store_name, {
+        'products': products,
+        'search_term': query,
+    })
+    return render(request, 'stores/products.html', ctx)
+
+
 def store_products(request, store_slug):
     store_map = {'orderimo': 'orderimo', 'petshop': 'petshop-ie', 'digital': 'digitalhub'}
     store_name_map = {'orderimo': 'Orderimo', 'petshop': 'PetShop Ireland', 'digital': 'DigitalHub'}
@@ -198,3 +230,116 @@ def store_products(request, store_slug):
     products = Product.objects.filter(store=db_store).select_related('category')
     ctx = _build_context(store_slug, db_store, store_name, {'products': products})
     return render(request, 'stores/products.html', ctx)
+
+
+def _fuzzy_match(query, candidates, threshold=0.6):
+    """Simple fuzzy match — returns best match or None."""
+    query = query.lower()
+    best = None
+    best_ratio = 0
+    for candidate in candidates:
+        name = candidate.lower()
+        ratio = SequenceMatcher(None, query, name).ratio()
+        if ratio > best_ratio and ratio >= threshold:
+            best_ratio = ratio
+            best = candidate
+    return best
+
+
+def store_search(request, store_slug):
+    """Store-scoped search — filters products by active store."""
+    store_map = {'orderimo': 'orderimo', 'petshop': 'petshop-ie', 'digital': 'digitalhub'}
+    store_name_map = {'orderimo': 'Orderimo', 'petshop': 'PetShop Ireland', 'digital': 'DigitalHub'}
+    db_store = store_map.get(store_slug, 'orderimo')
+    store_name = store_name_map.get(store_slug, store_slug.title())
+
+    # Start with store-scoped products
+    products = Product.objects.filter(store=db_store).select_related('category').order_by('id')
+    query = None
+    categories = None
+    sort = None
+    direction = None
+    suggested_query = None
+    suggested_category = None
+    paginate_by = 12
+
+    if request.GET:
+        if 'sort' in request.GET:
+            sortkey = request.GET['sort']
+            sort = sortkey
+            if sortkey == 'name':
+                sortkey = 'lower_name'
+                products = products.annotate(lower_name=Lower('name'))
+            if sortkey == 'category':
+                sortkey = 'category__name'
+            if 'direction' in request.GET:
+                direction = request.GET['direction']
+                if direction == 'desc':
+                    sortkey = f'-{sortkey}'
+            products = products.order_by(sortkey)
+
+        if 'category' in request.GET:
+            categories = request.GET['category'].split(',')
+            products = products.filter(category__name__in=categories)
+            categories = Category.objects.filter(name__in=categories)
+
+        if 'q' in request.GET:
+            query = request.GET['q']
+            if not query:
+                messages.error(request, "You didn't enter any search criteria!")
+                search_url = reverse(f'{store_slug}_search')
+                return redirect(f'{search_url}?sort={sort or "name"}&direction={direction or "asc"}')
+
+            queries = Q(name__icontains=query) | Q(description__icontains=query) | Q(brand__icontains=query)
+            products = products.filter(queries)
+
+            # Fuzzy "Did you mean?" suggestion
+            if not products.exists():
+                all_names = list(
+                    Product.objects.filter(store=db_store).values_list('name', flat=True)
+                ) + list(
+                    Category.objects.values_list('name', flat=True)
+                )
+                suggested_query = _fuzzy_match(query, all_names)
+                suggested_category = _fuzzy_match(
+                    query, list(Category.objects.values_list('friendly_name', flat=True))
+                )
+                if suggested_category:
+                    cats = Category.objects.filter(
+                        Q(name__icontains=suggested_category) |
+                        Q(friendly_name__icontains=suggested_category)
+                    )
+                    if cats.exists():
+                        suggested_category = cats.first()
+
+            # Category match on results
+            if 'category' not in request.GET:
+                matching_cat = Category.objects.filter(
+                    Q(name__icontains=query) | Q(friendly_name__icontains=query)
+                ).first()
+                if matching_cat:
+                    suggested_category = matching_cat
+
+    current_sorting = f'{sort}_{direction}'
+
+    paginator = Paginator(products, paginate_by)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    # Build search URL for the navbar form
+    search_url = reverse(f'{store_slug}_search')
+
+    ctx = _build_context(store_slug, db_store, store_name, {
+        'page_obj': page_obj,
+        'products': products,
+        'search_term': query,
+        'current_categories': categories,
+        'current_sorting': current_sorting,
+        'is_paginated': page_obj.has_other_pages(),
+        'suggested_query': suggested_query,
+        'suggested_category': suggested_category,
+        'search_url': search_url,
+        # Store-specific search action for navbar form
+        'store_search_url': search_url,
+    })
+    return render(request, 'stores/search_results.html', ctx)

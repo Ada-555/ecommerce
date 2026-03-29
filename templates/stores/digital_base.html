@@ -75,6 +75,15 @@
                 </div>
                 <a href="/digital/about/" class="nav-link-digital">About</a>
                 <a href="/digital/contact/" class="nav-link-digital">Contact</a>
+                <!-- Desktop Search -->
+                <form method="GET" action="/digital/search/" class="d-flex ms-3 mb-2 mb-lg-0 d-none d-lg-flex" style="max-width: 280px; flex-grow: 1;">
+                  <div class="input-group" style="border-radius: 50px; overflow: hidden;">
+                    <input type="text" name="q" class="form-control" placeholder="Search e-books, courses..." aria-label="Search" style="background:rgba(255,255,255,0.08);border:1px solid var(--border);color:var(--text);padding: 0.5rem 1rem;">
+                    <button class="btn" type="submit" style="background:var(--primary);color:#fff;padding: 0.5rem 1rem;">
+                      <i class="fa-solid fa-search"></i>
+                    </button>
+                  </div>
+                </form>
             </div>
             
             <div class="d-flex align-items-center gap-2">
@@ -107,6 +116,15 @@
         </div>
         <div class="collapse" id="digMobileNav">
             <div class="pb-3 d-lg-none">
+                <!-- Mobile Search -->
+                <form method="GET" action="/digital/search/" class="mb-3">
+                  <div class="input-group">
+                    <input type="text" name="q" class="form-control" placeholder="Search products..." style="background:rgba(255,255,255,0.08);border:1px solid var(--border);color:var(--text);">
+                    <button class="btn" type="submit" style="background:var(--primary);color:#fff;">
+                      <i class="fa-solid fa-search"></i>
+                    </button>
+                  </div>
+                </form>
                 <a href="/digital/" class="nav-link-digital d-block py-1">Home</a>
                 <a href="/digital/products/" class="nav-link-digital d-block py-1">All Products</a>
                 <a href="/digital/products/?category=ebooks" class="nav-link-digital d-block py-1 ps-3">E-books</a>

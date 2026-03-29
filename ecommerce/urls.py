@@ -6,9 +6,11 @@ from django.contrib.sitemaps.views import sitemap
 from django.views.generic import RedirectView
 
 from stores import store_views
+from stores.store_views import store_search
 from home import views as home_views
 from about import views as about_views
 from products import views as product_views
+from tracking import views as tracking_views
 from .sitemaps import ProductSitemap, CategorySitemap, BlogSitemap
 
 urlpatterns = [
@@ -20,9 +22,11 @@ urlpatterns = [
     # ========================
     path('orderimo/', store_views.orderimo_home, name='orderimo_home'),
     path('orderimo/products/', store_views.store_products, {'store_slug': 'orderimo'}, name='orderimo_products'),
+    path('orderimo/search/', store_search, {'store_slug': 'orderimo'}, name='orderimo_search'),
     path('orderimo/products/<int:product_id>/', product_views.product_detail, name='orderimo_product_detail'),
     path('orderimo/bag/', include('bag.urls')),
     path('orderimo/checkout/', include('checkout.urls')),
+    path('orderimo/wishlist/', include('wishlist.urls')),
     path('orderimo/about/', about_views.about, name='orderimo_about'),
     path('orderimo/blog/', include('blog.urls')),
     path('orderimo/contact/', about_views.contact, name='orderimo_contact'),
@@ -37,9 +41,11 @@ urlpatterns = [
     # ========================
     path('petshop/', store_views.petshop_home, name='petshop_home'),
     path('petshop/products/', store_views.store_products, {'store_slug': 'petshop'}, name='petshop_products'),
+    path('petshop/search/', store_search, {'store_slug': 'petshop'}, name='petshop_search'),
     path('petshop/products/<int:product_id>/', product_views.product_detail, name='petshop_product_detail'),
     path('petshop/bag/', include('bag.urls')),
     path('petshop/checkout/', include('checkout.urls')),
+    path('petshop/wishlist/', include('wishlist.urls')),
     path('petshop/about/', about_views.about, name='petshop_about'),
     path('petshop/blog/', include('blog.urls')),
     path('petshop/contact/', about_views.contact, name='petshop_contact'),
@@ -54,9 +60,11 @@ urlpatterns = [
     # ========================
     path('digital/', store_views.digital_home, name='digital_home'),
     path('digital/products/', store_views.store_products, {'store_slug': 'digital'}, name='digital_products'),
+    path('digital/search/', store_search, {'store_slug': 'digital'}, name='digital_search'),
     path('digital/products/<int:product_id>/', product_views.product_detail, name='digital_product_detail'),
     path('digital/bag/', include('bag.urls')),
     path('digital/checkout/', include('checkout.urls')),
+    path('digital/wishlist/', include('wishlist.urls')),
     path('digital/about/', about_views.about, name='digital_about'),
     path('digital/blog/', include('blog.urls')),
     path('digital/contact/', about_views.contact, name='digital_contact'),
@@ -69,8 +77,10 @@ urlpatterns = [
     # ========================
     # GLOBAL / LEGACY (redirect to orderimo store)
     # ========================
+    path('order/<str:order_number>/track/', tracking_views.track_order, name='track_order'),
     path('products/', include('products.urls')),
     path('bag/', include('bag.urls')),
+    path('wishlist/', include('wishlist.urls')),
     path('checkout/', include('checkout.urls')),
     path('blog/', include('blog.urls')),
     path('about/', include('about.urls')),
