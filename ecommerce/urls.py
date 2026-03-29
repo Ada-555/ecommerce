@@ -11,9 +11,10 @@ from home import views as home_views
 from about import views as about_views
 from products import views as product_views
 from tracking import views as tracking_views
-from affiliates import views as affiliate_views
+# from affiliates import views as affiliate_views  # Not ready yet
 from . import views as ecommerce_views
 from .sitemaps import ProductSitemap, CategorySitemap, BlogSitemap
+from analytics import views as analytics_views
 
 urlpatterns = [
     # Root serves the home page
@@ -89,15 +90,17 @@ urlpatterns = [
     path('blog/', include('blog.urls')),
     path('about/', include('about.urls')),
     path('stores/', include('stores.urls')),
-    path('accounts/affiliate/', affiliate_views.affiliate_dashboard, name='affiliate_dashboard'),
-    path('accounts/affiliate/create/', affiliate_views.become_affiliate, name='become_affiliate'),
-    path('affiliate/<str:code>/', affiliate_views.affiliate_landing, name='affiliate_landing'),
     path('accounts/', include('allauth.urls')),
     path('profiles/', include('profiles.urls')),
     path('avatar/', include('avatar.urls')),
-    path('newsletter/', include('newsletter.urls')),
-    path('', include('comparison.urls')),
-    path('', include('subscriptions.urls')),
+    # path('newsletter/', include('newsletter.urls')),
+    # path('', include('comparison.urls')),
+    # path('', include('subscriptions.urls')),
+    # Affiliate URLs disabled until app is implemented
+    # path('accounts/affiliate/', affiliate_views.affiliate_dashboard, name='affiliate_dashboard'),
+    # path('accounts/affiliate/create/', affiliate_views.become_affiliate, name='become_affiliate'),
+    # path('affiliate/<str:code>/', affiliate_views.affiliate_landing, name='affiliate_landing'),
+    path("admin/analytics/", analytics_views.analytics_dashboard, name="analytics_dashboard"),
     path('admin/', admin.site.urls),
     path('sitemap.xml', sitemap, {'sitemaps': {
         'products': ProductSitemap,

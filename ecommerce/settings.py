@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.sitemaps',
+    'analytics',
     # allauth
     'allauth',
     'allauth.account',
@@ -85,6 +86,7 @@ INSTALLED_APPS = [
     'invoices',
     'coupons',
     'newsletter',
+    'subscriptions',
     # other
     'crispy_forms',
     'crispy_bootstrap5',
@@ -129,10 +131,10 @@ TEMPLATES = [
                 'django.template.context_processors.media',
                 'ecommerce.store_context.store_context',
                 'ecommerce.admin_context.admin_store_stats',
-                'ecommerce.context_processors.currency_context',
+                # 'ecommerce.context_processors.currency_context',  # Not implemented yet
                 'bag.contexts.bag_contents',  # required for shopping bag
                 'wishlist.context_processors.wishlist_context',
-                'comparison.context_processors.compare_context',
+                # 'comparison.context_processors.compare_context',
             ],
             'builtins': [
                 'crispy_forms.templatetags.crispy_forms_tags',
