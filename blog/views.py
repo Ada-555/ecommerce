@@ -3,8 +3,75 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.urls import reverse
-from .models import BlogPage
+from django.http import JsonResponse
+from .models import BlogPage, BlogSubscriber
 from .forms import BlogPageForm
+
+
+def _get_store(request):
+    """Detect active store from URL path."""
+    path = request.path
+    if "/petshop/" in path:
+        return "petshop-ie"
+    elif "/digital/" in path:
+        return "digitalhub"
+    return "orderimo"
+
+
+def blog_index(request):
+    """Public blog index — list all published posts with pagination (6 per page)."""
+    active_store = _get_store(request)
+    posts = BlogPage.objects.filter(store=active_store, is_published=True).order_by('-created_at')
+    paginator = Paginator(posts, 6)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'page_obj': page_obj,
+        'is_paginated': page_obj.has_other_pages(),
+        'active_store': active_store,
+    }
+    return render(request, 'blog/blog.html', context)
+
+
+def blog_post(request, slug):
+    """Public single blog post by slug."""
+    active_store = _get_store(request)
+    post = get_object_or_404(BlogPage, slug=slug, store=active_store, is_published=True)
+
+    # Related posts: same store, latest 3 excluding current
+    related = BlogPage.objects.filter(
+        store=active_store, is_published=True
+    ).exclude(pk=post.pk).order_by('-created_at')[:3]
+
+    context = {
+        'blog_page': post,
+        'related_posts': related,
+    }
+    return render(request, 'blog/blog_post.html', context)
+
+
+def subscribe(request):
+    """Newsletter signup — POST only, returns JSON."""
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+    email = request.POST.get('email', '').strip().lower()
+    name = request.POST.get('name', '').strip()
+    active_store = _get_store(request)
+
+    if not email:
+        return JsonResponse({'error': 'Email is required.'}, status=400)
+
+    subscriber, created = BlogSubscriber.objects.get_or_create(
+        email=email,
+        defaults={'store': active_store, 'name': name}
+    )
+    if not created:
+        subscriber.is_active = True
+        subscriber.save()
+
+    return JsonResponse({'success': True, 'message': 'Subscribed successfully!'})
 
 
 def blog(request):

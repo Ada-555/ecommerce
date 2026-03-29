@@ -1,0 +1,218 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_title %}| Blog | {{ blog_page.title }}{% endblock %}
+
+{% block page_header %}
+<div class="page-header w-100">
+    <div class="container">
+        <div class="row">
+            <div class="col text-center">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-cyan">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'blog_index' %}" class="text-cyan">Blog</a></li>
+                        <li class="breadcrumb-item active text-white" aria-current="page">{{ blog_page.title|truncatechars:30 }}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+{% include "blog/delete_page_modal.html" %}
+
+<div class="container mb-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+
+            <!-- Blog Post -->
+            <article class="card product-card p-4 mt-4">
+                <!-- Meta -->
+                <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
+                    <span class="badge bg-purple rounded-pill px-3 py-1">
+                        <i class="fa-solid fa-tag me-1"></i>Blog
+                    </span>
+                    {% if blog_page.created_at %}
+                    <span class="text-muted small">
+                        <i class="fa-solid fa-calendar me-1"></i>{{ blog_page.created_at|date:"F j, Y" }}
+                    </span>
+                    {% endif %}
+                    <span class="text-cyan small">
+                        <i class="fa-solid fa-clock me-1"></i>{{ blog_page.reading_time }}
+                    </span>
+                    {% if blog_page.store %}
+                    <span class="text-muted small">
+                        <i class="fa-solid fa-store me-1"></i>{{ blog_page.store|title }}
+                    </span>
+                    {% endif %}
+                </div>
+
+                <h1 class="display-6 text-white mb-3">{{ blog_page.title }}</h1>
+
+                <!-- Featured Image -->
+                {% if blog_page.image %}
+                <div class="mb-4 rounded-3 overflow-hidden">
+                    <img src="{{ blog_page.image.url }}" class="img-fluid w-100"
+                        alt="{{ blog_page.title }}" style="max-height: 450px; object-fit: cover;">
+                </div>
+                {% endif %}
+
+                <!-- Blog Content -->
+                <div class="blog-content text-silver mb-4">
+                    {{ blog_page.content|safe }}
+                </div>
+
+                <!-- Social Share Buttons -->
+                <div class="d-flex flex-wrap gap-2 align-items-center mb-4">
+                    <span class="text-muted small me-2">Share:</span>
+                    <a href="https://twitter.com/intent/tweet?text={{ blog_page.title|urlencode }}&url={{ request.build_absolute_uri|urlencode }}"
+                       target="_blank" rel="noopener noreferrer"
+                       class="btn btn-sm btn-outline-info rounded-pill" aria-label="Share on X (Twitter)">
+                        <i class="fa-brands fa-x-twitter"></i>
+                    </a>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri|urlencode }}"
+                       target="_blank" rel="noopener noreferrer"
+                       class="btn btn-sm btn-outline-primary rounded-pill" aria-label="Share on Facebook">
+                        <i class="fa-brands fa-facebook-f"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ request.build_absolute_uri|urlencode }}&title={{ blog_page.title|urlencode }}"
+                       target="_blank" rel="noopener noreferrer"
+                       class="btn btn-sm btn-outline-info rounded-pill" aria-label="Share on LinkedIn">
+                        <i class="fa-brands fa-linkedin-in"></i>
+                    </a>
+                    <button class="btn btn-sm btn-outline-secondary rounded-pill"
+                            onclick="navigator.clipboard.writeText(window.location.href); this.innerHTML='<i class=\'fa-solid fa-check\'></i> Copied!'; setTimeout(() => this.innerHTML='<i class=\'fa-solid fa-link\'></i> Copy Link', 2000);">
+                        <i class="fa-solid fa-link"></i> Copy Link
+                    </button>
+                </div>
+
+                <hr class="custom-hr my-4">
+
+                <!-- Newsletter Signup -->
+                <div class="card bg-darker text-white rounded-4 p-3 mb-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <i class="fa-solid fa-envelope text-cyan fa-2x"></i>
+                        <div>
+                            <h6 class="text-white mb-1">Enjoyed this post?</h6>
+                            <p class="text-muted small mb-2">Subscribe for more updates.</p>
+                        </div>
+                    </div>
+                    <form id="newsletter-form" method="post" action="{% url 'blog_subscribe' %}">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <input type="email" name="email" class="form-control rounded-pill-start"
+                                   placeholder="Your email address" required>
+                            <button type="submit" class="btn btn-cyan rounded-pill-end px-4">
+                                Subscribe <i class="fa-solid fa-paper-plane ms-1"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <div id="newsletter-msg" class="mt-2 small"></div>
+                </div>
+
+                <!-- Comments section (placeholder if comments app exists) -->
+                {% block blog_comments %}
+                {% comment %}
+                {% if COMMENTS_APP_ENABLED %}
+                <section class="comments-section mt-4">
+                    <h5 class="text-white mb-3">
+                        <i class="fa-solid fa-comments text-cyan me-2"></i>Comments
+                    </h5>
+                    <!-- Comments would be rendered here -->
+                </section>
+                {% endif %}
+                {% endcomment %}
+                {% endblock %}
+
+                <!-- Admin actions -->
+                {% if request.user.is_superuser %}
+                <div class="mt-4 d-flex gap-2 justify-content-end">
+                    <a href="{% url 'edit_blog_page' pk=blog_page.pk %}" class="btn btn-sm btn-outline-warning rounded-pill">
+                        <i class="fa-solid fa-pen me-1"></i>Edit
+                    </a>
+                    <button type="button" class="btn btn-sm btn-outline-danger rounded-pill"
+                        data-bs-toggle="modal" data-bs-target="#deletePageModal">
+                        <i class="fa-solid fa-trash me-1"></i>Delete
+                    </button>
+                </div>
+                {% endif %}
+            </article>
+
+            <!-- Related Posts -->
+            {% if related_posts %}
+            <div class="mt-4">
+                <h5 class="text-white mb-3">
+                    <i class="fa-solid fa-feather text-cyan me-2"></i>Related Posts
+                </h5>
+                <div class="row g-3">
+                    {% for related in related_posts %}
+                    <div class="col-md-4">
+                        <div class="card bg-darker text-white rounded-4 overflow-hidden h-100">
+                            {% if related.image %}
+                            <a href="{% url 'blog_post' slug=related.slug %}">
+                                <img src="{{ related.image.url }}" class="card-img-top"
+                                     alt="{{ related.title }}" style="height: 120px; object-fit: cover;">
+                            </a>
+                            {% else %}
+                            <div class="bg-purple d-flex align-items-center justify-content-center"
+                                 style="height: 120px;">
+                                <i class="fa-solid fa-blog text-white fa-2x"></i>
+                            </div>
+                            {% endif %}
+                            <div class="card-body p-2">
+                                <p class="text-white small mb-1" style="font-weight: 600;">
+                                    <a href="{% url 'blog_post' slug=related.slug %}"
+                                       class="text-white text-decoration-none hover-gold">
+                                        {{ related.title|truncatechars:50 }}
+                                    </a>
+                                </p>
+                                {% if related.created_at %}
+                                <span class="text-muted" style="font-size: 0.75rem;">
+                                    <i class="fa-solid fa-calendar me-1"></i>{{ related.created_at|date:"M d, Y" }}
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Back to Blog -->
+            <div class="text-center mt-4">
+                <a href="{% url 'blog_index' %}" class="btn btn-outline-light rounded-pill">
+                    <i class="fa-solid fa-arrow-left me-2"></i>All Posts
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('newsletter-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var form = this;
+    var msg = document.getElementById('newsletter-msg');
+    fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: {'X-Requested-With': 'XMLHttpRequest'}
+    }).then(function(r) { return r.json(); })
+    .then(function(data) {
+        if (data.success) {
+            msg.innerHTML = '<span class="text-cyan"><i class="fa-solid fa-check me-1"></i>' + data.message + '</span>';
+            form.reset();
+        } else {
+            msg.innerHTML = '<span class="text-danger"><i class="fa-solid fa-xmark me-1"></i>' + data.error + '</span>';
+        }
+    })
+    .catch(function() {
+        msg.innerHTML = '<span class="text-danger">Something went wrong. Please try again.</span>';
+    });
+});
+</script>
+{% endblock %}

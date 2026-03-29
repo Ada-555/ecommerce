@@ -137,3 +137,97 @@ class BlogViewTests(TestCase):
         url = reverse('delete_blog_page', args=[self.blog.pk])
         response = self.client.post(url, data={'username': 'wrong'})
         self.assertEqual(BlogPage.objects.filter(pk=self.blog.pk).count(), 1)
+
+
+class BlogPublicViewTests(TestCase):
+    """Tests for public blog views (blog_index, blog_post, subscribe)."""
+
+    def setUp(self):
+        self.client = Client()
+        # Published post
+        self.published = BlogPage.objects.create(
+            title="Published Post",
+            content="<p>Great published content here.</p>",
+            is_published=True,
+            store='orderimo',
+        )
+        # Unpublished post
+        self.unpublished = BlogPage.objects.create(
+            title="Draft Post",
+            content="<p>Not ready yet.</p>",
+            is_published=False,
+            store='orderimo',
+        )
+
+    def test_blog_index_shows_only_published(self):
+        """blog_index should only list published posts."""
+        response = self.client.get(reverse('blog_index'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Published Post')
+        self.assertNotContains(response, 'Draft Post')
+
+    def test_blog_index_pagination(self):
+        """blog_index paginates at 6 posts per page."""
+        for i in range(7):
+            BlogPage.objects.create(
+                title=f"Post {i}",
+                content=f"<p>Content {i}</p>",
+                is_published=True,
+                store='orderimo',
+            )
+        response = self.client.get(reverse('blog_index'))
+        # Only 6 posts per page
+        self.assertLessEqual(len(response.context['page_obj']), 6)
+
+    def test_blog_post_shows_published_post(self):
+        """blog_post view shows a published post by slug."""
+        url = reverse('blog_post', kwargs={'slug': self.published.slug})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Published Post')
+        self.assertContains(response, self.published.content)
+
+    def test_blog_post_404_for_unpublished(self):
+        """blog_post view returns 404 for unpublished posts."""
+        url = reverse('blog_post', kwargs={'slug': self.unpublished.slug})
+        response = self.client.get(url)
+        self.assertEqual(response.status, 404)
+
+    def test_subscribe_valid_email(self):
+        """subscribe view returns success JSON for valid email."""
+        response = self.client.post(
+            reverse('blog_subscribe'),
+            {'email': 'newsubscriber@example.com'},
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest'
+        )
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertTrue(data['success'])
+
+    def test_subscribe_duplicate_email(self):
+        """subscribe view handles duplicate email gracefully."""
+        BlogSubscriber.objects.create(email='duplicate@example.com', store='orderimo')
+        response = self.client.post(
+            reverse('blog_subscribe'),
+            {'email': 'duplicate@example.com'},
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest'
+        )
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertTrue(data['success'])
+
+    def test_subscribe_get_method_not_allowed(self):
+        """subscribe view returns 405 for non-POST requests."""
+        response = self.client.get(reverse('blog_subscribe'))
+        self.assertEqual(response.status_code, 405)
+
+    def test_blog_post_reading_time(self):
+        """BlogPage.reading_time() returns a string with minutes."""
+        rt = self.published.reading_time()
+        self.assertIn('min read', rt)
+
+    def test_blog_post_excerpt(self):
+        """BlogPage.excerpt returns plain text truncated to ~30 words."""
+        excerpt = self.published.excerpt
+        self.assertIsInstance(excerpt, str)
+        self.assertLessEqual(len(excerpt), 200)
