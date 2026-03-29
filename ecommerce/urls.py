@@ -12,8 +12,8 @@ from products import views as product_views
 from .sitemaps import ProductSitemap, CategorySitemap, BlogSitemap
 
 urlpatterns = [
-    # Root redirects to orderimo store
-    path('', RedirectView.as_view(url='/orderimo/', permanent=False), name='home'),
+    # Root serves the home page
+    path('', home_views.index, name='home'),
 
     # ========================
     # ORDERIMO STORE
@@ -77,6 +77,7 @@ urlpatterns = [
     path('stores/', include('stores.urls')),
     path('accounts/', include('allauth.urls')),
     path('profiles/', include('profiles.urls')),
+    path('avatar/', include('avatar.urls')),
     path('admin/', admin.site.urls),
     path('sitemap.xml', sitemap, {'sitemaps': {
         'products': ProductSitemap,

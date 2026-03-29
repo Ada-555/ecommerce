@@ -125,12 +125,12 @@ class BagViewsTests(TestCase):
     def test_remove_from_bag(self):
         self._add_to_bag(quantity=3)
         response = self.client.post(self.remove_url)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)  # redirects to bag page
         bag = self.client.session.get('bag', {})
         self.assertNotIn(self.product.id, bag)
 
     def test_remove_from_bag_with_size_no_crash(self):
-        """Removing a previously added sized product returns 200 (no crash)."""
+        """Removing a previously added sized product with redirect (no crash)."""
         product_with_sizes = Product.objects.create(
             name='Sized Product', description='D', price=35.00, has_sizes=True
         )
@@ -140,7 +140,7 @@ class BagViewsTests(TestCase):
         self.client.post(add_url, data={'quantity': 1, 'product_size': 'L', 'redirect_url': '/'})
         # Then remove
         response = self.client.post(rem_url, data={'product_size': 'L'})
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)  # redirects to bag page
 
 
 class BagContextsTests(TestCase):
