@@ -83,7 +83,8 @@ Each feature below has been confirmed in the codebase (`grep`/code review), has 
 
 | # | Feature | App | Status | Notes |
 |---|---------|-----|--------|-------|
-| 28 | Blog + AI content generation | `blog/` | ⚠️ Partial | Admin-managed blog posts, `generate_blogs` management command. No public blog index page yet. |
+| 28 | Blog + AI content generation | `blog/` | ✅ Built | Admin-managed blog posts, `generate_blogs` management command |
+| 29 | Blog newsletter (Brevo) | `blog/` | ✅ Built | Django signal fires on BlogPage `is_published=True`, sends Brevo transactional email to `BlogSubscriber` list. No cron required. |
 
 ---
 
