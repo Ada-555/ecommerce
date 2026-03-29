@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_title %}| My Subscriptions{% endblock %}
+
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb" class="breadcrumbs-nav w-100">
+    <div class="container">
+        <ol class="breadcrumb mb-0 small">
+            <li class="breadcrumb-item">
+                <a href="{% url 'home' %}" class="text-cyan text-decoration-none">
+                    <i class="fa-solid fa-house me-1"></i>Home
+                </a>
+            </li>
+            <li class="breadcrumb-item active text-white" aria-current="page">My Subscriptions</li>
+        </ol>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container mb-5">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="display-6 mb-4">
+                <i class="fa-solid fa-rotate text-cyan me-2"></i>My Subscriptions
+            </h1>
+
+            {% if subscriptions %}
+                <div class="row g-4">
+                    {% for sub in subscriptions %}
+                    <div class="col-12 col-md-6">
+                        <div class="card product-card p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h3 class="h5 text-white fw-bold">{{ sub.product_name }}</h3>
+                                    <p class="text-muted small mb-1">
+                                        Interval: {{ sub.get_interval_display }}
+                                    </p>
+                                    <p class="text-muted small">
+                                        Status: <span class="text-cyan">{{ sub.get_status_display }}</span>
+                                    </p>
+                                    {% if sub.current_period_end %}
+                                    <p class="text-muted small">
+                                        Next billing: {{ sub.current_period_end|date:"M d, Y" }}
+                                    </p>
+                                    {% endif %}
+                                </div>
+                                <button class="btn btn-outline-danger btn-sm"
+                                    onclick="confirmCancel(event, '{{ sub.id }}')">
+                                    <i class="fa-solid fa-trash me-1"></i>Cancel
+                                </button>
+                            </div>
+                            <form id="cancel-form-{{ sub.id }}" method="POST"
+                                  action="{% url 'cancel_subscription' sub.id %}"
+                                  style="display: none;">
+                                {% csrf_token %}
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <p class="text-muted mb-3">You don't have any active subscriptions yet.</p>
+                    <a href="{% url 'products' %}" class="btn btn-glow rounded-pill">
+                        <i class="fa-solid fa-shopping-bag me-2"></i>Browse Products
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block postloadjs %}
+{{ block.super }}
+<script>
+    function confirmCancel(event, subId) {
+        if (confirm('Are you sure you want to cancel this subscription? You will not be billed for future periods.')) {
+            document.getElementById('cancel-form-' + subId).submit();
+        }
+    }
+</script>
+{% endblock %}

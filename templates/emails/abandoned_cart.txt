@@ -1,0 +1,23 @@
+Hi there,
+
+You left some items in your cart at {{ branding.name }} — and we thought you'd want them!
+
+{% for item in cart_items %}
+- {{ item.name }}{% if item.size %} (Size: {{ item.size }}){% endif %} x{{ item.quantity }} — €{{ item.total|floatformat:2 }}
+{% endfor %}
+
+Cart Total: €{{ cart_total|floatformat:2 }}
+
+{% if recovery_code %}
+Your exclusive recovery code: {{ recovery_code }}
+Get 10% off your order when you complete your purchase!
+
+Visit: {{ recovery_url|default:cart_url }}
+{% else %}
+Complete your order: {{ cart_url }}
+{% endif %}
+
+This offer is valid for the next 48 hours.
+
+— The {{ branding.name }} Team
+{{ branding.copyright }}

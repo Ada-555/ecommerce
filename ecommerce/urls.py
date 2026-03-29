@@ -11,11 +11,15 @@ from home import views as home_views
 from about import views as about_views
 from products import views as product_views
 from tracking import views as tracking_views
+from affiliates import views as affiliate_views
+from . import views as ecommerce_views
 from .sitemaps import ProductSitemap, CategorySitemap, BlogSitemap
 
 urlpatterns = [
     # Root serves the home page
     path('', home_views.index, name='home'),
+    # Currency setter
+    path('set-currency/<str:currency>/', ecommerce_views.set_currency, name='set_currency'),
 
     # ========================
     # ORDERIMO STORE
@@ -85,10 +89,15 @@ urlpatterns = [
     path('blog/', include('blog.urls')),
     path('about/', include('about.urls')),
     path('stores/', include('stores.urls')),
+    path('accounts/affiliate/', affiliate_views.affiliate_dashboard, name='affiliate_dashboard'),
+    path('accounts/affiliate/create/', affiliate_views.become_affiliate, name='become_affiliate'),
+    path('affiliate/<str:code>/', affiliate_views.affiliate_landing, name='affiliate_landing'),
     path('accounts/', include('allauth.urls')),
     path('profiles/', include('profiles.urls')),
     path('avatar/', include('avatar.urls')),
     path('newsletter/', include('newsletter.urls')),
+    path('', include('comparison.urls')),
+    path('', include('subscriptions.urls')),
     path('admin/', admin.site.urls),
     path('sitemap.xml', sitemap, {'sitemaps': {
         'products': ProductSitemap,

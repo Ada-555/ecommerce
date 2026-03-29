@@ -50,6 +50,28 @@ class Product(models.Model):
     # Digital product fields
     is_digital = models.BooleanField(default=False)
     download_file = models.FileField(upload_to='downloads/', blank=True, null=True)
+    # Subscription fields
+    is_subscription = models.BooleanField(
+        default=False,
+        help_text='Enable this product as a recurring subscription'
+    )
+    subscription_interval = models.CharField(
+        max_length=20,
+        choices=[
+            ('weekly', 'Weekly'),
+            ('monthly', 'Monthly'),
+            ('yearly', 'Yearly'),
+        ],
+        blank=True,
+        default='',
+        help_text='Billing interval for subscription'
+    )
+    stripe_price_id = models.CharField(
+        max_length=100,
+        blank=True,
+        default='',
+        help_text='Stripe Price ID for subscription billing'
+    )
     # Store filtering
     store = models.CharField(max_length=50, blank=True, default='orderimo',
         help_text="Store slug this product belongs to: orderimo, petshop-ie, digitalhub")

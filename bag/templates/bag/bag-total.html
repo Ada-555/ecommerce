@@ -3,6 +3,12 @@
         <span>Bag Total</span>
         <span class="fw-medium">€{{ total|floatformat:2 }}</span>
     </div>
+    {% if coupon_discount and coupon_discount > 0 %}
+    <div class="d-flex justify-content-between text-success mb-1">
+        <span><i class="fa-solid fa-tag me-1"></i>Coupon Discount</span>
+        <span class="fw-medium">-€{{ coupon_discount|floatformat:2 }}</span>
+    </div>
+    {% endif %}
     <div class="d-flex justify-content-between text-white mb-1">
         <span>Delivery</span>
         <span class="fw-medium">€{{ delivery|floatformat:2 }}</span>
@@ -23,16 +29,6 @@
         You've unlocked <strong>free delivery!</strong>
     </div>
     {% endif %}
-
-    <!-- Promo Code -->
-    <div class="mt-3">
-        <label for="promo-code" class="form-label text-muted small">Promo Code</label>
-        <div class="input-group input-group-sm mb-2">
-            <input type="text" id="promo-code" name="promo_code" class="form-control rounded-start-pill"
-                placeholder="Enter code">
-            <button class="btn btn-outline-light rounded-end-pill" type="button">Apply</button>
-        </div>
-    </div>
 
     <!-- Delivery Estimate -->
     <div class="mt-3 p-2 rounded-3" style="background: rgba(0,255,255,0.05); border: 1px solid rgba(0,255,255,0.1);">

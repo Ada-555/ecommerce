@@ -164,6 +164,28 @@
                         </div>
                     </fieldset>
 
+                    <!-- Coupon codes -->
+                    <fieldset class="mb-4">
+                        <legend class="text-cyan fw-bold mb-3">
+                            <i class="fa-solid fa-tag me-1"></i>Coupon Codes
+                        </legend>
+                        <div id="coupon-inputs" class="mb-2">
+                            <div class="input-group mb-2">
+                                <input type="text" name="coupon_code_1" id="coupon_code_1"
+                                    class="form-control" placeholder="Enter coupon code (optional)"
+                                    maxlength="50" autocomplete="off">
+                                <button type="button" class="btn btn-outline-cyan" id="apply-coupon-btn">
+                                    <i class="fa-solid fa-arrow-right-arrow-left me-1"></i>Apply
+                                </button>
+                            </div>
+                            <div id="coupon-error" class="text-danger small mb-2 d-none"></div>
+                            <div id="applied-coupons" class="d-flex flex-wrap gap-2">
+                                <!-- Applied coupons will appear here -->
+                            </div>
+                            <p class="text-muted small mt-2 mb-0">Tip: You can stack up to 3 coupons. <span class="text-cyan">FREE100</span> for €10 off!</p>
+                        </div>
+                    </fieldset>
+
                     <!-- Save info + payment -->
                     <fieldset class="mb-4">
                         <legend class="text-cyan fw-bold mb-3">
@@ -314,6 +336,27 @@
 {% block postloadjs %}
 {{ block.super }}
 <script>
+    // Coupon apply button — re-submit form to validate
+    document.getElementById('apply-coupon-btn').addEventListener('click', function() {
+        var form = document.getElementById('payment-form');
+        var coupon1 = document.getElementById('coupon_code_1').value.trim();
+        if (coupon1) {
+            form.submit();
+        } else {
+            var errEl = document.getElementById('coupon-error');
+            errEl.textContent = 'Please enter a coupon code first.';
+            errEl.classList.remove('d-none');
+        }
+    });
+
+    // Clear error on input
+    document.querySelectorAll('[id^=coupon_code_]').forEach(function(input) {
+        input.addEventListener('input', function() {
+            var errEl = document.getElementById('coupon-error');
+            errEl.classList.add('d-none');
+        });
+    });
+
     // Stripe payment element
     var stripe = Stripe('{{ stripe_public_key }}');
     var elements = stripe.elements();

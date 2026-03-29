@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Order, OrderLineItem
+from .models import Order, OrderLineItem, AbandonedCart
 
 
 class OrderLineItemAdminInline(admin.TabularInline):
@@ -94,3 +94,50 @@ class OrderAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Order, OrderAdmin)
+
+
+@admin.register(AbandonedCart)
+class AbandonedCartAdmin(admin.ModelAdmin):
+    list_display = ('email', 'store', 'bag_total', 'last_activity',
+                    'is_converted', 'reminder_sent', 'reminder_sent_at')
+    list_filter = ('store', 'is_converted', 'reminder_sent')
+    search_fields = ('email',)
+    readonly_fields = ('bag_snapshot', 'last_activity', 'reminder_sent_at',
+                       'converted_at')
+    ordering = ('-last_activity',)
+    actions = ['resend_reminder']
+
+    @admin.action(description='Re-send reminder email to selected carts')
+    def resend_reminder(self, request, queryset):
+        from .management.commands.send_abandoned_cart_emails import _build_cart_items
+        from notifications.utils import _send_html_email, get_store_branding
+        from django.utils import timezone
+        from django.conf import settings
+
+        for cart in queryset.filter(is_converted=False).exclude(email=''):
+            branding = get_store_branding(cart.store)
+            cart_items = _build_cart_items(cart.bag_snapshot)
+            if not cart_items:
+                continue
+            live_link = getattr(settings, 'LIVE_LINK', 'https://orderimo.com')
+            success = _send_html_email(
+                subject=f'Your cart at {branding["name"]} is waiting! 🛒',
+                to_email=cart.email,
+                html_template='emails/abandoned_cart.html',
+                text_template='emails/abandoned_cart.txt',
+                context={
+                    'cart_items': cart_items,
+                    'cart_total': cart.bag_total,
+                    'cart_url': f'{live_link}bag/',
+                    'recovery_code': cart.recovery_coupon_code,
+                    'recovery_url': f'{live_link}bag/?coupon={cart.recovery_coupon_code}' if cart.recovery_coupon_code else None,
+                    'live_link': live_link,
+                },
+                branding=branding,
+            )
+            if success:
+                cart.reminder_sent = True
+                cart.reminder_sent_at = timezone.now()
+                cart.save(update_fields=['reminder_sent', 'reminder_sent_at'])
+        self.message_user(request, 'Reminder emails queued.')
+

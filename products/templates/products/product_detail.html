@@ -146,6 +146,12 @@
                 {% endif %}
 
                 <!-- Add to Bag form -->
+                {% if product.is_subscription %}
+                <a href="{% url 'subscribe' product.id %}" class="btn btn-glow rounded-pill py-2 px-4 fw-bold">
+                    <i class="fa-solid fa-rotate me-2"></i>Subscribe Now
+                </a>
+                <p class="text-muted small mt-2">Recurring payment: €{{ product.price }}/{{ product.get_subscription_interval_display }}</p>
+                {% else %}
                 <form action="/{{ store_slug }}/bag/add/{{ product.id }}/" method="POST" class="add-to-bag-form">
                     {% csrf_token %}
                     <input type="hidden" name="redirect_url" value="{{ request.path }}">
@@ -253,7 +259,7 @@
                                style="color:{% if product.id in wishlist_product_ids %}#ff4757{% else %}#fff{% endif %};"></i>
                         </button>
                     </div>
-                </form>
+                </form>{% endif %}
 
                 <!-- Back / Continue shopping -->
                 <div class="mt-4 d-flex gap-3">

@@ -128,6 +128,7 @@ TEMPLATES = [
                 'django.template.context_processors.media',
                 'ecommerce.store_context.store_context',
                 'ecommerce.admin_context.admin_store_stats',
+                'ecommerce.context_processors.currency_context',
                 'bag.contexts.bag_contents',  # required for shopping bag
                 'wishlist.context_processors.wishlist_context',
                 'comparison.context_processors.compare_context',
@@ -283,6 +284,11 @@ STRIPE_CURRENCY = 'eur'
 STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY', '')
 STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', '')
 STRIPE_WH_SECRET = os.getenv('STRIPE_WH_SECRET', '')
+
+# Multi-Currency Settings (EUR base, USD/GBP via Frankfurter API)
+CURRENCIES = ['EUR', 'USD', 'GBP']
+DEFAULT_CURRENCY = 'EUR'
+CURRENCY_RATES = {}  # cache populated at runtime by currency.py
 
 # CoinGate API key for XMR payments
 COINGATE_API_KEY = os.getenv('COINGATE_API_KEY', '')

@@ -16,7 +16,7 @@ class ProductAdmin(admin.ModelAdmin):
     inlines = [ProductVariantInline]
     list_display = (
         'name', 'sku', 'store_badge', 'category', 'price', 'stock_quantity',
-        'stock_status', 'is_featured',
+        'stock_status', 'is_featured', 'is_subscription', 'subscription_interval',
     )
     list_editable = ('price', 'stock_quantity')
     search_fields = ('name', 'sku')
@@ -46,6 +46,10 @@ class ProductAdmin(admin.ModelAdmin):
         }),
         ('Details', {
             'fields': ('description', 'has_sizes', 'weight_kg', 'views_count')
+        }),
+        ('Subscription', {
+            'fields': ('is_subscription', 'subscription_interval', 'stripe_price_id'),
+            'classes': ('collapse',)  # optional: collapse by default
         }),
     )
 

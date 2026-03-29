@@ -1,4 +1,5 @@
 import uuid
+from decimal import Decimal
 
 from django.db import models
 from django.db.models import Sum
@@ -95,6 +96,12 @@ class Order(models.Model):
     crypto_address = models.CharField(
         max_length=255, null=True, blank=True,
         help_text='Destination crypto wallet address')
+    coupon_codes = models.CharField(
+        max_length=200, blank=True, default='',
+        help_text='Comma-separated list of applied coupon codes')
+    coupon_discount = models.DecimalField(
+        max_digits=10, decimal_places=2, null=False, blank=True, default=0,
+        help_text='Total discount from applied coupons')
 
     def _generate_order_number(self):
         """
@@ -105,7 +112,7 @@ class Order(models.Model):
     def update_total(self):
         """
         Update grand total each time a line item is added,
-        accounting for delivery costs.
+        accounting for delivery costs and coupon discounts.
         """
         self.order_total = self.lineitems.aggregate(
             Sum('lineitem_total'))['lineitem_total__sum'] or 0
@@ -113,7 +120,9 @@ class Order(models.Model):
             self.delivery_cost = self.order_total * settings.STANDARD_DELIVERY_PERCENTAGE / 100
         else:
             self.delivery_cost = 0
-        self.grand_total = self.order_total + self.delivery_cost
+        # Apply coupon discount (subtract from grand_total)
+        discount = getattr(self, 'coupon_discount', Decimal('0.00')) if self.coupon_discount else Decimal('0.00')
+        self.grand_total = self.order_total + self.delivery_cost - discount
         self.save()
 
     def save(self, *args, **kwargs):
@@ -153,3 +162,54 @@ class OrderLineItem(models.Model):
 
     def __str__(self):
         return f'SKU {self.product.sku} on order {self.order.order_number}'
+
+
+class AbandonedCart(models.Model):
+    """
+    Records abandoned shopping cart snapshots so we can send
+    follow-up reminder emails.
+
+    Updated by CheckoutMiddleware whenever the session bag changes.
+    Marked as converted when the user completes an order.
+    """
+    user = models.ForeignKey(
+        UserProfile, null=True, blank=True,
+        on_delete=models.SET_NULL, related_name='abandoned_carts')
+    session_key = models.CharField(
+        max_length=40, null=True, blank=True,
+        help_text='Django session key for anonymous carts')
+    email = models.EmailField(
+        max_length=254, null=False, blank=False,
+        help_text='Email address to send the reminder to')
+    store = models.CharField(
+        max_length=20, choices=[
+            ('orderimo', 'Orderimo'),
+            ('petshop-ie', 'PetShop Ireland'),
+            ('digitalhub', 'DigitalHub'),
+        ], default='orderimo')
+    # Serialised bag snapshot: same format as request.session['bag']
+    bag_snapshot = models.TextField(default='{}')
+    bag_total = models.DecimalField(
+        max_digits=10, decimal_places=2, null=False, default=0)
+    last_activity = models.DateTimeField(auto_now=True)
+    # Conversion tracking
+    is_converted = models.BooleanField(default=False)
+    converted_at = models.DateTimeField(null=True, blank=True)
+    # Email send tracking
+    reminder_sent = models.BooleanField(default=False)
+    reminder_sent_at = models.DateTimeField(null=True, blank=True)
+    # Recovery coupon (links to a Coupon if one was issued)
+    recovery_coupon_code = models.CharField(max_length=50, null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Abandoned Cart'
+        verbose_name_plural = 'Abandoned Carts'
+        ordering = ['-last_activity']
+        indexes = [
+            models.Index(fields=['email', 'store', 'is_converted']),
+            models.Index(fields=['last_activity']),
+        ]
+
+    def __str__(self):
+        return f'AbandonedCart({self.email}, {self.store}, converted={self.is_converted})'
+

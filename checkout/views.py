@@ -7,19 +7,23 @@ import urllib.parse
 from django.shortcuts import (
     render, redirect, reverse, get_object_or_404, HttpResponse
 )
+from django.utils import timezone
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.conf import settings
 from django.views.decorators.cache import never_cache
 from django_ratelimit.decorators import ratelimit
+from decimal import Decimal
 
 from .forms import OrderForm
 from .models import Order, OrderLineItem
+from .webhook_handler import StripeWH_Handler
 from products.models import Product
 from profiles.models import UserProfile
 from profiles.forms import UserProfileForm
 from bag.contexts import bag_contents
 from notifications.utils import send_order_confirmation
+from coupons.utils import validate_and_apply_coupons
 
 
 def _create_stripe_checkout_session(request, order, current_bag):
@@ -169,6 +173,33 @@ def checkout(request):
     if request.method == 'POST':
         bag = request.session.get('bag', {})
 
+        # ---- Coupon handling ----
+        coupon_codes = []
+        for i in range(1, 4):
+            code = request.POST.get(f'coupon_code_{i}', '').strip()
+            if code:
+                coupon_codes.append(code.upper())
+
+        current_bag = bag_contents(request)
+        subtotal = current_bag['total']
+        coupon_discount = Decimal('0.00')
+        applied_coupons = []
+        coupon_error = None
+
+        if coupon_codes:
+            coupon_discount, applied_coupons, coupon_error = validate_and_apply_coupons(
+                coupon_codes, subtotal
+            )
+            if coupon_error:
+                messages.warning(request, coupon_error)
+
+        # Delivery cost after coupon (free shipping coupons)
+        free_shipping_coupons = [c for c in applied_coupons if c.discount_type == 'free_shipping']
+        delivery_after_discount = Decimal('0.00') if free_shipping_coupons else current_bag['delivery']
+
+        discounted_grand_total = subtotal + delivery_after_discount - coupon_discount
+        # ---- End coupon handling ----
+
         form_data = {
             'full_name': request.POST['full_name'],
             'email': request.POST['email'],
@@ -185,31 +216,53 @@ def checkout(request):
             order = order_form.save(commit=False)
             order.payment_method = payment_method
             order.original_bag = json.dumps(bag)
-            # Set store based on URL path
             order.store = _get_store_from_request(request)
-
-            current_bag = bag_contents(request)
+            # Store coupon codes on the order
+            order.coupon_codes = ','.join([c.code for c in applied_coupons]) if applied_coupons else ''
+            order.coupon_discount = coupon_discount
 
             if payment_method == 'card':
                 # Standard card payment via Stripe PaymentIntent
                 pid = request.POST.get('client_secret', '').split('_secret')[0]
                 order.stripe_pid = pid
                 order.payment_status = 'paid'
+                # Set order totals with coupon discount applied
+                order.order_total = subtotal
+                order.delivery_cost = delivery_after_discount
+                order.grand_total = discounted_grand_total
                 order.save()
                 _create_or_update_line_items(request, order, bag)
+                # Increment coupon use counters
+                for coupon in applied_coupons:
+                    coupon.current_uses += 1
+                    coupon.save()
 
             elif payment_method == 'stripe_crypto':
                 # Stripe Checkout Session for BTC/USDC
-                order.save()  # Save first to get order_number
+                order.order_total = subtotal
+                order.delivery_cost = delivery_after_discount
+                order.grand_total = discounted_grand_total
+                order.save()
                 _create_or_update_line_items(request, order, bag)
+                # Apply discount to session total
+                current_bag['grand_total'] = discounted_grand_total
                 session = _create_stripe_checkout_session(request, order, current_bag)
+                for coupon in applied_coupons:
+                    coupon.current_uses += 1
+                    coupon.save()
                 return redirect(session.url)
 
             elif payment_method == 'coingate_xmr':
                 # CoinGate XMR redirect flow
                 order.payment_status = 'pending'
+                order.order_total = subtotal
+                order.delivery_cost = delivery_after_discount
+                order.grand_total = discounted_grand_total
                 order.save()
                 _create_or_update_line_items(request, order, bag)
+                for coupon in applied_coupons:
+                    coupon.current_uses += 1
+                    coupon.save()
                 coingate_url = _create_coingate_order(request, order, current_bag)
                 if coingate_url:
                     return redirect(coingate_url)
@@ -225,6 +278,41 @@ def checkout(request):
         else:
             messages.error(request, 'There was an error with your form. \
                 Please double check your information.')
+            # Re-render with coupons preserved
+            bag = request.session.get('bag', {})
+            current_bag = bag_contents(request)
+            total = current_bag['grand_total']
+            stripe_total = round(total * 100)
+            stripe.api_key = stripe_secret_key
+            intent = stripe.PaymentIntent.create(
+                amount=stripe_total,
+                currency=settings.STRIPE_CURRENCY,
+            )
+            if request.user.is_authenticated:
+                try:
+                    profile = UserProfile.objects.get(user=request.user)
+                    order_form = OrderForm(initial={
+                        'full_name': profile.user.get_full_name(),
+                        'email': profile.user.email,
+                        'phone_number': profile.default_phone_number,
+                        'country': profile.default_country,
+                        'postcode': profile.default_postcode,
+                        'town_or_city': profile.default_town_or_city,
+                        'street_address1': profile.default_street_address1,
+                        'street_address2': profile.default_street_address2,
+                        'county': profile.default_county,
+                    })
+                except UserProfile.DoesNotExist:
+                    order_form = OrderForm()
+            else:
+                order_form = OrderForm()
+            template = 'checkout/checkout.html'
+            context = {
+                'order_form': order_form,
+                'stripe_public_key': stripe_public_key,
+                'client_secret': intent.client_secret,
+            }
+            return render(request, template, context)
     else:
         bag = request.session.get('bag', {})
         if not bag:
@@ -350,6 +438,17 @@ def checkout_success(request, order_number):
 
     if 'bag' in request.session:
         del request.session['bag']
+
+    # Mark abandoned cart as converted
+    try:
+        from .models import AbandonedCart
+        AbandonedCart.objects.filter(
+            email__iexact=order.email,
+            store=order.store,
+            is_converted=False,
+        ).update(is_converted=True, converted_at=timezone.now())
+    except Exception:
+        pass
 
     # Send order confirmation email (via notifications app)
     send_order_confirmation(order)

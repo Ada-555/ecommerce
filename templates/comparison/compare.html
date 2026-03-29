@@ -1,0 +1,192 @@
+{% extends "stores/orderimo_base.html" %}
+{% load static %}
+
+{% block title %}Compare Products — {{ store_name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .compare-table { border-collapse: separate; border-spacing: 0; }
+    .compare-table th, .compare-table td {
+        padding: 1rem;
+        border-bottom: 1px solid var(--border);
+        vertical-align: middle;
+    }
+    .compare-table thead th {
+        background: var(--card);
+        border-top: 1px solid var(--border);
+        font-family: 'Space Grotesk', sans-serif;
+        font-weight: 600;
+        color: var(--primary);
+        font-size: 1.1rem;
+    }
+    .compare-table thead th:first-child {
+        border-left: 1px solid var(--border);
+    }
+    .compare-table thead th:not(:first-child) {
+        border-left: none;
+        text-align: center;
+        min-width: 200px;
+    }
+    .compare-table tbody th {
+        background: rgba(0,180,216,0.06);
+        font-weight: 600;
+        color: var(--text);
+        white-space: nowrap;
+        border-left: 1px solid var(--border);
+        width: 160px;
+    }
+    .compare-table tbody td {
+        text-align: center;
+        border-left: 1px solid var(--border);
+        background: var(--card);
+    }
+    .compare-table tbody td:first-child {
+        border-left: none;
+    }
+    .compare-img { width: 100%; max-width: 160px; height: 160px; object-fit: cover; border-radius: 8px; }
+    .in-stock { color: #2ecc71; }
+    .out-stock { color: #e74c3c; }
+    .low-stock { color: #e67e22; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0"><i class="fa-solid fa-scale-balanced me-2" style="color:var(--primary);"></i>Compare Products</h2>
+        {% if compare_ids %}
+        <a href="{% url 'clear_compare' %}" class="btn btn-sm btn-outline-danger">
+            <i class="fa-solid fa-trash me-1"></i>Clear All
+        </a>
+        {% endif %}
+    </div>
+
+    {% if not products %}
+    <div class="text-center py-5" style="background:var(--card);border-radius:16px;border:1px solid var(--border);">
+        <i class="fa-solid fa-scale-unbalanced fa-3x mb-3" style="color:var(--muted);"></i>
+        <h4 class="text-white mb-3">No products to compare</h4>
+        <p class="text-muted mb-4">Add products using the ⚖ Compare button on product cards.</p>
+        <a href="/{{ store_slug }}/products/" class="btn btn-primary-custom">Browse Products</a>
+    </div>
+    {% else %}
+    <div class="table-responsive">
+        <table class="compare-table w-100">
+            <thead>
+                <tr>
+                    <th></th>
+                    {% for product in products %}
+                    <th>
+                        <div class="d-flex flex-column align-items-center gap-2">
+                            {% if product.image %}
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="compare-img">
+                            {% else %}
+                            <div class="bg-secondary d-flex align-items-center justify-content-center rounded" style="width:160px;height:160px;">
+                                <i class="fa-solid fa-image text-white fa-2x"></i>
+                            </div>
+                            {% endif %}
+                            <span class="text-white mt-2" style="font-size:0.95rem;">{{ product.name }}</span>
+                            <a href="{% url 'remove_from_compare' product.id %}" class="btn btn-sm btn-outline-danger">
+                                <i class="fa-solid fa-xmark"></i> Remove
+                            </a>
+                        </div>
+                    </th>
+                    {% endfor %}
+                    <!-- Fill empty columns to 3 -->
+                    {% with products|length as pcount %}
+                    {% if pcount < 3 %}
+                        {% for i in "123" %}
+                            {% if forloop.counter > pcount %}
+                            <th></th>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    {% endwith %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>Price</th>
+                    {% for product in products %}
+                    <td><span class="fw-bold fs-5" style="color:var(--primary);">€{{ product.price }}</span></td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <th>Rating</th>
+                    {% for product in products %}
+                    <td>
+                        {% if product.rating %}
+                        <i class="fa-solid fa-star" style="color:#FFD700;"></i>
+                        {{ product.rating|floatformat:1 }}/5
+                        {% else %}
+                        <span class="text-muted">No rating</span>
+                        {% endif %}
+                    </td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <th>Category</th>
+                    {% for product in products %}
+                    <td>{{ product.category.friendly_name|default:product.category.name|default:"—" }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <th>Brand</th>
+                    {% for product in products %}
+                    <td>{{ product.brand|default:"—" }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <th>Stock</th>
+                    {% for product in products %}
+                    <td>
+                        {% if product.stock_quantity == 0 %}
+                        <span class="out-stock"><i class="fa-solid fa-circle-xmark me-1"></i>Out of Stock</span>
+                        {% elif product.stock_quantity and product.stock_quantity < 5 %}
+                        <span class="low-stock"><i class="fa-solid fa-circle-exclamation me-1"></i>Only {{ product.stock_quantity }} left</span>
+                        {% else %}
+                        <span class="in-stock"><i class="fa-solid fa-circle-check me-1"></i>In Stock</span>
+                        {% endif %}
+                    </td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    {% for product in products %}
+                    <td>
+                        <span style="display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;font-size:0.9rem;color:var(--muted);">
+                            {{ product.description|truncatewords:20 }}
+                        </span>
+                    </td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <th>SKU</th>
+                    {% for product in products %}
+                    <td class="text-muted small">{{ product.sku|default:"—" }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <th>Weight</th>
+                    {% for product in products %}
+                    <td>{% if product.weight_kg %}{{ product.weight_kg }} kg{% else %}—{% endif %}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <th></th>
+                    {% for product in products %}
+                    <td>
+                        <a href="/{{ store_slug }}/bag/add/{{ product.id }}/" class="btn btn-primary-custom btn-sm-custom w-100 mb-2">
+                            <i class="fa-solid fa-cart-plus me-1"></i>Add to Cart
+                        </a>
+                        <a href="/{{ store_slug }}/products/{{ product.id }}/" class="btn btn-outline-custom btn-sm-custom w-100">
+                            View Details
+                        </a>
+                    </td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

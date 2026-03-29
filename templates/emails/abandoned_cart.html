@@ -1,0 +1,74 @@
+{% extends "emails/base_email.html" %}
+
+{% block email_content %}
+<p>Hi there,</p>
+<p>You left some items in your cart at <strong>{{ branding.name }}</strong> — and we thought you'd want them!</p>
+
+<div class="order-box">
+  <div class="order-meta">
+    <div>
+      <div class="order-meta-label">Store</div>
+      <div class="order-meta-value">{{ branding.name }}</div>
+    </div>
+    <div style="text-align:right;">
+      <div class="order-meta-label">Cart Total</div>
+      <div class="order-meta-value text-cyan">€{{ cart_total|floatformat:2 }}</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <p class="mb-2" style="font-size:13px; color:#888;">Your cart snapshot:</p>
+  <table class="items-table">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th style="text-align:center;">Qty</th>
+        <th style="text-align:right;">Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in cart_items %}
+      <tr>
+        <td>
+          {{ item.name }}
+          {% if item.size %}<br><span style="color:#888; font-size:12px;">Size: {{ item.size }}</span>{% endif %}
+        </td>
+        <td style="text-align:center;" class="item-qty">×{{ item.quantity }}</td>
+        <td class="item-price">€{{ item.total|floatformat:2 }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <hr class="divider">
+
+  <div class="totals-row">
+    <span>Cart Total</span>
+    <span>€{{ cart_total|floatformat:2 }}</span>
+  </div>
+</div>
+
+{% if recovery_code %}
+<div style="background: rgba(0,180,216,0.1); border: 2px dashed var(--cyan, #00b4d8); border-radius: 8px; padding: 16px; text-align: center; margin: 20px 0;">
+  <p class="mb-1" style="font-size:13px; color:#888; text-transform:uppercase; letter-spacing:1px;">Your Exclusive Recovery Offer</p>
+  <p class="mb-2">Use code <strong style="font-size:18px; letter-spacing:2px;">{{ recovery_code }}</strong> for a discount on your order!</p>
+  <a href="{{ recovery_url }}"
+     style="display:inline-block; background: var(--cyan, #00b4d8); color:#000; padding:10px 24px; border-radius:20px; text-decoration:none; font-weight:bold; font-size:14px;">
+    Complete Your Order →
+  </a>
+</div>
+{% else %}
+<div style="text-align:center; margin: 20px 0;">
+  <a href="{{ cart_url }}"
+     style="display:inline-block; background: var(--cyan, #00b4d8); color:#000; padding:10px 24px; border-radius:20px; text-decoration:none; font-weight:bold; font-size:14px;">
+    Complete Your Order →
+  </a>
+</div>
+{% endif %}
+
+<p style="font-size:13px; color:#888; text-align:center;">
+  This offer is valid for the next 48 hours. Your cart is waiting — we'd love to see you again! 💜
+</p>
+
+{% endblock %}
