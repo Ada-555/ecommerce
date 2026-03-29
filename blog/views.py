@@ -5,12 +5,12 @@ from django.contrib import messages
 from django.urls import reverse
 from .models import BlogPage
 from .forms import BlogPageForm
-# from datetime import datetime
 
 
 def blog(request):
     """ Display list of blog posts """
-    blog_pages = BlogPage.objects.all().order_by('-created_at')
+    active_store = request.session.get('active_store', 'orderimo')
+    blog_pages = BlogPage.objects.filter(store=active_store).order_by('-created_at')
     template = 'blog/blog.html'
     paginate_by = 3  # paginate by posts (sets posts per page)
     paginator = Paginator(blog_pages, paginate_by)
@@ -50,10 +50,11 @@ def create_blog_page(request):
 
 def blog_page_detail(request, pk):
     """ Display a blog post """
-    blog_page = get_object_or_404(BlogPage, pk=pk)
+    active_store = request.session.get('active_store', 'orderimo')
+    blog_page = get_object_or_404(BlogPage, pk=pk, store=active_store)
 
-    # Get all blog pages ordered by created_at
-    all_blog_pages = BlogPage.objects.all().order_by('created_at')
+    # Get all blog pages ordered by created_at (same store)
+    all_blog_pages = BlogPage.objects.filter(store=active_store).order_by('created_at')
 
     # Find the index of the current blog page
     current_index = list(all_blog_pages).index(blog_page)

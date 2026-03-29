@@ -10,6 +10,7 @@ class BlogPage(models.Model):
     content = RichTextField(blank=True, null=True)
     image = models.ImageField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    store = models.CharField(max_length=50, blank=True, default='orderimo')
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -18,3 +19,7 @@ class BlogPage(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse('blog_page_detail', kwargs={'pk': self.pk})

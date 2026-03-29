@@ -18,6 +18,10 @@ class Category(models.Model):
     def get_friendly_name(self):
         return self.friendly_name or self.name
 
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse('products') + f'?category={self.name}'
+
 
 class Product(models.Model):
     category = models.ForeignKey(
@@ -46,9 +50,16 @@ class Product(models.Model):
     # Digital product fields
     is_digital = models.BooleanField(default=False)
     download_file = models.FileField(upload_to='downloads/', blank=True, null=True)
+    # Store filtering
+    store = models.CharField(max_length=50, blank=True, default='orderimo',
+        help_text="Store slug this product belongs to: orderimo, petshop-ie, digitalhub")
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse('product_detail', args=[self.id])
 
     @property
     def stock_status(self):

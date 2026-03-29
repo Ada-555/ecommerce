@@ -1,4 +1,3 @@
-import re
 from difflib import SequenceMatcher
 
 from django.core.paginator import Paginator
@@ -28,8 +27,8 @@ def _fuzzy_match(query, candidates, threshold=0.6):
 
 def all_products(request):
     """ A view to show all products, including sorting and search queries """
-
-    products = Product.objects.select_related('category').order_by('id')
+    active_store = request.session.get('active_store', 'orderimo')
+    products = Product.objects.filter(store=active_store).select_related('category').order_by('id')
     query = None
     categories = None
     sort = None
@@ -119,11 +118,12 @@ def all_products(request):
 def category_detail(request, slug):
     """ A view to show products in a specific category """
     category = get_object_or_404(Category, name=slug)
+    active_store = request.session.get('active_store', 'orderimo')
 
     sort = request.GET.get('sort', None)
     direction = request.GET.get('direction', None)
 
-    products = Product.objects.filter(category=category).select_related('category')
+    products = Product.objects.filter(category=category, store=active_store).select_related('category')
 
     if sort:
         sortkey = sort
@@ -183,8 +183,9 @@ def category_detail(request, slug):
 
 def product_detail(request, product_id):
     """ A view to show individual product details """
+    active_store = request.session.get('active_store', 'orderimo')
 
-    product = get_object_or_404(Product.objects.select_related('category'), pk=product_id)
+    product = get_object_or_404(Product.objects.select_related('category'), pk=product_id, store=active_store)
 
     # Track recently viewed (store up to 4 product IDs in session)
     recently_viewed = request.session.get('recently_viewed', [])
@@ -200,17 +201,17 @@ def product_detail(request, product_id):
     # Increment views
     Product.objects.filter(pk=product_id).update(views_count=product.views_count + 1)
 
-    # Related products (same category)
+    # Related products (same category, same store)
     related_products = list(
-        Product.objects.filter(category=product.category).exclude(
+        Product.objects.filter(category=product.category, store=active_store).exclude(
             pk=product_id
         ).select_related('category').order_by('-views_count')[:4]
     )
 
-    # Recently viewed products (from session, excluding current product)
+    # Recently viewed products (from session, excluding current product, same store)
     recently_viewed_ids = request.session.get('recently_viewed', [])
     recently_viewed = list(
-        Product.objects.filter(pk__in=[p for p in recently_viewed_ids if p != product_id])
+        Product.objects.filter(pk__in=[p for p in recently_viewed_ids if p != product_id], store=active_store)
         .select_related('category')[:4]
     )
 
