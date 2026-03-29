@@ -1,63 +1,51 @@
 # Plurino / Orderimo — Build Task Dashboard
 
-## 🚦 Status (2026-03-29 09:50 GMT+1)
+## 🚦 Status (2026-03-29 09:55 GMT+1)
 
 - **Tests:** ✅ 112/112 passing
-- **Stores:** ✅ All 3 live (200 OK)
-- **Build:** ✅ Production-ready core features complete
+- **Stores:** ✅ Orderimo, PetShop Ireland, DigitalHub (200 OK)
+- **Core Build:** ✅ Complete (see completed list)
 
 ---
 
 ## ✅ Completed Features
 
-| Feature | Commit | Notes |
-|---------|--------|-------|
-| Store-scoped search | `6e12240` | /orderimo/search/, /petshop/search/, /digital/search/ |
-| Email notifications | `5a07479` | 1,851 lines — confirmation, shipped, delivered, welcome |
-| Order tracking page | `dd6886b` | tracking/<order_number>/, status fields, email integration |
-| Wishlist (heart icon) | `5bfc59a` | HTMX toggle, per-store |
-| Crypto payments | `dd1084b` | BTC/USDC via Stripe, XMR via CoinGate |
-| Phase 12 Reviews | `2d8192b` | Frontend: star ratings, verified buyer badge, submission form |
-| Multi-currency | `35bc9fe` | EUR/USD/GBP selector with Frankfurter API |
-| Affiliate program | `a504dbf` | Referral tracking, commissions, dashboard |
-| Stub invoices app | — | download_invoice placeholder (needs full implementation) |
-| Stabilization | `5ad684e` | Set currency view, URL fixes, app disable for incomplete features |
+| Feature | Commit |
+|---------|--------|
+| Store-scoped search | `6e12240` |
+| Email notifications | `5a07479` |
+| Order tracking page | `dd6886b` |
+| Wishlist (heart icon) | `5bfc59a` |
+| Crypto payments | `dd1084b` |
+| Phase 12 Reviews (frontend) | `2d8192b` |
+| Multi-currency (EUR/USD/GBP) | `35bc9fe` |
+| Affiliate program | `a504dbf` |
+| Stabilization (set_currency, URL fixes) | `5ad684e` |
 
 ---
 
-## 🟡 In Progress / TBD
+## 🟡 Final Sprint — In Progress (now)
 
-| Feature | Status | Next step |
-|---------|--------|-----------|
-| Multi-coupon system | Partially coded (coupons app exists, not integrated) | Integrate into checkout UI |
-| Subscription products | Model exists, not integrated | Add subscription checkout flow |
-| Newsletter signup | Newsletter app exists | Configure Mailchimp, add footer form |
-| Abandoned cart emails | Signal design only | Implement management command + cron |
-| PDF invoices | Stub view only | Build ReportLab PDF generation |
-| Product comparisons | Comparison app exists | Build compare page (+ add compare buttons) |
-| GA4 dashboard | Analytics app partial | Finish dashboard template, add to admin |
+| Agent | Task | Status |
+|-------|------|--------|
+| agent-coupon-ui | Integrate multi-coupon into checkout UI (apply button, discount line) | 🟡 Running |
+| agent-subscriptions-checkout | Subscription checkout flow (Stripe mode='subscription') | 🟡 Running |
+| agent-newsletter-finish | Newsletter footer form + Mailchimp integration | 🟡 Running |
+| agent-abandoned-cart | Management command for abandoned cart emails | 🟟 Running |
+| agent-invoices-finish | PDF invoice generation with ReportLab | 🟡 Running |
 
 ---
 
-## 🧠 Notes
+## 🔜 Scoped but not started (can do any time)
 
-- **Option B partitions** — 6 dedicated agents ran in parallel without file conflicts
-- **Max API burn** — used all available capacity
-- **Test baseline** — currently 112/112 passing on stabilized HEAD
-- **Uncommitted work:** None (all agent work either committed or stashed/stabilized)
-
----
-
-## 📦 Next Steps (if continuing)
-
-1. **Implement checkout integration for coupons**
-2. **Add subscription mode to checkout**
-3. **Finish newsletter footer form + Mailchimp settings**
-4. **Implement abandoned cart email management command**
-5. **Build PDF invoice generation**
-6. **Create comparison page template & add compare buttons**
-7. **Complete GA4 analytics admin page**
+| Feature | Notes |
+|---------|-------|
+| Product comparisons | templates/comparison/compare.html + compare buttons in product cards |
+| GA4 analytics dashboard | Admin analytics page template already created |
+| Multi-coupon backend | Model exists, needs checkout integration (in progress above) |
+| Subscription admin UI | Show in admin, subscription management page (in progress) |
+| Final deployment checklist | DEPLOYMENT.md, .env.example, production settings |
 
 ---
 
-_Last updated: 2026-03-29 09:50 GMT+1_
+_Last updated: 2026-03-29 09:55 GMT+1_
