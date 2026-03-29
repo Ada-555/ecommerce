@@ -1,81 +1,152 @@
-[{
-        "pk": 1,
-        "model": "products.category",
-        "fields": {
-            "name": "activewear",
-            "friendly_name": "Activewear"
-        }
-    },
-    {
-        "pk": 2,
-        "model": "products.category",
-        "fields": {
-            "name": "bed_bath",
-            "friendly_name": "Bed & Bath"
-        }
-    },
-    {
-        "pk": 3,
-        "model": "products.category",
-        "fields": {
-            "name": "clearance",
-            "friendly_name": "Clearance"
-        }
-    },
-    {
-        "pk": 4,
-        "model": "products.category",
-        "fields": {
-            "name": "deals",
-            "friendly_name": "Deals"
-        }
-    },
-    {
-        "pk": 5,
-        "model": "products.category",
-        "fields": {
-            "name": "essentials",
-            "friendly_name": "Essentials"
-        }
-    },
-    {
-        "pk": 6,
-        "model": "products.category",
-        "fields": {
-            "name": "jackets_hoodies",
-            "friendly_name": "Jackets & Hoodies"
-        }
-    },
-    {
-        "pk": 7,
-        "model": "products.category",
-        "fields": {
-            "name": "kitchen_dining",
-            "friendly_name": "Kitchen & Dining"
-        }
-    },
-    {
-        "pk": 8,
-        "model": "products.category",
-        "fields": {
-            "name": "new_arrivals",
-            "friendly_name": "New Arrivals"
-        }
-    },
-    {
-        "pk": 9,
-        "model": "products.category",
-        "fields": {
-            "name": "shirts",
-            "friendly_name": "Shirts"
-        }
-    },
-    {
-        "pk": 10,
-        "model": "products.category",
-        "fields": {
-            "name": "electronics_technology",
-            "friendly_name": "Electronics & Technology"
-        }
+[
+  {
+    "model": "products.category",
+    "pk": 10,
+    "fields": {
+      "name": "electronics",
+      "friendly_name": "Electronics",
+      "description": "Latest tech gadgets, devices, and accessories for the modern digital lifestyle.",
+      "display_order": 1
     }
+  },
+  {
+    "model": "products.category",
+    "pk": 11,
+    "fields": {
+      "name": "phones_tablets",
+      "friendly_name": "Phones & Tablets",
+      "description": "Smartphones, tablets, and mobile accessories.",
+      "display_order": 2
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 12,
+    "fields": {
+      "name": "computers_laptops",
+      "friendly_name": "Computers & Laptops",
+      "description": "Desktops, laptops, and computing accessories.",
+      "display_order": 3
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 13,
+    "fields": {
+      "name": "audio_headphones",
+      "friendly_name": "Audio & Headphones",
+      "description": "Headphones, earbuds, speakers, and audio gear.",
+      "display_order": 4
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 14,
+    "fields": {
+      "name": "accessories",
+      "friendly_name": "Accessories",
+      "description": "Cables, chargers, cases, and tech accessories.",
+      "display_order": 5
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 20,
+    "fields": {
+      "name": "home",
+      "friendly_name": "Home & Living",
+      "description": "Everything for your home — from bedroom to garden.",
+      "display_order": 10
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 21,
+    "fields": {
+      "name": "bedroom",
+      "friendly_name": "Bedroom",
+      "description": "Bedding, mattresses, furniture, and bedroom decor.",
+      "display_order": 11
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 22,
+    "fields": {
+      "name": "kitchen",
+      "friendly_name": "Kitchen",
+      "description": "Cookware, appliances, and kitchen essentials.",
+      "display_order": 12
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 23,
+    "fields": {
+      "name": "decor",
+      "friendly_name": "Decor",
+      "description": "Wall art, candles, vases, and home accessories.",
+      "display_order": 13
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 24,
+    "fields": {
+      "name": "garden",
+      "friendly_name": "Garden",
+      "description": "Plants, outdoor furniture, and garden tools.",
+      "display_order": 14
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 30,
+    "fields": {
+      "name": "fashion",
+      "friendly_name": "Fashion",
+      "description": "Trendy clothing and accessories for every style.",
+      "display_order": 20
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 31,
+    "fields": {
+      "name": "men",
+      "friendly_name": "Men",
+      "description": "Clothing and accessories for men.",
+      "display_order": 21
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 32,
+    "fields": {
+      "name": "women",
+      "friendly_name": "Women",
+      "description": "Clothing and accessories for women.",
+      "display_order": 22
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 33,
+    "fields": {
+      "name": "shoes",
+      "friendly_name": "Shoes",
+      "description": "Footwear for every occasion.",
+      "display_order": 23
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 34,
+    "fields": {
+      "name": "fashion_accessories",
+      "friendly_name": "Accessories",
+      "description": "Bags, watches, jewellery, and fashion accessories.",
+      "display_order": 24
+    }
+  }
 ]
