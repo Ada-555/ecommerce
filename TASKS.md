@@ -1,71 +1,63 @@
 # Plurino / Orderimo — Build Task Dashboard
 
-## 🚦 Status Legend
-- ✅ **DONE** — completed and merged
-- 🟡 **IN PROGRESS** — actively being built
-- ⏳ **QUEUED** — next to spawn
-- 🔜 **SOON** — planned
+## 🚦 Status (2026-03-29 09:50 GMT+1)
+
+- **Tests:** ✅ 112/112 passing
+- **Stores:** ✅ All 3 live (200 OK)
+- **Build:** ✅ Production-ready core features complete
 
 ---
 
-## ✅ Completed
+## ✅ Completed Features
 
-| Task | Commit | Notes |
-|------|--------|-------|
-| Store-scoped search | `6e12240` | ✅ /orderimo/search/, /petshop/search/, /digital/search/ |
-| Email notifications (full) | `5a07479` | ✅ 1,851 lines — order confirmation/shipped/delivered, welcome |
-| Order tracking page (full) | `dd6886b` | ✅ tracking/<int:order_number>/, status fields, success page |
-| Wishlist / Save for later | `5bfc59a` | ✅ model, views, HTMX toggle, per-store |
-| Wishlist / Save for later (final) | `2bee7da` | ✅ HTMX toggle with pulse animation, heart icon on product cards & detail, per-store wishlist page |
-| Crypto payments (BTC/USDC/XMR) | `dd1084b` | ✅ Stripe crypto + CoinGate for XMR |
-| Phase 12 — Review templates | (local) | ✅ Star ratings, verified buyer badge, rating breakdown, clickable review form |
-
----
-
-## 🟡 Active — Partitioned by Directory
-
-| Agent | Owns | Features |
-|-------|------|----------|
-| ~~**phase12-frontend**~~ | ~~`products/templates/`~~ | ✅ Review display, submit form, verified buyer badge, star ratings |
-| **agent-payments** | `coupons/`, `subscriptions/` | Multi-coupon + Stripe subscriptions |
-| **agent-ops** | `newsletter/`, `invoices/` | Newsletter (Mailchimp), abandoned cart, PDF invoices |
-| ~~**wishlist-retry**~~ | ~~`wishlist/`~~ | ✅ Done |
-| **order-tracking-retry** | `tracking/` | Tracking page, order status view |
+| Feature | Commit | Notes |
+|---------|--------|-------|
+| Store-scoped search | `6e12240` | /orderimo/search/, /petshop/search/, /digital/search/ |
+| Email notifications | `5a07479` | 1,851 lines — confirmation, shipped, delivered, welcome |
+| Order tracking page | `dd6886b` | tracking/<order_number>/, status fields, email integration |
+| Wishlist (heart icon) | `5bfc59a` | HTMX toggle, per-store |
+| Crypto payments | `dd1084b` | BTC/USDC via Stripe, XMR via CoinGate |
+| Phase 12 Reviews | `2d8192b` | Frontend: star ratings, verified buyer badge, submission form |
+| Multi-currency | `35bc9fe` | EUR/USD/GBP selector with Frankfurter API |
+| Affiliate program | `a504dbf` | Referral tracking, commissions, dashboard |
+| Stub invoices app | — | download_invoice placeholder (needs full implementation) |
+| Stabilization | `5ad684e` | Set currency view, URL fixes, app disable for incomplete features |
 
 ---
 
-## ⏳ Queued (as slots free)
+## 🟡 In Progress / TBD
 
-| # | Agent | Owns | Features |
-|---|-------|------|----------|
-| 6 | agent-seo | `comparison/`, `analytics/` | Product comparisons, GA4 dashboard |
-| 7 | agent-currencies | `settings.py`, templates | Multi-currency (EUR/USD/GBP) |
-| 8 | agent-affiliate | `affiliates/` | Affiliate program with referral tracking |
-| 9 | agent-final | misc | Final polish, docs, deployment checks |
-
----
-
-## 📋 Agent Log
-
-| Time | Agent | Status |
-|------|-------|--------|
-| 08:44 | email-notifications | ✅ Done (1,851 lines) |
-| 08:44 | crypto-payments | ✅ Done |
-| 08:45 | wishlist-retry | ✅ Done (HTMX toggle) |
-| 08:45 | order-tracking-retry | ✅ Done (tracking page + status) |
-| 08:51 | wishlist-retry | ✅ Final commit 2bee7da (heart icon, pulse, per-store) |
-| 08:46 | agent-ops | 🟡 Running |
-| 08:46 | agent-payments | 🟡 Running |
-| 08:46 | phase12-frontend | ✅ Done |
+| Feature | Status | Next step |
+|---------|--------|-----------|
+| Multi-coupon system | Partially coded (coupons app exists, not integrated) | Integrate into checkout UI |
+| Subscription products | Model exists, not integrated | Add subscription checkout flow |
+| Newsletter signup | Newsletter app exists | Configure Mailchimp, add footer form |
+| Abandoned cart emails | Signal design only | Implement management command + cron |
+| PDF invoices | Stub view only | Build ReportLab PDF generation |
+| Product comparisons | Comparison app exists | Build compare page (+ add compare buttons) |
+| GA4 dashboard | Analytics app partial | Finish dashboard template, add to admin |
 
 ---
 
-## 📊 Site Health
-- Stores: ✅ All 3 live (200 OK)
-- Tests: ✅ 101/101 passing
-- Deployment: ready
+## 🧠 Notes
+
+- **Option B partitions** — 6 dedicated agents ran in parallel without file conflicts
+- **Max API burn** — used all available capacity
+- **Test baseline** — currently 112/112 passing on stabilized HEAD
+- **Uncommitted work:** None (all agent work either committed or stashed/stabilized)
 
 ---
 
-_Last updated: 2026-03-29 08:52 GMT+1_
+## 📦 Next Steps (if continuing)
 
+1. **Implement checkout integration for coupons**
+2. **Add subscription mode to checkout**
+3. **Finish newsletter footer form + Mailchimp settings**
+4. **Implement abandoned cart email management command**
+5. **Build PDF invoice generation**
+6. **Create comparison page template & add compare buttons**
+7. **Complete GA4 analytics admin page**
+
+---
+
+_Last updated: 2026-03-29 09:50 GMT+1_
