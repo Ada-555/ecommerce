@@ -617,3 +617,36 @@ footer a:hover {
     border-color: var(--cyan) !important;
     box-shadow: 0 0 12px rgba(0, 255, 255, 0.25) !important;
 }
+
+/* ---- Wishlist Heart Icon ---- */
+.wishlist-toggle {
+    transition: transform 0.2s ease, background 0.2s ease;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.wishlist-toggle:hover {
+    transform: scale(1.15);
+    background: rgba(0, 0, 0, 0.8) !important;
+}
+
+.wishlist-toggle.btn-wishlist-active {
+    background: rgba(255, 71, 87, 0.85) !important;
+}
+
+.wishlist-toggle.btn-wishlist-active:hover {
+    background: rgba(255, 71, 87, 0.95) !important;
+}
+
+.wishlist-toggle.animating {
+    animation: wishlist-pulse 0.4s ease-out;
+}
+
+@keyframes wishlist-pulse {
+    0%  { transform: scale(1); }
+    30% { transform: scale(1.4); }
+    60% { transform: scale(0.9); }
+    100%{ transform: scale(1); }
+}
+
+/* Remove animation for wishlist items */

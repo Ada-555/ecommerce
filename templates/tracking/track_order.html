@@ -1,0 +1,286 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_title %}| Track Order #{{ order_number }}{% endblock %}
+
+{% block page_header %}
+<div class="page-header w-100">
+    <div class="container">
+        <div class="row">
+            <div class="col text-center">
+                <h1 class="display-6 text-cyan">
+                    <i class="fa-solid fa-location-dot me-2"></i>Track Your Order
+                </h1>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container mb-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8">
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} text-center mb-3" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            {% if not order %}
+            <!-- Email Verification Form -->
+            <div class="card product-card p-4 mb-4">
+                <div class="text-center mb-4">
+                    <i class="fa-solid fa-envelope-circle-check text-cyan fa-4x mb-3"></i>
+                    <h3 class="text-white">Verify Your Email</h3>
+                    <p class="text-muted">
+                        Enter the email address you used for order
+                        <strong class="text-cyan font-monospace">#{{ order_number }}</strong>
+                    </p>
+                </div>
+                <form method="POST" action=".">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="email" class="form-label text-muted">Email Address</label>
+                        <input
+                            type="email"
+                            class="form-control form-control-dark"
+                            id="email"
+                            name="email"
+                            placeholder="your@email.com"
+                            required
+                        >
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-cyan rounded-pill py-2">
+                            <i class="fa-solid fa-magnifying-glass me-2"></i>Track Order
+                        </button>
+                    </div>
+                </form>
+                <div class="text-center mt-3">
+                    <a href="{% url 'home' %}" class="text-muted small">
+                        <i class="fa-solid fa-arrow-left me-1"></i>Back to home
+                    </a>
+                </div>
+            </div>
+
+            {% else %}
+            <!-- Order Found — Show Tracking Details -->
+
+            <!-- Order Header -->
+            <div class="card product-card p-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                    <div>
+                        <h4 class="text-white mb-1">Order #{{ order.order_number }}</h4>
+                        <p class="text-muted mb-0">
+                            <i class="fa-regular fa-calendar me-1"></i>
+                            Placed {{ order.date|date:"d M Y, H:i" }}
+                        </p>
+                    </div>
+                    <div>
+                        {% if order.status == 'pending' %}
+                            <span class="badge fs-6" style="background:#ffc107; color:#000;">Pending</span>
+                        {% elif order.status == 'confirmed' %}
+                            <span class="badge fs-6" style="background:#0d6efd;">Confirmed</span>
+                        {% elif order.status == 'shipped' %}
+                            <span class="badge fs-6" style="background:#6f42c1;">Shipped</span>
+                        {% elif order.status == 'out_for_delivery' %}
+                            <span class="badge fs-6" style="background:#d63384;">Out for Delivery</span>
+                        {% elif order.status == 'delivered' %}
+                            <span class="badge fs-6" style="background:#198754;">Delivered</span>
+                        {% elif order.status == 'cancelled' %}
+                            <span class="badge fs-6" style="background:#dc3545;">Cancelled</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tracking Timeline -->
+            {% if order.status != 'cancelled' %}
+            <div class="card product-card p-4 mb-4">
+                <h5 class="text-cyan mb-4"><i class="fa-solid fa-route me-2"></i>Tracking Timeline</h5>
+                <div class="tracking-timeline">
+                    {% for step in timeline %}
+                    <div class="tracking-step {% if step.done %}done{% endif %} {% if step.active %}active{% endif %}">
+                        <div class="tracking-icon">
+                            <i class="fa-solid {{ step.icon }}"></i>
+                        </div>
+                        <div class="tracking-line"></div>
+                        <div class="tracking-label">
+                            <span class="step-label {% if step.done %}text-white{% else %}text-muted{% endif %}">
+                                {{ step.label }}
+                            </span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Order Items -->
+            <div class="card product-card p-4 mb-4">
+                <h5 class="text-cyan mb-3"><i class="fa-solid fa-box-open me-2"></i>Order Items</h5>
+                <table class="table table-dark table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Details</th>
+                            <th class="text-center">Qty</th>
+                            <th class="text-end">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in order.lineitems.all %}
+                        <tr>
+                            <td>
+                                {% if item.product.image %}
+                                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}"
+                                         style="width:50px; height:50px; object-fit:cover;" class="rounded">
+                                {% else %}
+                                    <div class="bg-secondary rounded d-flex align-items-center justify-content-center"
+                                         style="width:50px; height:50px;">
+                                        <i class="fa-solid fa-image text-muted"></i>
+                                    </div>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <strong class="text-white">{{ item.product.name }}</strong>
+                                {% if item.product_size %}
+                                    <br><small class="text-muted">{{ item.product_size }}</small>
+                                {% endif %}
+                            </td>
+                            <td class="text-center">{{ item.quantity }}</td>
+                            <td class="text-end text-white">€{{ item.lineitem_total }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Delivery Address & Order Total -->
+            <div class="row g-4 mb-4">
+                <div class="col-12 col-md-6">
+                    <div class="card product-card p-4 h-100">
+                        <h5 class="text-cyan mb-3"><i class="fa-solid fa-location-dot me-2"></i>Delivery Address</h5>
+                        <address class="text-white mb-0">
+                            <strong>{{ order.full_name }}</strong><br>
+                            {{ order.street_address1 }}{% if order.street_address2 %}, {{ order.street_address2 }}{% endif %}<br>
+                            {{ order.town_or_city }}{% if order.county %}, {{ order.county }}{% endif %}<br>
+                            {{ order.postcode }}<br>
+                            {{ order.country }}
+                        </address>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="card product-card p-4 h-100">
+                        <h5 class="text-cyan mb-3"><i class="fa-solid fa-receipt me-2"></i>Order Total</h5>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Subtotal</span>
+                            <span class="text-white">€{{ order.order_total }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Delivery</span>
+                            <span class="text-white">€{{ order.delivery_cost }}</span>
+                        </div>
+                        <hr style="border-color: #333;">
+                        <div class="d-flex justify-content-between">
+                            <strong class="text-cyan">Total</strong>
+                            <strong class="text-white">€{{ order.grand_total }}</strong>
+                        </div>
+                        {% if order.estimated_delivery %}
+                        <div class="d-flex justify-content-between mt-3">
+                            <span class="text-muted">
+                                <i class="fa-solid fa-truck-fast me-1"></i>Est. Delivery
+                            </span>
+                            <span class="text-white">{{ order.estimated_delivery|date:"d M Y" }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="text-center">
+                <a href="{% url 'home' %}" class="btn btn-outline-cyan rounded-pill px-4">
+                    <i class="fa-solid fa-bag-shopping me-2"></i>Continue Shopping
+                </a>
+            </div>
+
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+
+<style>
+/* Tracking Timeline Styles */
+.tracking-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+.tracking-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    position: relative;
+}
+.tracking-step:last-child .tracking-line {
+    display: none;
+}
+.tracking-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #333;
+    border: 2px solid #444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-size: 1rem;
+    flex-shrink: 0;
+    z-index: 2;
+}
+.tracking-step.done .tracking-icon {
+    background: #00FFFF;
+    border-color: #00FFFF;
+    color: #000;
+}
+.tracking-step.active .tracking-icon {
+    background: #00FFFF;
+    border-color: #00FFFF;
+    color: #000;
+    animation: pulse-glow 2s infinite;
+}
+.tracking-line {
+    position: absolute;
+    left: 19px;
+    top: 40px;
+    width: 2px;
+    height: calc(100% + 0px);
+    background: #444;
+}
+.tracking-step.done .tracking-line {
+    background: #00FFFF;
+}
+.tracking-label {
+    padding: 8px 0;
+    padding-left: 0.5rem;
+}
+.step-label {
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+.tracking-step.active .step-label {
+    color: #00FFFF !important;
+}
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(0, 255, 255, 0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(0, 255, 255, 0); }
+}
+</style>
+{% endblock %}

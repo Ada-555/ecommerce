@@ -1,0 +1,29 @@
+Order #{{ order.order_number }} Confirmed — {{ branding.name }}
+================================================
+
+Hi {{ order.full_name }},
+
+Your order #{{ order.order_number }} has been confirmed!
+
+Order Date: {{ order.date|date:"M d, Y" }}
+Total: €{{ grand_total|floatformat:2 }}
+
+Items:
+{% for item in line_items %}- {{ item.name }}{% if item.size %} (Size: {{ item.size }}){% endif %} x{{ item.quantity }} — €{{ item.total|floatformat:2 }}
+{% endfor %}
+
+Subtotal: €{{ order_total|floatformat:2 }}
+Delivery: {% if order.delivery_cost > 0 %}€{{ delivery_cost|floatformat:2 }}{% else %}Free{% endif %}
+Total: €{{ grand_total|floatformat:2 }}
+
+Delivery Address:
+{{ order.full_name }}
+{{ order.street_address1 }}{% if order.street_address2 %}, {{ order.street_address2 }}{% endif %}
+{{ order.town_or_city }}{% if order.county %}, {{ order.county }}{% endif %}
+{{ order.country }}
+
+Track your order: {{ live_link|default:"#" }}{% if order.store == 'petshop-ie' %}/petshop{% elif order.store == 'digitalhub' %}/digital{% else %}/orderimo{% endif %}/order/{{ order.order_number }}/
+
+Questions? Email us at hello@orderimo.com
+
+{{ branding.copyright }}

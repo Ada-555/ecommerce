@@ -46,12 +46,55 @@ class Order(models.Model):
         null=False, blank=False, default='')
     stripe_pid = models.CharField(
         max_length=254, null=False, blank=False, default='')
+    store = models.CharField(
+        max_length=20, choices=[
+            ('orderimo', 'Orderimo'),
+            ('petshop-ie', 'PetShop Ireland'),
+            ('digitalhub', 'DigitalHub'),
+        ], default='orderimo')
     status = models.CharField(max_length=20, choices=[
         ('pending', 'Pending'),
-        ('processing', 'Processing'),
+        ('confirmed', 'Confirmed'),
         ('shipped', 'Shipped'),
+        ('out_for_delivery', 'Out for Delivery'),
         ('delivered', 'Delivered'),
+        ('cancelled', 'Cancelled'),
     ], default='pending')
+    tracking_number = models.CharField(
+        max_length=100, null=True, blank=True,
+        help_text='Carrier tracking number')
+    carrier = models.CharField(
+        max_length=100, null=True, blank=True,
+        help_text='Shipping carrier name (e.g. An Post, DPD)')
+    estimated_delivery = models.DateField(null=True, blank=True)
+
+    # Crypto payment fields
+    PAYMENT_METHOD_CHOICES = [
+        ('card', 'Card'),
+        ('stripe_crypto', 'Stripe Crypto (BTC/USDC)'),
+        ('coingate_xmr', 'CoinGate (XMR)'),
+    ]
+    PAYMENT_STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('paid', 'Paid'),
+        ('failed', 'Failed'),
+        ('refunded', 'Refunded'),
+    ]
+    payment_method = models.CharField(
+        max_length=20, choices=PAYMENT_METHOD_CHOICES,
+        default='card', null=False, blank=False)
+    payment_status = models.CharField(
+        max_length=20, choices=PAYMENT_STATUS_CHOICES,
+        default='pending', null=False, blank=False)
+    crypto_txid = models.CharField(
+        max_length=255, null=True, blank=True,
+        help_text='Cryptocurrency transaction ID')
+    crypto_amount = models.DecimalField(
+        max_digits=20, decimal_places=12, null=True, blank=True,
+        help_text='Crypto amount sent (for XMR via CoinGate)')
+    crypto_address = models.CharField(
+        max_length=255, null=True, blank=True,
+        help_text='Destination crypto wallet address')
 
     def _generate_order_number(self):
         """

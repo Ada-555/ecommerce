@@ -1,0 +1,44 @@
+{% extends "emails/base_email.html" %}
+
+{% block email_content %}
+<div class="text-center">
+  <div class="emoji-big">📦✅</div>
+  <h2 class="email-heading" style="margin-top:16px;">Order Delivered!</h2>
+  <p class="email-subheading">Order #{{ order.order_number }} has arrived</p>
+</div>
+
+<p>Hi <strong>{{ order.full_name }}</strong>,</p>
+<p>Your order <strong>#{{ order.order_number }}</strong> has been delivered! 🎉</p>
+<p>We hope you love your purchase. If you have any questions or concerns, don't hesitate to reach out.</p>
+
+<div class="order-box">
+  <div class="order-meta">
+    <div>
+      <div class="order-meta-label">Order</div>
+      <div class="order-meta-value">#{{ order.order_number }}</div>
+    </div>
+    <div style="text-align:right;">
+      <div class="order-meta-label">Delivered</div>
+      <div class="order-meta-value">{{ order.date|date:"M d, Y" }}</div>
+    </div>
+  </div>
+  <hr class="divider">
+  <div style="font-size:14px; color:#ccc;">
+    <strong style="color: {{ branding.primary_color }};">Delivery Address</strong><br>
+    {{ order.full_name }}<br>
+    {{ order.street_address1 }}{% if order.street_address2 %}, {{ order.street_address2 }}{% endif %}<br>
+    {{ order.town_or_city }}{% if order.county %}, {{ order.county }}{% endif %}<br>
+    {{ order.country }}
+  </div>
+</div>
+
+<p style="text-align:center;">
+  <a href="{{ live_link|default:"#" }}{% if order.store == 'petshop-ie' %}/petshop{% elif order.store == 'digitalhub' %}/digital{% else %}/orderimo{% endif %}/products/" class="btn">
+    ⭐ Leave a Review
+  </a>
+</p>
+
+<p class="text-center text-muted" style="font-size:13px;">
+  Thank you for shopping with <strong>{{ branding.name }}</strong>. We appreciate your business! 🙏
+</p>
+{% endblock %}

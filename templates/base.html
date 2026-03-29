@@ -78,6 +78,97 @@
     {% endblock %}
 
     {% block extra_js %}{% endblock %}
+
+    <!-- Wishlist toggle JS -->
+    <script>
+    (function() {
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function updateNavbarWishlistCount(count) {
+            var badge = document.querySelector('.wishlist-nav-badge');
+            if (badge) {
+                if (count > 0) {
+                    badge.textContent = count;
+                    badge.style.display = 'inline';
+                } else {
+                    badge.style.display = 'none';
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.wishlist-toggle').forEach(function(btn) {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    var productId = btn.getAttribute('data-product-id');
+                    var storeSlug = btn.getAttribute('data-store-slug') || 'orderimo';
+                    var url = '/' + storeSlug + '/wishlist/toggle/' + productId + '/';
+
+                    // Animate the heart
+                    btn.classList.add('animating');
+                    setTimeout(function() { btn.classList.remove('animating'); }, 400);
+
+                    var icon = btn.querySelector('.fa-heart');
+
+                    fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': getCookie('csrftoken'),
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'HX-Request': 'true',
+                        },
+                    }).then(function(response) {
+                        if (response.status === 401) {
+                            // Not logged in — redirect to login
+                            window.location.href = '/accounts/login/?next=' + encodeURIComponent(window.location.pathname);
+                            return;
+                        }
+                        return response.json();
+                    }).then(function(data) {
+                        if (!data) return;
+                        if (data.added) {
+                            icon.classList.remove('fa-regular');
+                            icon.classList.add('fa-solid');
+                            icon.style.color = '#ff4757';
+                            btn.classList.remove('btn-wishlist');
+                            btn.classList.add('btn-wishlist-active');
+                            btn.title = 'Remove from wishlist';
+                            btn.setAttribute('aria-label', 'Remove from wishlist');
+                        } else {
+                            icon.classList.remove('fa-solid');
+                            icon.classList.add('fa-regular');
+                            icon.style.color = '#fff';
+                            btn.classList.remove('btn-wishlist-active');
+                            btn.classList.add('btn-wishlist');
+                            btn.title = 'Add to wishlist';
+                            btn.setAttribute('aria-label', 'Add to wishlist');
+                        }
+                        if (data.count !== undefined) {
+                            updateNavbarWishlistCount(data.count);
+                        }
+                    }).catch(function(err) {
+                        console.error('Wishlist toggle error:', err);
+                    });
+                });
+            });
+        });
+    })();
+    </script>
 </head>
 
 <body class="d-flex flex-column min-vh-100 {{ store_css_class|default:'store-orderimo' }}">
@@ -158,6 +249,27 @@
                                 <small class="nav-icon-label">Bag</small>
                                 {% if grand_total %}
                                 <span class="position-absolute badge bg-danger rounded-circle bag-badge">{{ grand_total|floatformat:2 }}</span>
+                                {% endif %}
+                            </div>
+                        </a>
+                    </li>
+                    <!-- Wishlist -->
+                    <li class="nav-item">
+                        <a class="text-white nav-icon-link text-decoration-none position-relative"
+                            href="{% url 'wishlist' %}">
+                            <div class="d-flex flex-column align-items-center">
+                                <i class="fa-solid fa-heart fa-lg"></i>
+                                <small class="nav-icon-label">Wishlist</small>
+                                {% if wishlist_count > 0 %}
+                                <span class="position-absolute badge bg-danger rounded-circle wishlist-nav-badge"
+                                      style="top:-4px;right:-6px;font-size:0.6rem;min-width:16px;height:16px;display:inline-flex;align-items:center;justify-content:center;">
+                                    {{ wishlist_count }}
+                                </span>
+                                {% else %}
+                                <span class="position-absolute badge bg-danger rounded-circle wishlist-nav-badge"
+                                      style="top:-4px;right:-6px;font-size:0.6rem;min-width:16px;height:16px;display:none;">
+                                    0
+                                </span>
                                 {% endif %}
                             </div>
                         </a>

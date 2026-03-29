@@ -23,4 +23,8 @@ urlpatterns = [
         'order/<str:order_number>/',
         views.order_status,
         name='order_status'),
+    path(
+        'coingate/callback/',
+        views.coingate_callback,
+        name='coingate_callback'),
 ]

@@ -18,6 +18,19 @@
                 <i class="fa-solid fa-download me-1"></i>Digital
             </span>
             {% endif %}
+            <!-- Wishlist heart icon -->
+            <button type="button"
+                    class="btn btn-sm position-absolute wishlist-toggle p-1
+                           {% if product.id in wishlist_product_ids %}btn-wishlist-active{% else %}btn-wishlist{% endif %}"
+                    style="bottom:8px;right:8px;background:rgba(0,0,0,0.6);border-radius:50%;width:34px;height:34px;
+                           display:flex;align-items:center;justify-content:center;"
+                    data-product-id="{{ product.id }}"
+                    data-store-slug="{{ store_slug }}"
+                    title="{% if product.id in wishlist_product_ids %}Remove from wishlist{% else %}Add to wishlist{% endif %}"
+                    aria-label="{% if product.id in wishlist_product_ids %}Remove from wishlist{% else %}Add to wishlist{% endif %}">
+                <i class="fa-heart {% if product.id in wishlist_product_ids %}fa-solid{% else %}fa-regular{% endif %}"
+                   style="color:{% if product.id in wishlist_product_ids %}#ff4757{% else %}#fff{% endif %};font-size:1rem;"></i>
+            </button>
         </div>
         <div class="p-3 flex-grow-1 d-flex flex-column justify-content-between">
             <div>

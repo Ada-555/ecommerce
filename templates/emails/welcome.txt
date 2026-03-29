@@ -1,0 +1,20 @@
+Welcome to {{ branding.name }}! — {{ branding.name }}
+==============================================
+
+Hi {{ first_name }},
+
+Welcome! Your account is ready. 🎉
+
+What you can do with your account:
+- Track your orders
+- Save your favourites to a wishlist
+- Fast checkout with saved addresses
+- Exclusive member deals
+
+Start shopping: {{ live_link|default:"#" }}{% if store_slug == 'petshop-ie' %}/petshop{% elif store_slug == 'digitalhub' %}/digital{% else %}/orderimo{% endif %}/products/
+
+Questions? Email us at hello@orderimo.com
+
+— The {{ branding.name }} Team
+
+{{ branding.copyright }}

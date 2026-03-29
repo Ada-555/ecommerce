@@ -71,13 +71,16 @@ INSTALLED_APPS = [
     'home',
     'products',
     'bag',
+    'wishlist',
     'checkout',
+    'tracking',
     'profiles',
     'about',
     'blog',
     'avatar',
     'accounts',
     'stores',
+    'notifications',
     # other
     'crispy_forms',
     'crispy_bootstrap5',
@@ -121,7 +124,8 @@ TEMPLATES = [
                 'django.template.context_processors.media',
                 'ecommerce.store_context.store_context',
                 'ecommerce.admin_context.admin_store_stats',
-                'bag.contexts.bag_contents'  # required for shopping bag
+                'bag.contexts.bag_contents',  # required for shopping bag
+                'wishlist.context_processors.wishlist_context',
             ],
             'builtins': [
                 'crispy_forms.templatetags.crispy_forms_tags',
@@ -275,6 +279,9 @@ STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY', '')
 STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', '')
 STRIPE_WH_SECRET = os.getenv('STRIPE_WH_SECRET', '')
 
+# CoinGate API key for XMR payments
+COINGATE_API_KEY = os.getenv('COINGATE_API_KEY', '')
+
 if 'DEVELOPMENT' in os.environ:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
     DEFAULT_FROM_EMAIL = 'hello@orderimo.com'
@@ -290,6 +297,9 @@ else:
 
 # Site Logo
 SITE_LOGO = 'favicon/android-chrome-192x192.png'
+
+# Tracking
+TRACKING_BASE_URL = os.environ.get('TRACKING_BASE_URL', 'https://orderimo.com')
 
 
 # =============================================================================

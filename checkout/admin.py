@@ -20,13 +20,15 @@ class OrderAdmin(admin.ModelAdmin):
               'postcode', 'town_or_city', 'street_address1',
               'street_address2', 'county', 'status',
               'delivery_cost', 'order_total', 'grand_total',
-              'original_bag', 'stripe_pid',)
+              'original_bag', 'stripe_pid',
+              'payment_method', 'payment_status',
+              'crypto_txid', 'crypto_amount', 'crypto_address',)
 
     list_display = ('order_number', 'date', 'full_name',
                     'order_total', 'delivery_cost',
-                    'grand_total', 'status', 'store_badge')
+                    'grand_total', 'status', 'payment_status_badge', 'store_badge')
 
-    list_filter = ('status', 'date')
+    list_filter = ('status', 'date', 'payment_method', 'payment_status')
 
     ordering = ('-date',)
 
@@ -62,6 +64,21 @@ class OrderAdmin(admin.ModelAdmin):
             color, name
         )
     store_badge.short_description = 'Store'
+
+    def payment_status_badge(self, obj):
+        colors = {
+            'pending': '#FFA500',
+            'paid': '#00FF00',
+            'failed': '#FF4444',
+            'refunded': '#AAAAAA',
+        }
+        color = colors.get(obj.payment_status, '#cccccc')
+        label = obj.get_payment_status_display()
+        return format_html(
+            '<span style="background:{0}22; color:{0}; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:bold;">{1}</span>',
+            color, label
+        )
+    payment_status_badge.short_description = 'Payment'
 
     @admin.action(description='Mark selected orders as Processing')
     def mark_as_processing(self, request, queryset):

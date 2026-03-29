@@ -1,0 +1,105 @@
+{% load i18n %}{% spaceless %}
+<!DOCTYPE html>
+<html lang="en" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="x-apple-disable-message-reformatting">
+  <title>{{ subject|default:"Orderimo" }}</title>
+  <!--[if mso]>
+  <noscript>
+    <xml>
+      <o:OfficeDocumentSettings>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+    </xml>
+  </noscript>
+  <![endif]-->
+  <style>
+    /* Reset */
+    body, table, td, a { -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; }
+    table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+    img { -ms-interpolation-mode: bicubic; border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; }
+    table { border-collapse: collapse !important; }
+    a[x-apple-data-detectors] { color: inherit !important; text-decoration: none !important; font-size: inherit !important; font-family: inherit !important; font-weight: inherit !important; line-height: inherit !important; }
+    /* Dark theme */
+    body { background-color: {{ branding.dark|default:"#0a0a0f" }}; margin: 0 !important; padding: 0 !important; width: 100% !important; }
+    .email-wrapper { background-color: {{ branding.dark|default:"#0a0a0f" }}; width: 100%; }
+    .email-content { background-color: #12121a; max-width: 600px; margin: 0 auto; }
+    .email-header { background: linear-gradient(135deg, {{ branding.primary_color|default:"#00b4d8" }} 0%, {{ branding.secondary_color|default:"#0077b6" }} 100%); padding: 32px 40px; text-align: center; }
+    .store-icon { font-size: 40px; color: #fff; margin-bottom: 8px; }
+    .store-name { color: #fff; font-size: 28px; font-weight: 700; margin: 0; letter-spacing: -0.5px; }
+    .store-tagline { color: rgba(255,255,255,0.85); font-size: 14px; margin: 4px 0 0; }
+    .email-body { padding: 40px; color: #e0e0e0; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 15px; line-height: 1.6; }
+    .email-heading { font-size: 22px; font-weight: 700; color: {{ branding.primary_color|default:"#00b4d8" }}; margin: 0 0 20px; }
+    .email-subheading { font-size: 16px; color: {{ branding.accent_color|default:"#90e0ef" }}; font-weight: 600; margin: 0 0 16px; }
+    .order-box { background: #1a1a2e; border: 1px solid rgba(255,255,255,0.07); border-radius: 8px; padding: 24px; margin: 20px 0; }
+    .order-meta { display: flex; justify-content: space-between; margin-bottom: 12px; }
+    .order-meta-label { color: #888; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .order-meta-value { color: #fff; font-weight: 600; font-size: 14px; }
+    .items-table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+    .items-table th { text-align: left; color: {{ branding.primary_color|default:"#00b4d8" }}; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .items-table td { padding: 10px 12px; color: #ccc; font-size: 14px; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: middle; }
+    .items-table .item-qty { color: #888; font-size: 13px; }
+    .items-table .item-price { text-align: right; color: {{ branding.accent_color|default:"#90e0ef" }}; font-weight: 600; }
+    .totals-row { display: flex; justify-content: space-between; padding: 6px 0; color: #aaa; font-size: 14px; }
+    .totals-row.grand-total { border-top: 1px solid rgba(255,255,255,0.1); margin-top: 8px; padding-top: 12px; font-size: 18px; font-weight: 700; color: {{ branding.primary_color|default:"#00b4d8" }}; }
+    .address-block { background: #1a1a2e; border-radius: 6px; padding: 16px 20px; margin: 16px 0; font-size: 14px; line-height: 1.8; color: #ccc; }
+    .btn { display: inline-block; background: linear-gradient(135deg, {{ branding.primary_color|default:"#00b4d8" }} 0%, {{ branding.secondary_color|default:"#0077b6" }} 100%); color: #fff !important; text-decoration: none; padding: 14px 28px; border-radius: 6px; font-weight: 600; font-size: 15px; text-align: center; margin: 16px 0; }
+    .btn:hover { opacity: 0.9; }
+    .tracking-box { background: linear-gradient(135deg, {{ branding.dark|default:"#0a0a0f" }}, #1a1a2e); border: 1px solid {{ branding.primary_color|default:"#00b4d8" }}; border-radius: 8px; padding: 20px; text-align: center; margin: 20px 0; }
+    .tracking-number { font-family: 'Courier New', monospace; font-size: 20px; font-weight: 700; color: {{ branding.accent_color|default:"#90e0ef" }}; letter-spacing: 2px; }
+    .carrier-name { color: #888; font-size: 13px; margin-top: 4px; }
+    .email-footer { background: #0a0a0f; padding: 24px 40px; text-align: center; }
+    .footer-links a { color: {{ branding.primary_color|default:"#00b4d8" }}; text-decoration: none; margin: 0 12px; font-size: 13px; }
+    .footer-copy { color: #555; font-size: 12px; margin-top: 12px; }
+    .social-links { margin: 16px 0; }
+    .social-links a { color: {{ branding.primary_color|default:"#00b4d8" }}; font-size: 20px; margin: 0 8px; text-decoration: none; }
+    .divider { border: none; border-top: 1px solid rgba(255,255,255,0.06); margin: 24px 0; }
+    .text-center { text-align: center; }
+    .text-muted { color: #888; }
+    .emoji-big { font-size: 48px; }
+    /* Responsive */
+    @media only screen and (max-width: 600px) {
+      .email-content { width: 100% !important; }
+      .email-header { padding: 24px 20px !important; }
+      .email-body { padding: 24px 20px !important; }
+      .email-footer { padding: 20px !important; }
+      .order-meta { flex-direction: column; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="email-wrapper">
+    <div class="email-content">
+      <!-- Header -->
+      <div class="email-header">
+        <div class="store-icon">{{ branding.icon|default:"&#128722;" }}</div>
+        <h1 class="store-name">{{ branding.name|default:"Orderimo" }}</h1>
+        <p class="store-tagline">{{ branding.tagline|default:"" }}</p>
+      </div>
+
+      <!-- Body -->
+      <div class="email-body">
+        {% block email_content %}{% endblock %}
+      </div>
+
+      <!-- Footer -->
+      <div class="email-footer">
+        <div class="social-links">
+          <a href="{{ live_link|default:"#" }}">🌐 Website</a>
+          <a href="mailto:hello@orderimo.com">✉️ Contact</a>
+        </div>
+        <div class="footer-links">
+          <a href="{{ live_link|default:"#" }}/orderimo/about/">About</a>
+          <a href="{{ live_link|default:"#" }}/orderimo/privacy/">Privacy</a>
+          <a href="{{ live_link|default:"#" }}/orderimo/terms/">Terms</a>
+        </div>
+        <p class="footer-copy">{{ branding.copyright|default:"© 2026 Orderimo" }}</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+{% endspaceless %}

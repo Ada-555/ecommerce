@@ -1,0 +1,36 @@
+{% extends "emails/base_email.html" %}
+
+{% block email_content %}
+<div class="text-center">
+  <div class="emoji-big">👋🎉</div>
+  <h2 class="email-heading" style="margin-top:16px;">Welcome to {{ branding.name }}!</h2>
+  <p class="email-subheading">Your account is ready</p>
+</div>
+
+<p>Hi <strong>{{ first_name }}</strong>,</p>
+<p>Welcome to <strong>{{ branding.name }}</strong>! 🎉 We're thrilled to have you join our community.</p>
+
+<div class="order-box">
+  <div style="font-size:15px; line-height:1.8;">
+    <p style="margin:0 0 12px;">Here's what you can do with your new account:</p>
+    <ul style="color:#ccc; padding-left:20px; margin:0;">
+      <li>📦 <strong>Track your orders</strong> — from checkout to delivery</li>
+      <li>❤️ <strong>Save your favourites</strong> — build your wishlist</li>
+      <li>💾 <strong>Fast checkout</strong> — save your address for next time</li>
+      <li>🏷️ <strong>Exclusive member deals</strong> — only for registered users</li>
+    </ul>
+  </div>
+</div>
+
+<p style="text-align:center;">
+  <a href="{{ live_link|default:"#" }}{% if store_slug == 'petshop-ie' %}/petshop{% elif store_slug == 'digitalhub' %}/digital{% else %}/orderimo{% endif %}/products/" class="btn">
+    🛍️ Start Shopping
+  </a>
+</p>
+
+<p class="text-muted" style="font-size:13px;">
+  If you have any questions, our support team is here to help. Just reply to this email or reach us at <a href="mailto:hello@orderimo.com" style="color:{{ branding.primary_color }};">hello@orderimo.com</a>.
+</p>
+
+<p>See you soon!<br><strong>— The {{ branding.name }} Team</strong></p>
+{% endblock %}

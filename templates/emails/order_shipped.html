@@ -1,17 +1,41 @@
-<!DOCTYPE html>
-<html>
-<body style="font-family: Arial, sans-serif; background: #000; color: #fff; padding: 20px;">
-  <h2 style="color: #FF69B4;">Your Order Has Shipped! 🚚</h2>
-  <p>Hi {{ order.full_name }},</p>
-  <p>Great news! Your order <strong>#{{ order.order_number }}</strong> is on its way.</p>
-  <p><strong>Delivery Address:</strong><br>
+{% extends "emails/base_email.html" %}
+
+{% block email_content %}
+<p>Hi <strong>{{ order.full_name }}</strong>,</p>
+<p>🚚 <strong>Your order is on its way!</strong></p>
+<p>Great news — order <strong>#{{ order.order_number }}</strong> has been dispatched and is heading your way.</p>
+
+{% if tracking_number %}
+<div class="tracking-box">
+  <div style="color:#888; font-size:12px; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Tracking Number</div>
+  <div class="tracking-number">{{ tracking_number }}</div>
+  {% if carrier %}<div class="carrier-name">via {{ carrier }}</div>{% endif %}
+  {% if expected_delivery %}<div style="margin-top:8px; color:#aaa; font-size:14px;">Expected: <strong>{{ expected_delivery }}</strong></div>{% endif %}
+</div>
+{% endif %}
+
+<div class="order-box">
+  <div class="order-meta">
+    <div>
+      <div class="order-meta-label">Order</div>
+      <div class="order-meta-value">#{{ order.order_number }}</div>
+    </div>
+    <div style="text-align:right;">
+      <div class="order-meta-label">Total</div>
+      <div class="order-meta-value">€{{ order.grand_total|floatformat:2 }}</div>
+    </div>
+  </div>
+</div>
+
+<div class="address-block">
+  <strong style="color: {{ branding.primary_color }};">Delivery Address</strong><br>
+  {{ order.full_name }}<br>
   {{ order.street_address1 }}{% if order.street_address2 %}, {{ order.street_address2 }}{% endif %}<br>
   {{ order.town_or_city }}{% if order.county %}, {{ order.county }}{% endif %}<br>
-  {{ order.country }}</p>
-  {% if tracking_number %}
-  <p><strong>Tracking Number:</strong> {{ tracking_number }}</p>
-  {% endif %}
-  <p>Thank you for shopping with Orderimo!</p>
-  <p>— Orderimo Team</p>
-</body>
-</html>
+  {{ order.country }}
+</div>
+
+<p class="text-center text-muted" style="font-size:13px;">
+  You'll receive a final email once your order has been delivered. sit tight! 🙌
+</p>
+{% endblock %}

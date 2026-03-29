@@ -242,9 +242,15 @@
                             <i class="fa-solid fa-bag-shopping me-2"></i>
                             {% if product.is_in_stock %}Add to Bag{% else %}Out of Stock{% endif %}
                         </button>
-                        <a href="#" class="btn btn-outline-light rounded-pill py-2 px-3" title="Save for later">
-                            <i class="fa-regular fa-heart"></i>
-                        </a>
+                        <button type="button"
+                                class="btn btn-outline-light rounded-pill py-2 px-3 wishlist-toggle
+                                       {% if product.id in wishlist_product_ids %}btn-wishlist-active{% else %}btn-wishlist{% endif %}"
+                                data-product-id="{{ product.id }}"
+                                data-store-slug="{{ store_slug }}"
+                                title="{% if product.id in wishlist_product_ids %}Remove from wishlist{% else %}Add to wishlist{% endif %}">
+                            <i class="fa-heart {% if product.id in wishlist_product_ids %}fa-solid{% else %}fa-regular{% endif %}"
+                               style="color:{% if product.id in wishlist_product_ids %}#ff4757{% else %}#fff{% endif %};"></i>
+                        </button>
                     </div>
                 </form>
 
