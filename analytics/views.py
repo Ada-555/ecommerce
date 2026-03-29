@@ -21,14 +21,20 @@ def analytics_dashboard(request):
 
     # Orders by Status: count orders by status (excluding cancelled maybe)
     orders_by_status = Order.objects.values('status').annotate(count=Count('id')).order_by('status')
-    # Convert to list of dicts for template
-    status_labels = []
-    status_counts = []
+    # Convert to list of dicts for template with label and percentage
+    status_data = []
+    total_orders = 0
     for item in orders_by_status:
-        # capitalize status label
         label = dict(Order._meta.get_field('status').choices)[item['status']]
-        status_labels.append(label)
-        status_counts.append(item['count'])
+        count = item['count']
+        total_orders += count
+        status_data.append({
+            'label': label,
+            'count': count,
+        })
+    # Calculate percentages
+    for item in status_data:
+        item['pct'] = round((item['count'] / total_orders * 100) if total_orders > 0 else 0)
 
     # Top 10 Products: by quantity sold in paid orders
     # Join OrderLineItem with Order where Order.payment_status='paid'
@@ -44,8 +50,8 @@ def analytics_dashboard(request):
     context = {
         'total_revenue': total_revenue,
         'avg_order_value': avg_order_value,
-        'status_labels': status_labels,
-        'status_counts': status_counts,
+        'paid_orders_count': paid_orders_count,
+        'status_data': status_data,
         'top_products': top_products,
     }
     return render(request, 'analytics/dashboard.html', context)

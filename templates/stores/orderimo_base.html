@@ -108,6 +108,14 @@
                     <a href="{% url 'account_login' %}" class="nav-link-custom">Sign In</a>
                     <a href="{% url 'account_signup' %}" class="btn btn-outline-custom btn-sm-custom">Join</a>
                 {% endif %}
+                <a href="/orderimo/compare/" class="btn btn-outline-info btn-sm-custom position-relative me-2">
+                    <i class="fa-solid fa-scale-balanced"></i> Compare
+                    {% if compare_ids|length > 0 %}
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        {{ compare_ids|length }}
+                    </span>
+                    {% endif %}
+                </a>
                 <a href="/orderimo/bag/" class="btn btn-primary-custom btn-sm-custom">
                     <i class="fa-solid fa-cart-shopping me-1"></i>Cart
                 </a>
