@@ -8,69 +8,61 @@
 
 ---
 
-## ✅ Completed This Session
+## ✅ Completed
 
-| Task | Commit | Lines |
+| Task | Commit | Notes |
 |------|--------|-------|
-| Store-scoped search | `6e12240` | — |
-| Email notifications (full) | `5a07479` | 1,851 |
-| Order tracking (full) | `5a07479` | (with email) |
-| Crypto payments (BTC/USDC/XMR) | `dd1084b` | — |
+| Store-scoped search | `6e12240` | ✅ /orderimo/search/, /petshop/search/, /digital/search/ |
+| Email notifications (full) | `5a07479` | ✅ order confirmation/shpped/delivered, welcome emails |
+| Order tracking (full) | `5a07479` | ✅ tracking page, status fields, email integration |
+| Crypto payments (BTC/USDC/XMR) | `dd1084b` | ✅ Stripe crypto + CoinGate for XMR |
 
 ---
 
-## 🟡 In Progress (Partitioned by Directory)
+## 🟡 Active — Partitioned by Directory
 
-| # | Task | Agent | Owns | Status |
-|---|------|-------|------|--------|
-| 1 | Wishlist — heart icon, save for later | wishlist-retry | `wishlist/` | 🟡 Running |
-| 2 | Phase 12 Reviews — templates, star rating, verified buyer | phase12-frontend | `products/templates/` | 🟡 Running |
-| 3 | Multi-coupon + Subscriptions | agent-payments | `coupons/`, `subscriptions/` | 🟡 Running |
-| 4 | Order Tracking — verify + finish | order-tracking-retry | `tracking/` | ✅ Done |
-
----
-
-## ⏳ Queued (spawn as slots free)
-
-| # | Task | Agent | Owns |
-|---|------|-------|------|
-| 5 | Product Comparisons + GA4 Dashboard | agent-seo | `comparison/`, `analytics/` |
-| 6 | Newsletter (Mailchimp) + Abandoned Cart Emails | agent-ops | `notifications/`, emails |
-| 7 | PDF Invoices | agent-ops | new `invoices/` |
-| 8 | Multi-Currency (EUR/USD/GBP) | next-free | settings + templates |
-| 9 | Affiliate Program | next-free | `affiliates/` |
+| Agent | Owns | Features |
+|-------|------|----------|
+| **wishlist-retry** | `wishlist/` | Heart icon, wishlist page, HTMX toggle |
+| **phase12-frontend** | `products/templates/` | Review display, submit form, verified buyer badge |
+| **agent-payments** | `coupons/`, `subscriptions/` | Multi-coupon + Stripe subscriptions |
+| **order-tracking-retry** | `tracking/` | Tracking page, order status view |
+| **agent-ops** | `newsletter/`, `invoices/` | Newsletter (Mailchimp), abandoned cart, PDF invoices |
 
 ---
 
-## 🔜 Soon (not started)
+## ⏳ Queued (next slots)
 
-| # | Task |
-|---|------|
-| 10 | GA4 External API (optional, on top of ORM dashboard) |
-| 11 | Stripe Customer Portal for subscriptions |
-| 12 | Multi-currency price conversion |
+| # | Agent | Owns | Features |
+|---|-------|------|----------|
+| 6 | agent-seo | `comparison/`, `analytics/` | Product comparisons, GA4 dashboard |
+| 7 | agent-currencies | `settings.py`, templates | Multi-currency (EUR/USD/GBP) |
+| 8 | agent-affiliate | `affiliates/` | Affiliate program with referral tracking |
+| 9 | agent-final | misc | Final polish, docs, deployment checks |
 
 ---
 
 ## 📋 Agent Log
 
-| Time | Agent | Action |
-|------|-------|--------|
-| 08:44 | email-notifications | ✅ Committed 1,851 lines — full email system |
-| 08:44 | crypto-payments | ✅ Committed — BTC/USDC via Stripe, XMR via CoinGate |
-| 08:44 | store-search | ✅ Committed — store-scoped search |
-| 08:44 | orderimo-phase12-reviews | ❌ KILLED — stuck in git loop 2.5h |
-| 08:44 | phase12-frontend | 🟡 Running — templates only |
-| 08:44 | agent-payments | 🟡 Started — coupons + subscriptions |
-| 08:45 | wishlist-retry | 🟡 Running — wishlist app |
-| 08:45 | order-tracking-retry | ✅ Done — tracking URL, status fields, template, email integration |
+| Time | Agent | Commit | Status |
+|------|-------|--------|--------|
+| 08:44 | email-notifications | `5a07479` — 1,851 lines | ✅ Done |
+| 08:44 | crypto-payments | `dd1084b` | ✅ Done |
+| 08:44 | store-search | `6e12240` | ✅ Done |
+| 08:45 | agent-payments | — | 🟡 Running |
+| 08:45 | phase12-frontend | — | 🟡 Running |
+| 08:45 | wishlist-retry | — | 🟡 Running |
+| 08:45 | order-tracking-retry | — | 🟡 Running |
+| 08:46 | agent-ops | — | 🟡 Started |
 
 ---
 
 ## 📊 Site Health
-- All 3 stores: ✅ 200 OK
+- Stores: ✅ All 3 live (200 OK)
 - Tests: ✅ 101/101 passing
+- Deployment: ready
 
 ---
 
-_Last updated: 2026-03-29 08:47 GMT+1_
+_Last updated: 2026-03-29 08:46 GMT+1_
+
