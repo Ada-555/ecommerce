@@ -1,0 +1,79 @@
+{% extends "stores/petshop_base.html" %}
+{% load static %}
+
+{% block content %}
+<!-- Hero -->
+<div class="hero-pet text-center py-5 mb-0">
+  <div class="container py-5">
+    <h1 class="display-4 fw-bold mb-3" style="color: var(--accent);">
+      🐾 PetShop Ireland
+    </h1>
+    <p class="lead mb-4" style="color: #b8e6b8;">Ireland's Best Pet Supplies — Everything Your Pets Need! 🇮🇪</p>
+    <a href="/petshop/products/" class="btn btn-pet btn-lg"><i class="fa-solid fa-cart-shopping me-2"></i>Shop Now</a>
+  </div>
+</div>
+
+<div class="container section-padding">
+  <!-- Shop by Pet -->
+  <h2 class="mb-4 text-white"><i class="fa-solid fa-paw text-pet-accent me-2"></i>Shop by Pet</h2>
+  <div class="row g-3 mb-5">
+    <div class="col-6 col-md-3">
+      <a href="/petshop/products/?category=dogs" class="text-decoration-none">
+        <div class="product-card text-center p-4">
+          <div class="fs-1 mb-2">🐶</div>
+          <h6 class="text-white mb-0">Dogs</h6>
+        </div>
+      </a>
+    </div>
+    <div class="col-6 col-md-3">
+      <a href="/petshop/products/?category=cats" class="text-decoration-none">
+        <div class="product-card text-center p-4">
+          <div class="fs-1 mb-2">🐱</div>
+          <h6 class="text-white mb-0">Cats</h6>
+        </div>
+      </a>
+    </div>
+    <div class="col-6 col-md-3">
+      <a href="/petshop/products/?category=fish_aquatics" class="text-decoration-none">
+        <div class="product-card text-center p-4">
+          <div class="fs-1 mb-2">🐟</div>
+          <h6 class="text-white mb-0">Fish</h6>
+        </div>
+      </a>
+    </div>
+    <div class="col-6 col-md-3">
+      <a href="/petshop/products/?category=birds" class="text-decoration-none">
+        <div class="product-card text-center p-4">
+          <div class="fs-1 mb-2">🐦</div>
+          <h6 class="text-white mb-0">Birds</h6>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  {% if new_arrivals %}
+  <h2 class="mb-4 text-white"><i class="fa-solid fa-sparkles text-pet-accent me-2"></i>New Arrivals</h2>
+  <div class="row g-4 mb-5">
+    {% for product in new_arrivals %}
+    <div class="col-6 col-md-3">
+      <div class="product-card">
+        {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}">{% else %}<div class="d-flex align-items-center justify-content-center" style="height:220px; background: rgba(255,255,255,0.05);"><i class="fa-solid fa-image text-muted fa-3x"></i></div>{% endif %}
+        <div class="p-3">
+          <p class="small mb-1" style="color: #b8e6b8;">{{ product.category.friendly_name|default:product.category.name|default:"" }}</p>
+          <h6 class="text-white mb-2">{{ product.name }}</h6>
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="text-pet-accent fw-bold">€{{ product.price }}</span>
+            <a href="/bag/add/{{ product.id }}/?redirect_url=/petshop/products/" class="btn btn-sm btn-pet">Add</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="text-center mt-4">
+    <a href="/petshop/products/" class="btn btn-pet btn-lg"><i class="fa-solid fa-grid-2 me-2"></i>View All Products</a>
+  </div>
+</div>
+{% endblock %}

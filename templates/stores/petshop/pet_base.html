@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PetShop Ireland — Ireland's best pet supplies. Dog beds, cat litter, fish tanks and more. Fast Irish delivery.">
+    <title>{% block title %}PetShop Ireland 🇮🇪{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root { --primary: #228B22; --secondary: #2d9a3e; --accent: #90EE90; --warning: #FFA500; --dark: #0a150a; --card-bg: #111a11; --text: #e8f5e9; --muted: #7a9a7a; }
+        * { box-sizing: border-box; }
+        body { background: var(--dark); color: var(--text); font-family: 'Nunito', sans-serif; margin: 0; min-height: 100vh; }
+        h1,h2,h3,h4,h5,h6 { font-family: 'Poppins', sans-serif; font-weight: 600; }
+        .btn-pet { background: linear-gradient(135deg, var(--primary), var(--secondary)); border: none; color: #fff; border-radius: 50px; padding: 0.6rem 1.5rem; font-weight: 600; transition: transform 0.2s, box-shadow 0.2s; }
+        .btn-pet:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(34,139,34,0.4); color: #fff; }
+        .btn-outline-pet { border: 2px solid var(--primary); color: var(--accent); border-radius: 50px; padding: 0.5rem 1.2rem; font-weight: 600; background: transparent; }
+        .btn-outline-pet:hover { background: var(--primary); color: #fff; }
+        .navbar-pet { background: rgba(10,15,10,0.97); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(34,139,34,0.15); }
+        .nav-link-pet { color: var(--text) !important; font-weight: 500; border-radius: 8px; padding: 0.5rem 1rem !important; }
+        .nav-link-pet:hover { color: var(--accent) !important; }
+        .product-card { background: var(--card-bg); border: 1px solid rgba(34,139,34,0.25); border-radius: 16px; overflow: hidden; transition: transform 0.3s; }
+        .product-card:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(34,139,34,0.2); }
+        .product-card img { width: 100%; height: 200px; object-fit: cover; }
+        footer { background: var(--card-bg); border-top: 1px solid rgba(34,139,34,0.15); }
+        .text-pet { color: var(--accent); }
+        .section-padding { padding: 4rem 0; }
+        .pet-hero { background: linear-gradient(135deg, #0a150a 0%, #1a2f1a 50%, #0a150a 100%); }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <nav class="navbar navbar-expand-lg navbar-pet sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-white d-flex align-items-center" href="/petshop/" style="font-family: 'Poppins', sans-serif;">
+                <i class="fa-solid fa-paw me-2" style="color: var(--accent);"></i>PetShop Ireland <span class="ms-1">🇮🇪</span>
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#petNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="petNav">
+                <ul class="navbar-nav ms-auto gap-1">
+                    <li class="nav-item"><a class="nav-link nav-link-pet" href="/petshop/">Home</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link nav-link-pet dropdown-toggle" href="#" data-bs-toggle="dropdown">Dogs</a>
+                        <ul class="dropdown-menu" style="background: var(--card-bg); border: 1px solid rgba(34,139,34,0.25); border-radius: 12px;">
+                            <li><a class="dropdown-item" href="/petshop/products/?category=dogs" style="color: var(--text);">All Dogs</a></li>
+                            <li><a class="dropdown-item" href="/petshop/products/?category=dog_beds" style="color: var(--text);">Beds & Bedding</a></li>
+                            <li><a class="dropdown-item" href="/petshop/products/?category=dog_food" style="color: var(--text);">Food & Treats</a></li>
+                            <li><a class="dropdown-item" href="/petshop/products/?category=dog_toys" style="color: var(--text);">Toys</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link nav-link-pet dropdown-toggle" href="#" data-bs-toggle="dropdown">Cats</a>
+                        <ul class="dropdown-menu" style="background: var(--card-bg); border: 1px solid rgba(34,139,34,0.25); border-radius: 12px;">
+                            <li><a class="dropdown-item" href="/petshop/products/?category=cats" style="color: var(--text);">All Cats</a></li>
+                            <li><a class="dropdown-item" href="/petshop/products/?category=cat_litter" style="color: var(--text);">Litter</a></li>
+                            <li><a class="dropdown-item" href="/petshop/products/?category=cat_food" style="color: var(--text);">Food</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item"><a class="nav-link nav-link-pet" href="/petshop/products/?category=fish_aquatics">Fish</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-pet" href="/petshop/products/?category=birds">Birds</a></li>
+                    <li class="nav-item ms-2">
+                        <a class="btn btn-pet mt-1" href="/petshop/bag/"><i class="fa-solid fa-cart-shopping me-1"></i>Cart</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <main class="flex-grow-1">{% block content %}{% endblock %}</main>
+    <footer class="py-4">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <h6 class="fw-bold text-white mb-2" style="font-family: 'Poppins', sans-serif;">
+                        <i class="fa-solid fa-paw me-2" style="color: var(--accent);"></i>PetShop Ireland
+                    </h6>
+                    <p class="small mb-0" style="color: var(--muted);">Ireland's best pet supplies. Fast delivery across all 32 counties.</p>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <p class="small mb-0" style="color: var(--muted);">© 2026 PetShop Ireland — Delivering to Ireland 🇮🇪</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

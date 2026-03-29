@@ -1,0 +1,80 @@
+{% extends "stores/digital_base.html" %}
+{% load static %}
+
+{% block content %}
+<!-- Hero -->
+<div class="text-center py-5 mb-0" style="background: linear-gradient(135deg, #08080f 0%, #150a1a 100%);">
+  <div class="container py-5">
+    <h1 class="display-4 fw-bold mb-3" style="color: var(--primary); font-family: 'JetBrains Mono', monospace;">
+      💜 DigitalHub
+    </h1>
+    <p class="lead text-muted mb-4">Instant Delivery. Lifetime Access. Download Immediately.</p>
+    <a href="/digital/products/" class="btn btn-digital btn-lg"><i class="fa-solid fa-bolt me-2"></i>Browse Products</a>
+  </div>
+</div>
+
+<div class="container section-padding">
+  <!-- Categories -->
+  <h2 class="mb-4"><i class="fa-solid fa-layer-group text-digital-accent me-2"></i>Categories</h2>
+  <div class="row g-3 mb-5">
+    <div class="col-6 col-md-3">
+      <a href="/digital/products/?category=ebooks" class="text-decoration-none">
+        <div class="product-card text-center p-4">
+          <div class="fs-1 mb-2">📚</div>
+          <h6 class="text-white mb-0">E-books</h6>
+        </div>
+      </a>
+    </div>
+    <div class="col-6 col-md-3">
+      <a href="/digital/products/?category=online_courses" class="text-decoration-none">
+        <div class="product-card text-center p-4">
+          <div class="fs-1 mb-2">🎓</div>
+          <h6 class="text-white mb-0">Courses</h6>
+        </div>
+      </a>
+    </div>
+    <div class="col-6 col-md-3">
+      <a href="/digital/products/?category=software" class="text-decoration-none">
+        <div class="product-card text-center p-4">
+          <div class="fs-1 mb-2">💻</div>
+          <h6 class="text-white mb-0">Software</h6>
+        </div>
+      </a>
+    </div>
+    <div class="col-6 col-md-3">
+      <a href="/digital/products/?category=templates" class="text-decoration-none">
+        <div class="product-card text-center p-4">
+          <div class="fs-1 mb-2">📄</div>
+          <h6 class="text-white mb-0">Templates</h6>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  {% if new_arrivals %}
+  <h2 class="mb-4"><i class="fa-solid fa-sparkles text-digital-accent me-2"></i>New Arrivals</h2>
+  <div class="row g-4 mb-5">
+    {% for product in new_arrivals %}
+    <div class="col-6 col-md-3">
+      <div class="product-card">
+        {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}">{% else %}<div class="d-flex align-items-center justify-content-center" style="height:200px; background: rgba(255,255,255,0.03);"><i class="fa-solid fa-image text-muted fa-3x"></i></div>{% endif %}
+        <div class="p-3">
+          <span class="digital-badge mb-2 d-inline-block">Digital</span>
+          <p class="small text-muted mb-1">{{ product.category.friendly_name|default:product.category.name|default:"" }}</p>
+          <h6 class="text-white mb-2">{{ product.name }}</h6>
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="text-digital-accent fw-bold">€{{ product.price }}</span>
+            <a href="/bag/add/{{ product.id }}/?redirect_url=/digital/products/" class="btn btn-sm btn-digital">Add</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="text-center mt-4">
+    <a href="/digital/products/" class="btn btn-digital btn-lg"><i class="fa-solid fa-grid-2 me-2"></i>View All Products</a>
+  </div>
+</div>
+{% endblock %}

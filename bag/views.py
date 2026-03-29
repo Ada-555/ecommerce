@@ -15,8 +15,8 @@ def add_to_bag(request, item_id):
     item_id = str(item_id)
 
     product = get_object_or_404(Product, pk=item_id)
-    quantity = int(request.POST.get('quantity'))
-    redirect_url = request.POST.get('redirect_url')
+    quantity = int(request.POST.get('quantity') or request.GET.get('quantity', 1))
+    redirect_url = request.POST.get('redirect_url') or request.GET.get('redirect_url', '/bag/')
     size = None
     if 'product_size' in request.POST:
         size = request.POST['product_size']

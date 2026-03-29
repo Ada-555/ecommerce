@@ -8,6 +8,7 @@ from django.views.generic import TemplateView
 from .views import handler404
 from .sitemaps import ProductSitemap, CategorySitemap, BlogSitemap
 from avatar.views import CustomSignupView
+from stores import store_views
 
 
 sitemaps = {
@@ -22,6 +23,17 @@ def robots_txt(request):
 
 
 urlpatterns = [
+    # Store routes FIRST (more specific)
+    path('orderimo/', store_views.orderimo_home, name='orderimo_home'),
+    path('orderimo/products/', store_views.store_products, {'store_slug': 'orderimo'}, name='orderimo_products'),
+
+    path('petshop/', store_views.petshop_home, name='petshop_home'),
+    path('petshop/products/', store_views.store_products, {'store_slug': 'petshop'}, name='petshop_products'),
+
+    path('digital/', store_views.digital_home, name='digital_home'),
+    path('digital/products/', store_views.store_products, {'store_slug': 'digital'}, name='digital_products'),
+
+    # Existing global routes
     path('admin/', admin.site.urls),
     path("accounts/signup/", CustomSignupView.as_view(), name="account_signup"),
     path('accounts/', include('allauth.urls')),
