@@ -14,7 +14,6 @@ from tracking import views as tracking_views
 # from affiliates import views as affiliate_views  # Not ready yet
 from . import views as ecommerce_views
 from .sitemaps import ProductSitemap, CategorySitemap, BlogSitemap
-from analytics import views as analytics_views
 # from analytics import views as analytics_views  # Not ready yet
 
 urlpatterns = [
