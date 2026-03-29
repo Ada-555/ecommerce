@@ -15,7 +15,8 @@ Status: **112/112 tests passing** | Updated: 10:15 GMT+1
 | Multi-currency (EUR/USD/GBP) | `35bc9fe` |
 | Affiliate program (referral tracking + commissions) | `a504dbf` |
 | Newsletter signup (Mailchimp) + checkout checkbox | `236b781` |
-| Subscriptions checkout (Stripe recurring) | `112530a` |
+| Subscriptions checkout (Stripe recurring) | `9aa6e77` |
+| Multi-coupon system with stackable discounts | `9aa6e77` |
 | Product comparisons (compare page) | (by agent-comparisons-ga4-finish) |
 | GA4 analytics dashboard (ORM-based) | (by agent-comparisons-ga4-finish) |
 | Stabilization (set_currency, URL fixes) | `5ad684e` |
@@ -26,11 +27,10 @@ Status: **112/112 tests passing** | Updated: 10:15 GMT+1
 
 | Agent | Task | ETA |
 |-------|------|-----|
-| agent-coupon-ui-retry | Checkout coupon code input + discount display | 30m |
 | agent-invoices-retry | PDF invoice generation (simplified) | new |
 | agent-abandoned-cart-retry | Abandoned cart email command | new |
 | agent-ux-polish | Fix any final issues, test checkout flow | new |
 
 ---
 
-Total committed features: **14** — core platform complete. Final polish pending.
+Total committed features: **15** — core platform complete. Final polish pending.
