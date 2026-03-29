@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Category, ProductVariant
+from .models import Product, Category, ProductVariant, Review
 from django.utils.html import format_html
 from django.db.models import F
 from django.core.mail import send_mail
@@ -155,6 +155,20 @@ class ProductVariantAdmin(admin.ModelAdmin):
     list_filter = ('size', 'color')
 
 
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ('user', 'product', 'rating', 'approved', 'created_at')
+    list_filter = ('approved', 'rating')
+    list_editable = ('approved',)
+    search_fields = ('user__username', 'product__name')
+    actions = ['approve_selected']
+
+    @admin.action(description='Approve selected reviews')
+    def approve_selected(self, request, queryset):
+        queryset.update(approved=True)
+        self.message_user(request, f'{queryset.count()} reviews approved.')
+
+
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(ProductVariant, ProductVariantAdmin)
+admin.site.register(Review, ReviewAdmin)

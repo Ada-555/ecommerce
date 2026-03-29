@@ -6,6 +6,22 @@ from .widgets import CustomClearableFileInput
 from .models import Product, Category
 
 
+class ReviewForm(forms.Form):
+    rating = forms.ChoiceField(
+        choices=[(i, f'{i} ★') for i in range(1, 6)],
+        label='Rating',
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+    comment = forms.CharField(
+        label='Comment',
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'rows': '4',
+            'placeholder': 'Share your thoughts about this product...'
+        })
+    )
+
+
 class ProductForm(forms.ModelForm):
 
     class Meta:

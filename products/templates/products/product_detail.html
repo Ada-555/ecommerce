@@ -443,6 +443,121 @@
         </div>
     </div>
     {% endif %}
+
+    <!-- Reviews Section -->
+    <div class="row mt-5" id="reviews">
+        <div class="col-12">
+            <h3 class="text-white mb-4">
+                <i class="fa-solid fa-star text-gold me-2"></i>
+                Customer Reviews
+            </h3>
+        </div>
+
+        {# Average rating display #}
+        {% with product.average_rating as avg_rating %}
+        {% with product.review_count as rcount %}
+        {% if avg_rating %}
+        <div class="col-12 mb-4">
+            <div class="bg-darker rounded-4 p-3 d-inline-flex align-items-center gap-3">
+                <span class="text-gold fs-3">
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= avg_rating|floatformat:0 %}
+                            <i class="fa-solid fa-star"></i>
+                        {% else %}
+                            <i class="fa-regular fa-star"></i>
+                        {% endif %}
+                    {% endfor %}
+                </span>
+                <span class="text-white fw-bold fs-5">{{ avg_rating }}/5</span>
+                <span class="text-silver">based on {{ rcount }} review{{ rcount|pluralize:"s" }}</span>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12 mb-4">
+            <p class="text-silver">No reviews yet. Be the first to review this product!</p>
+        </div>
+        {% endif %}
+        {% endwith %}
+        {% endwith %}
+
+        {# Approved reviews list #}
+        {% for review in product.reviews.all %}
+            {% if review.approved %}
+            <div class="col-12 mb-3">
+                <div class="bg-darker rounded-4 p-3">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div>
+                            <span class="text-gold">
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= review.rating %}
+                                        <i class="fa-solid fa-star"></i>
+                                    {% else %}
+                                        <i class="fa-regular fa-star"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </span>
+                            <span class="text-white fw-bold ms-2">{{ review.user.username }}</span>
+                        </div>
+                        <small class="text-silver">{{ review.created_at|date:"M d, Y" }}</small>
+                    </div>
+                    <p class="text-silver mb-0">{{ review.comment|linebreaks }}</p>
+                </div>
+            </div>
+            {% endif %}
+        {% endfor %}
+
+        {# Review form for logged-in users #}
+        {% if request.user.is_authenticated %}
+            {% has_user_reviewed=False %}
+            {% for review in product.reviews.all %}
+                {% if review.user == request.user %}
+                    {% with has_user_reviewed=True %}{% endwith %}
+                {% endif %}
+            {% endfor %}
+
+            {% if has_user_reviewed %}
+            <div class="col-12 mt-3">
+                <div class="bg-darker rounded-4 p-3">
+                    <p class="text-silver mb-0">
+                        <i class="fa-solid fa-check-circle text-success me-1"></i>
+                        You reviewed this product.
+                    </p>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-12 mt-3">
+                <div class="bg-darker rounded-4 p-4">
+                    <h5 class="text-white mb-3">
+                        <i class="fa-solid fa-pen me-2"></i>Write a Review
+                    </h5>
+                    <form method="POST" action="{% url 'add_review' product.id %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="id_rating" class="form-label text-silver">Your Rating</label>
+                            {{ review_form.rating }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_comment" class="form-label text-silver">Your Review</label>
+                            {{ review_form.comment }}
+                        </div>
+                        <button type="submit" class="btn btn-glow rounded-pill">
+                            <i class="fa-solid fa-paper-plane me-2"></i>Submit Review
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% endif %}
+        {% else %}
+            <div class="col-12 mt-3">
+                <div class="bg-darker rounded-4 p-3 text-center">
+                    <p class="text-silver mb-0">
+                        <a href="{% url 'account_login' %}?next={{ request.path }}#reviews" class="text-cyan">Log in</a>
+                        to write a review.
+                    </p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
 </div>
 
 {% endblock %}

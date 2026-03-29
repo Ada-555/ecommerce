@@ -81,6 +81,17 @@ class Product(models.Model):
     def has_variants(self):
         return self.variants.exists()
 
+    @property
+    def average_rating(self):
+        approved = self.reviews.filter(approved=True)
+        if not approved.exists():
+            return None
+        return round(sum(r.rating for r in approved) / approved.count(), 1)
+
+    @property
+    def review_count(self):
+        return self.reviews.filter(approved=True).count()
+
 
 class ProductVariant(models.Model):
     product = models.ForeignKey(
@@ -114,3 +125,25 @@ class ProductVariant(models.Model):
     @property
     def is_in_stock(self):
         return self.stock_quantity > 0
+
+
+class Review(models.Model):
+    user = models.ForeignKey(
+        'auth.User', on_delete=models.CASCADE, related_name='reviews'
+    )
+    product = models.ForeignKey(
+        'Product', on_delete=models.CASCADE, related_name='reviews'
+    )
+    rating = models.IntegerField(
+        choices=[(i, f'{i} star{"s" if i > 1 else ""}') for i in range(1, 6)]
+    )
+    comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    approved = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['-created_at']
+        unique_together = ['user', 'product']
+
+    def __str__(self):
+        return f'{self.user.username} - {self.product.name} ({self.rating}★)'

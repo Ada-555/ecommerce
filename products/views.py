@@ -7,8 +7,52 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.db.models.functions import Lower
 
-from .models import Product, Category
-from .forms import ProductForm
+from .models import Product, Category, Review
+from .forms import ProductForm, ReviewForm
+
+
+@login_required
+def create_review(request, product_id):
+    """Create a review for a product."""
+    product = get_object_or_404(Product, pk=product_id)
+
+    if request.method == 'POST':
+        rating = request.POST.get('rating')
+        comment = request.POST.get('comment', '').strip()
+
+        # Validate rating is 1-5
+        try:
+            rating = int(rating)
+            if rating < 1 or rating > 5:
+                messages.error(request, 'Rating must be between 1 and 5.')
+                return redirect(reverse('product_detail', args=[product_id]))
+        except (TypeError, ValueError):
+            messages.error(request, 'Invalid rating.')
+            return redirect(reverse('product_detail', args=[product_id]))
+
+        if not comment:
+            messages.error(request, 'Please write a comment.')
+            return redirect(reverse('product_detail', args=[product_id]))
+
+        # Check for existing review
+        if Review.objects.filter(user=request.user, product=product).exists():
+            messages.error(request, 'You have already reviewed this product.')
+            return redirect(reverse('product_detail', args=[product_id]))
+
+        Review.objects.create(
+            user=request.user,
+            product=product,
+            rating=rating,
+            comment=comment,
+            approved=False,
+        )
+        messages.success(
+            request,
+            'Thank you! Your review has been submitted and is pending approval.'
+        )
+        return redirect(reverse('product_detail', args=[product_id]))
+
+    return redirect(reverse('product_detail', args=[product_id]))
 
 
 def _fuzzy_match(query, candidates, threshold=0.6):
@@ -259,6 +303,7 @@ def product_detail(request, product_id):
         'related_products': related_products,
         'recently_viewed': recently_viewed,
         'product_schema': product_schema,
+        'review_form': ReviewForm(),
     }
 
     return render(request, 'products/product_detail.html', context)
