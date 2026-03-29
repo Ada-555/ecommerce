@@ -12,12 +12,12 @@
 
 | # | Task | Status | Agent | Notes |
 |---|------|--------|-------|-------|
-| 1 | Per-store admin | ✅ DONE | per-store-admin | Store-scoped admin views, admin_context.py, store admin base |
+| 1 | Per-store admin | ✅ DONE | per-store-admin | Store-scoped admin views |
 | 2 | Phase 12 Reviews — star ratings, moderation, verified buyer | 🟡 IN PROGRESS | orderimo-phase12-reviews | Running 2h+, deep in implementation |
-| 3 | Order tracking page — trackable link after purchase | ⏳ TIMEOUT | order-tracking | Timed out 10m — respawning |
-| 4 | Email notifications — confirmation, shipping, delivery | ⏳ TIMEOUT | email-notifications | Timed out 10m — respawning |
-| 5 | Wishlist / Save for later — heart icon | ⏳ TIMEOUT | wishlist-feature | Timed out 10m — respawning |
-| 6 | Store-specific search — scoped to active store | ✅ DONE | store-search | Complete — search per store, URLs working |
+| 3 | Order tracking page — trackable link after purchase | 🟡 IN PROGRESS | order-tracking-retry | Respawning with 30m timeout |
+| 4 | Email notifications — confirmation, shipping, delivery | 🟡 IN PROGRESS | email-notifications-retry | Respawning with 30m timeout |
+| 5 | Wishlist / Save for later — heart icon | 🟡 IN PROGRESS | wishlist-retry | Respawning with 30m timeout |
+| 6 | Store-specific search — scoped to active store | ✅ DONE | store-search | Search per store (orderimo/petshop/digital/search/) |
 
 ---
 
@@ -25,8 +25,6 @@
 
 | # | Task | Status | Agent | Notes |
 |---|------|--------|-------|-------|
-| 5 | Wishlist / Save for later — heart icon | 🟡 IN PROGRESS | wishlist-feature | Launched 07:53 |
-| 6 | Store-specific search — scoped to active store | ✅ DONE | store-search | Complete |
 | 7 | Product comparisons — side-by-side 2-3 products | ⏳ NEXT | — | |
 | 8 | Abandoned cart emails | ⏳ NEXT | — | |
 | 9 | Multi-coupon system — credits, % off, free shipping | ⏳ NEXT | — | |
@@ -38,12 +36,12 @@
 
 | # | Task | Status | Agent | Notes |
 |---|------|--------|-------|-------|
-| 11 | Subscription products — recurring billing | 🔜 SOON | — | |
-| 12 | GA4 analytics dashboard — revenue, conversions, top products | 🔜 SOON | — | |
-| 13 | Affiliate program — per-store affiliate links | 🔜 SOON | — | |
-| 14 | Multi-currency — EUR, USD, GBP | 🔜 SOON | — | |
-| 15 | **Crypto payments — BTC, USDC, XMR via Stripe** | 🔜 SOON | — | Kay's priority |
-| 16 | Newsletter signup — Mailchimp or equivalent | 🔜 SOON | — | |
+| 11 | **Crypto payments — BTC, USDC, XMR via Stripe** | 🟡 IN PROGRESS | crypto-payments | Kay's priority — launched 08:17 |
+| 12 | Newsletter signup — Mailchimp or equivalent | ⏳ NEXT | — | |
+| 13 | Subscription products — recurring billing | 🔜 SOON | — | |
+| 14 | GA4 analytics dashboard — revenue, conversions, top products | 🔜 SOON | — | |
+| 15 | Affiliate program — per-store affiliate links | 🔜 SOON | — | |
+| 16 | Multi-currency — EUR, USD, GBP | 🔜 SOON | — | |
 
 ---
 
@@ -53,21 +51,19 @@
 |-----------|-------|--------|--------|
 | 2026-03-29 07:00 | per-store-admin | Committed store-scoped admin | ✅ Done |
 | 2026-03-29 07:46 | qa-test-sweep | Fixed profile URL, bag URL param, all 101 tests pass | ✅ Done |
-| 2026-03-29 07:46 | orderimo-phase12-reviews | Building review system (2h+) | 🟡 Running |
-| 2026-03-29 07:53 | order-tracking | Building order tracking page | 🟡 Running |
-| 2026-03-29 07:53 | email-notifications | Building transactional email system | 🟡 Running |
-| 2026-03-29 07:53 | wishlist-feature | Building wishlist with heart toggle | 🟡 Running |
-| 2026-03-29 08:16 | store-search | Added store-scoped search URLs (/orderimo/search/, /petshop/search/, /digital/search/), new store_search view, updated store base templates with search forms, new search_results.html template | ✅ Done |
-| 2026-03-29 07:53 | store-search | Building store-scoped search | ✅ Completed |
-| 2026-03-29 07:55 | (this session) | Taking over build management, spawning all agents | 🟡 IN PROGRESS |
+| 2026-03-29 08:16 | store-search | Added store-scoped search URLs & templates | ✅ Done |
+| 2026-03-29 08:00 | order-tracking, email, wishlist | Initial runs timed out (10m) | ⚠️ Timeout |
+| 2026-03-29 08:18 | order-tracking-retry, email-notifications-retry, wishlist-retry | Respawning with 30min timeouts — resuming from partial work | 🟡 Running |
+| 2026-03-29 08:19 | crypto-payments | Starting crypto payments (BTC, USDC, XMR) | 🟩 Started |
 
 ---
 
-## 📊 Current Site Health
+## 📊 Site Health
 - All 3 stores: ✅ 200 OK on all pages
 - Tests: ✅ 101/101 passing
-- Stores: Orderimo, PetShop Ireland, DigitalHub — all live
+- Django check: ✅ passing
 
 ---
 
-_Last updated: 2026-03-29 07:52 GMT+1_
+_Last updated: 2026-03-29 08:19 GMT+1_
+
