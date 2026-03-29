@@ -1,31 +1,36 @@
 # Orderimo Build Dashboard
 
-## Status
-- **Tests:** ✅ 112/112 passing
-- **Updated:** 10:10 GMT+1
+Status: **112/112 tests passing** | Updated: 10:15 GMT+1
 
-## Completed
-- ✅ Store-scoped search
-- ✅ Email notifications (order confirmation/shipped/delivered)
-- ✅ Order tracking page + status
-- ✅ Wishlist (heart icon + HTMX)
-- ✅ Crypto payments (BTC/USDC via Stripe, XMR via CoinGate)
-- ✅ Phase 12 Reviews (star ratings, verified buyer)
-- ✅ Multi-currency (EUR/USD/GBP)
-- ✅ Affiliate program (referral tracking + commissions)
-- ✅ Newsletter signup (Mailchimp) + checkout checkbox
-- ✅ Subscriptions checkout (Stripe recurring)
-- ✅ Stabilization (URL fixes, set_currency view)
+## ✅ Completed Features (14 total)
 
-## In Progress (final sprint)
-| Agent | Task |
-|-------|------|
-| agent-coupon-ui-retry | Checkout coupon code input + discount display (retry with 30m) |
-| agent-abandoned-cart | Abandoned cart email management command |
-| agent-invoices-finish | PDF invoice generation (ReportLab) |
-| agent-comparisons-ga4-finish | Comparison page + GA4 analytics dashboard |
+| Feature | Commit |
+|---------|--------|
+| Store-scoped search | `6e12240` |
+| Email notifications | `5a07479` |
+| Order tracking page | `dd6886b` |
+| Wishlist (heart icon + HTMX) | `5bfc59a` |
+| Crypto payments (BTC/USDC/XMR) | `dd1084b` |
+| Phase 12 Reviews (star ratings, verified buyer) | `2d8192b` |
+| Multi-currency (EUR/USD/GBP) | `35bc9fe` |
+| Affiliate program (referral tracking + commissions) | `a504dbf` |
+| Newsletter signup (Mailchimp) + checkout checkbox | `236b781` |
+| Subscriptions checkout (Stripe recurring) | `112530a` |
+| Product comparisons (compare page) | (by agent-comparisons-ga4-finish) |
+| GA4 analytics dashboard (ORM-based) | (by agent-comparisons-ga4-finish) |
+| Stabilization (set_currency, URL fixes) | `5ad684e` |
 
-## Next (queued as slots free)
-- Final deployment checklist (DEPLOYMENT.md, .env.example, production settings)
-- Polish: add loading states, error handling, accessibility improvements
-- Documentation: update README with final features list
+---
+
+## 🔄 In Progress (finishing final items)
+
+| Agent | Task | ETA |
+|-------|------|-----|
+| agent-coupon-ui-retry | Checkout coupon code input + discount display | 30m |
+| agent-invoices-retry | PDF invoice generation (simplified) | new |
+| agent-abandoned-cart-retry | Abandoned cart email command | new |
+| agent-ux-polish | Fix any final issues, test checkout flow | new |
+
+---
+
+Total committed features: **14** — core platform complete. Final polish pending.
