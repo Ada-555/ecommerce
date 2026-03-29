@@ -28,19 +28,26 @@ SECRET_KEY = os.environ.get('SECRET_KEY', '')
 DEBUG = 'DEVELOPMENT' in os.environ
 
 ALLOWED_HOSTS = [
-    '.onlineai.art',
+    '.orderimo.com',
     '.herokuapp.com',
     '.gitpod.io',
     'localhost',
     '127.0.0.1',
+    '192.168.0.59',
+    '0.0.0.0',
 ]
 
 
 # Live Site Link
+# Site Identity
+SITE_NAME = "Orderimo"
+SITE_DOMAIN = "orderimo.com"
+STORENAME = "Orderimo"
+
 if 'DEVELOPMENT' in os.environ:
-    LIVE_LINK = 'http://127.0.0.1:8000/'
+    LIVE_LINK = 'http://127.0.0.1:8023/'
 else:
-    LIVE_LINK = 'https://onlineAI.art/'
+    LIVE_LINK = 'https://orderimo.com/'
 
 
 # Application definition
@@ -246,7 +253,7 @@ STRIPE_WH_SECRET = os.getenv('STRIPE_WH_SECRET', '')
 
 if 'DEVELOPMENT' in os.environ:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-    DEFAULT_FROM_EMAIL = 'support@onlineai.art'
+    DEFAULT_FROM_EMAIL = 'hello@orderimo.com'
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     EMAIL_USE_TLS = True
@@ -254,7 +261,7 @@ else:
     EMAIL_HOST = 'smtp.gmail.com'
     EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
     EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASS')
-    DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_HOST_USER')
+    DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_HOST_USER') or 'hello@orderimo.com'
 
 
 # Site Logo
@@ -264,13 +271,13 @@ SITE_LOGO = 'favicon/android-chrome-192x192.png'
 # Custom Jazzmin Settings
 JAZZMIN_SETTINGS = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)
-    "site_title": "onlineAI.art Admin",
+    "site_title": "Orderimo Admin",
 
     # Title on the login screen (19 chars max) (defaults to current_admin_site.site_header if absent or None)
-    "site_header": "onlineAI.art",
+    "site_header": "Orderimo",
 
     # Title on the brand (19 chars max) (defaults to current_admin_site.site_header if absent or None)
-    "site_brand": "onlineAI.art",
+    "site_brand": "Orderimo",
 
     # Logo to use for your site, must be present in static files, used for brand on top left
     "site_logo": SITE_LOGO,
@@ -285,10 +292,10 @@ JAZZMIN_SETTINGS = {
     "user_avatar": SITE_LOGO,
 
     # Welcome text on the login screen
-    "welcome_sign": "Welcome to the onlineAI.art Admin Portal",
+    "welcome_sign": "Welcome to the Orderimo Admin Portal",
 
     # Copyright on the footer
-    "copyright": "onlineAI.art Ltd 2026",
+    "copyright": "Orderimo Ltd 2026",
 
     # List of model admins to search from the search bar, search bar omitted if excluded
     # If you want to use a single search field you dont need to use a list, you can use a simple string
@@ -326,6 +333,6 @@ JAZZMIN_SETTINGS = {
         {"model": "avatar.avatar"},
         {"model": "blog.blogpage"},
         {"model": "about.aboutpage"},
-        {"name": "Developer", "url": "https://github.com/Ada-555", "new_window": True},
+        {"name": "Developer", "url": "https://github.com/Ada-555/Orderimo", "new_window": True},
     ],
 }

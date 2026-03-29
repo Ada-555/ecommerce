@@ -9,25 +9,25 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description"
-        content="onlineAI.art — Limited edition AI-generated artwork on clothing, homeware and tech. Unique aiPunk avatars. Shop now.">
-    <meta name="keywords" content="AI art, print on demand, custom clothing, digital art, t-shirts, hoodies, art prints">
-    <meta name="author" content="onlineAI.art">
+        content="Orderimo — One platform. Multiple branded stores. Shop Plurino for tech, HomeNest for homeware, and StyleVault for fashion.">
+    <meta name="keywords" content="multi-store, e-commerce, tech gadgets, homeware, fashion, streetwear, online shopping">
+    <meta name="author" content="Orderimo">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://onlineAI.art">
-    <meta property="og:title" content="onlineAI.art">
-    <meta property="og:description" content="AI-generated artwork on clothing, homeware and tech.">
+    <meta property="og:url" content="https://orderimo.com">
+    <meta property="og:title" content="Orderimo">
+    <meta property="og:description" content="One platform. Multiple branded stores. Shop Plurino, HomeNest, and StyleVault.">
     <meta property="og:image" content="{% static 'favicon/favicon-512x512.png' %}">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://onlineAI.art">
-    <meta name="twitter:title" content="onlineAI.art">
-    <meta name="twitter:description" content="AI-generated artwork on clothing, homeware and tech.">
+    <meta name="twitter:url" content="https://orderimo.com">
+    <meta name="twitter:title" content="Orderimo">
+    <meta name="twitter:description" content="One platform. Multiple branded stores.">
     {% endblock %}
 
-    <title>onlineAI.art{% block extra_title %}{% endblock %}</title>
+    <title>Orderimo{% block extra_title %}{% endblock %}</title>
 
     <!-- Favicons -->
     {% block favicon %}
@@ -51,6 +51,8 @@
         integrity="sha512-5AsV6VGEJncMk1T7pMk3gkH9/6y/dh4t0i3b1KqKZQhpLjY4p7TnrnV0j3I5e1R0VZnG7W8E3W3JvvK9vK5V3A==" crossorigin="anonymous">
     <!-- Base CSS -->
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <!-- Brand CSS -->
+    <link rel="stylesheet" href="{% static 'css/brands.css' %}">
     {% endblock %}
 
     {% block extra_css %}{% endblock %}
@@ -83,7 +85,7 @@
         <div class="row g-0 top-bar d-none d-lg-flex align-items-center">
             <div class="col-12 col-lg-4 text-center text-lg-start ps-4">
                 <a href="{% url 'home' %}" class="text-decoration-none">
-                    <h4 class="brand-font text-white my-0 neon-text">online<strong>AI</strong>.art</h4>
+                    <h4 class="brand-font text-white my-0 neon-text">Orderimo</h4>
                 </a>
             </div>
             <div class="col-12 col-lg-4 py-2">
@@ -127,8 +129,6 @@
                                 <li class="px-3 py-2 text-muted small fw-bold">My Account</li>
                                 <li><a class="dropdown-item" href="{% url 'profile' %}">
                                     <i class="fa-regular fa-user me-2"></i>My Profile</a></li>
-                                <li><a class="dropdown-item" href="{% url 'avatar_detail' %}">
-                                    <i class="fa-solid fa-robot me-2"></i>My aiPunk</a></li>
                                 <li><a class="dropdown-item" href="{% url 'account_logout' %}">
                                     <i class="fa-solid fa-right-from-bracket me-2"></i>Logout</a></li>
                             {% else %}
@@ -166,7 +166,7 @@
         <!-- Main Navbar -->
         <nav class="navbar navbar-expand-lg navbar-dark main-nav">
             <div class="container-fluid">
-                <a class="navbar-brand d-lg-none brand-font neon-text" href="{% url 'home' %}">online<strong>AI</strong>.art</a>
+                <a class="navbar-brand d-lg-none brand-font neon-text" href="{% url 'home' %}">Orderimo</a>
                 <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
                     data-bs-target="#main-nav" aria-controls="main-nav" aria-expanded="false"
                     aria-label="Toggle navigation">
@@ -189,6 +189,9 @@
     <!-- Mobile Header (visible only on mobile) -->
     {% include 'includes/mobile-nav.html' %}
 
+    <!-- Breadcrumbs -->
+    {% block breadcrumbs %}{% endblock %}
+
     <!-- Toast Messages -->
     {% if messages %}
     <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;">
@@ -210,6 +213,9 @@
 
     <!-- Page Header -->
     {% block page_header %}{% endblock %}
+
+    <!-- Structured Data -->
+    {% block structured_data %}{% endblock %}
 
     <!-- Main Content -->
     <main class="flex-grow-1 main-content">

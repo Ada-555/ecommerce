@@ -18,63 +18,74 @@
                     <i class="fa-solid fa-star me-2 text-muted"></i>By Rating</a></li>
                 <li><a class="dropdown-item" href="{% url 'products' %}?sort=category&direction=asc">
                     <i class="fa-solid fa-folder me-2 text-muted"></i>By Category</a></li>
+                <li><a class="dropdown-item" href="{% url 'products' %}?sort=name&direction=asc">
+                    <i class="fa-solid fa-arrow-a-to-z me-2 text-muted"></i>A-Z</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item fw-bold" href="{% url 'products' %}">
                     <i class="fa-solid fa-shopping-bag me-2"></i>All Products</a></li>
             </ul>
         </li>
-        <!-- Clothing -->
+        <!-- Plurino -->
         <li class="nav-item dropdown">
-            <a class="nav-link text-white text-center dropdown-toggle" href="#" id="clothing"
+            <a class="nav-link text-cyan text-center dropdown-toggle" href="#" id="plurino"
                 data-bs-toggle="dropdown" role="button" aria-expanded="false">
-                <i class="fa-solid fa-shirt me-1"></i>Clothing
+                <i class="fa-solid fa-microchip me-1"></i>Plurino
             </a>
-            <ul class="dropdown-menu neon-dropdown shadow" aria-labelledby="clothing">
-                <li><a class="dropdown-item" href="{% url 'products' %}?category=activewear,essentials">
-                    <i class="fa-solid fa-dumbbell me-2 text-muted"></i>Activewear & Essentials</a></li>
-                <li><a class="dropdown-item" href="{% url 'products' %}?category=jackets_hoodies">
-                    <i class="fa-solid fa-vest me-2 text-muted"></i>Jackets & Hoodies</a></li>
-                <li><a class="dropdown-item" href="{% url 'products' %}?category=shirts">
-                    <i class="fa-solid fa-shirt me-2 text-muted"></i>Shirts</a></li>
+            <ul class="dropdown-menu neon-dropdown shadow" aria-labelledby="plurino">
+                <li class="px-3 py-2 text-muted small fw-bold">Tech Gadgets & Accessories</li>
+                <li><a class="dropdown-item" href="{% url 'products' %}?category=phones_tablets">
+                    <i class="fa-solid fa-mobile-screen me-2 text-muted"></i>Phones & Tablets</a></li>
+                <li><a class="dropdown-item" href="{% url 'products' %}?category=computers_laptops">
+                    <i class="fa-solid fa-laptop me-2 text-muted"></i>Computers & Laptops</a></li>
+                <li><a class="dropdown-item" href="{% url 'products' %}?category=audio_headphones">
+                    <i class="fa-solid fa-headphones me-2 text-muted"></i>Audio & Headphones</a></li>
+                <li><a class="dropdown-item" href="{% url 'products' %}?category=accessories">
+                    <i class="fa-solid fa-plug me-2 text-muted"></i>Accessories</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item fw-bold" href="{% url 'products' %}?category=activewear,essentials,jackets_hoodies,shirts">
-                    <i class="fa-solid fa-shirt me-2"></i>All Clothing</a></li>
+                <li><a class="dropdown-item fw-bold" href="{% url 'products' %}?store=plurino">
+                    <i class="fa-solid fa-shop me-2"></i>All Plurino</a></li>
             </ul>
         </li>
-        <!-- Homeware & Tech -->
+        <!-- HomeNest -->
         <li class="nav-item dropdown">
-            <a class="nav-link text-white text-center dropdown-toggle" href="#" id="homeware"
+            <a class="nav-link text-warning text-center dropdown-toggle" href="#" id="homenest"
                 data-bs-toggle="dropdown" role="button" aria-expanded="false">
-                <i class="fa-solid fa-house-chimney me-1"></i>Homeware & Tech
+                <i class="fa-solid fa-house-chimney me-1"></i>HomeNest
             </a>
-            <ul class="dropdown-menu neon-dropdown shadow" aria-labelledby="homeware">
-                <li><a class="dropdown-item" href="{% url 'products' %}?category=bed_bath">
-                    <i class="fa-solid fa-bed me-2 text-muted"></i>Bed & Bath</a></li>
-                <li><a class="dropdown-item" href="{% url 'products' %}?category=kitchen_dining">
-                    <i class="fa-solid fa-kitchen-set me-2 text-muted"></i>Kitchen & Dining</a></li>
-                <li><a class="dropdown-item" href="{% url 'products' %}?category=electronics_technology">
-                    <i class="fa-solid fa-microchip me-2 text-muted"></i>Electronics & Tech</a></li>
+            <ul class="dropdown-menu neon-dropdown shadow" aria-labelledby="homenest">
+                <li class="px-3 py-2 text-muted small fw-bold">Curated Home & Living</li>
+                <li><a class="dropdown-item" href="{% url 'products' %}?category=bedroom">
+                    <i class="fa-solid fa-bed me-2 text-muted"></i>Bedroom</a></li>
+                <li><a class="dropdown-item" href="{% url 'products' %}?category=kitchen">
+                    <i class="fa-solid fa-kitchen-set me-2 text-muted"></i>Kitchen</a></li>
+                <li><a class="dropdown-item" href="{% url 'products' %}?category=decor">
+                    <i class="fa-solid fa-palette me-2 text-muted"></i>Decor</a></li>
+                <li><a class="dropdown-item" href="{% url 'products' %}?category=garden">
+                    <i class="fa-solid fa-seedling me-2 text-muted"></i>Garden</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item fw-bold" href="{% url 'products' %}?category=bed_bath,kitchen_dining,electronics_technology">
-                    <i class="fa-solid fa-house me-2"></i>All Homeware & Tech</a></li>
+                <li><a class="dropdown-item fw-bold" href="{% url 'products' %}?store=homenest">
+                    <i class="fa-solid fa-house me-2"></i>All HomeNest</a></li>
             </ul>
         </li>
-        <!-- Special Offers -->
+        <!-- StyleVault -->
         <li class="nav-item dropdown">
-            <a class="nav-link text-white text-center dropdown-toggle" href="#" id="specials"
+            <a class="nav-link text-pink text-center dropdown-toggle" href="#" id="stylevault"
                 data-bs-toggle="dropdown" role="button" aria-expanded="false">
-                <i class="fa-solid fa-gift me-1"></i>Special Offers
+                <i class="fa-solid fa-shirt me-1"></i>StyleVault
             </a>
-            <ul class="dropdown-menu neon-dropdown shadow" aria-labelledby="specials">
-                <li><a class="dropdown-item" href="{% url 'products' %}?category=new_arrivals">
-                    <i class="fa-solid fa-sparkles me-2 text-muted"></i>New Arrivals</a></li>
-                <li><a class="dropdown-item" href="{% url 'products' %}?category=deals">
-                    <i class="fa-solid fa-tags me-2 text-muted"></i>Deals</a></li>
-                <li><a class="dropdown-item" href="{% url 'products' %}?category=clearance">
-                    <i class="fa-solid fa-percent me-2 text-muted"></i>Clearance</a></li>
+            <ul class="dropdown-menu neon-dropdown shadow" aria-labelledby="stylevault">
+                <li class="px-3 py-2 text-muted small fw-bold">Fashion & Streetwear</li>
+                <li><a class="dropdown-item" href="{% url 'products' %}?category=men">
+                    <i class="fa-solid fa-person me-2 text-muted"></i>Men</a></li>
+                <li><a class="dropdown-item" href="{% url 'products' %}?category=women">
+                    <i class="fa-solid fa-person-dress me-2 text-muted"></i>Women</a></li>
+                <li><a class="dropdown-item" href="{% url 'products' %}?category=shoes">
+                    <i class="fa-solid fa-shoe-prints me-2 text-muted"></i>Shoes</a></li>
+                <li><a class="dropdown-item" href="{% url 'products' %}?category=fashion_accessories">
+                    <i class="fa-solid fa-glasses me-2 text-muted"></i>Accessories</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item fw-bold" href="{% url 'products' %}?category=new_arrivals,deals,clearance">
-                    <i class="fa-solid fa-gift me-2"></i>All Specials</a></li>
+                <li><a class="dropdown-item fw-bold" href="{% url 'products' %}?store=stylevault">
+                    <i class="fa-solid fa-shirt me-2"></i>All StyleVault</a></li>
             </ul>
         </li>
         <!-- Blog link -->

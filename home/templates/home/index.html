@@ -4,26 +4,267 @@
 {% block extra_title %}| Home{% endblock %}
 
 {% block page_header %}
-    <div class="container header-container">
-        <div class="row">
-            <div class="col"></div>
-        </div>
+<div class="container header-container">
+    <div class="row">
+        <div class="col"></div>
     </div>
+</div>
 {% endblock %}
 
 {% block content %}
-<div class="container vh-100">
-    <div class="d-flex flex-column justify-content-center align-items-center h-100">
-        <div class="col-lg-6 col-md-9 text-center">
-            <div class="bg-teal rounded-lg">
-                <h3 class="logo-font text-white p-4 responsive-heading mt-4">
-                    Unique one of a kind products created using the latest AI technology!
-                </h3>
+<!-- Hero Section -->
+<section class="hero-section position-relative overflow-hidden">
+    <div class="container py-5">
+        <div class="row align-items-center py-5">
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <span class="badge bg-purple text-white px-3 py-2 rounded-pill">
+                        <i class="fa-solid fa-store me-1"></i> One Platform. Three Stores.
+                    </span>
+                </div>
+                <h1 class="display-4 brand-font text-white mb-3 neon-text">
+                    Shop Smarter with <strong>Orderimo</strong>
+                </h1>
+                <p class="lead text-silver mb-4">
+                    Discover curated products from three distinct brands — tech gadgets from Plurino, home essentials from HomeNest, and streetwear from StyleVault.
+                </p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="{% url 'products' %}" class="btn btn-lg btn-primary rounded-pill px-4">
+                        <i class="fa-solid fa-bag-shopping me-2"></i>Shop All
+                    </a>
+                    <a href="#stores" class="btn btn-lg btn-outline-light rounded-pill px-4">
+                        <i class="fa-solid fa-store me-2"></i>Our Stores
+                    </a>
+                </div>
             </div>
-            <div class="mt-4">
-                <a href="{% url 'products' %}" class="btn btn-secondary btn-lg heartbeat-hover border-0 my-4 p-3 rounded-pill">Discover Now</a>
+            <div class="col-lg-6 text-center mt-4 mt-lg-0">
+                <div class="p-4 rounded-4" style="background: rgba(128,0,128,0.15); border: 1px solid rgba(128,0,128,0.3);">
+                    <div class="display-1 mb-3">🛍️</div>
+                    <p class="text-silver mb-0">Free delivery on orders over €{{ free_delivery_threshold }}</p>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</section>
+
+<!-- Trust Badges -->
+<section class="py-3 bg-darker">
+    <div class="container">
+        <div class="row text-center g-4">
+            <div class="col-6 col-md-3">
+                <i class="fa-solid fa-shield-halved text-info fa-2x mb-2"></i>
+                <p class="small text-silver mb-0">Secure Checkout</p>
+            </div>
+            <div class="col-6 col-md-3">
+                <i class="fa-solid fa-truck-fast text-info fa-2x mb-2"></i>
+                <p class="small text-silver mb-0">Fast Delivery</p>
+            </div>
+            <div class="col-6 col-md-3">
+                <i class="fa-solid fa-rotate-left text-info fa-2x mb-2"></i>
+                <p class="small text-silver mb-0">Free Returns</p>
+            </div>
+            <div class="col-6 col-md-3">
+                <i class="fa-solid fa-headset text-info fa-2x mb-2"></i>
+                <p class="small text-silver mb-0">24/7 Support</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stores Section -->
+<section class="py-5" id="stores">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="brand-font text-white neon-text">Our Stores</h2>
+            <p class="text-silver">Three brands. One destination.</p>
+        </div>
+        <div class="row g-4">
+            <!-- Plurino -->
+            <div class="col-md-4">
+                <div class="card h-100 store-card-plurino text-white rounded-4 overflow-hidden">
+                    <div class="card-body p-4">
+                        <div class="mb-3">
+                            <span class="badge badge-plurino rounded-pill px-3 py-2">
+                                <i class="fa-solid fa-microchip me-1"></i> Tech
+                            </span>
+                        </div>
+                        <h3 class="card-title text-cyan fw-bold mb-2">Plurino</h3>
+                        <p class="card-text text-silver small mb-3">Smart, sleek, cutting-edge tech gadgets and accessories for the modern lifestyle.</p>
+                        <ul class="list-unstyled small text-silver mb-4">
+                            <li><i class="fa-solid fa-mobile-screen text-cyan me-2"></i>Phones & Tablets</li>
+                            <li><i class="fa-solid fa-laptop text-cyan me-2"></i>Computers & Laptops</li>
+                            <li><i class="fa-solid fa-headphones text-cyan me-2"></i>Audio & Headphones</li>
+                            <li><i class="fa-solid fa-plug text-cyan me-2"></i>Accessories</li>
+                        </ul>
+                        <a href="{% url 'products' %}?store=plurino" class="btn btn-outline-cyan rounded-pill w-100">
+                            <i class="fa-solid fa-bag-shopping me-2"></i>Shop Plurino
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- HomeNest -->
+            <div class="col-md-4">
+                <div class="card h-100 store-card-homenest text-white rounded-4 overflow-hidden">
+                    <div class="card-body p-4">
+                        <div class="mb-3">
+                            <span class="badge badge-homenest rounded-pill px-3 py-2">
+                                <i class="fa-solid fa-house me-1"></i> Home
+                            </span>
+                        </div>
+                        <h3 class="card-title text-warning fw-bold mb-2">HomeNest</h3>
+                        <p class="card-text text-silver small mb-3">Warm, cozy, curated homeware and interiors to make every space feel like home.</p>
+                        <ul class="list-unstyled small text-silver mb-4">
+                            <li><i class="fa-solid fa-bed text-warning me-2"></i>Bedroom</li>
+                            <li><i class="fa-solid fa-kitchen-set text-warning me-2"></i>Kitchen</li>
+                            <li><i class="fa-solid fa-palette text-warning me-2"></i>Decor</li>
+                            <li><i class="fa-solid fa-seedling text-warning me-2"></i>Garden</li>
+                        </ul>
+                        <a href="{% url 'products' %}?store=homenest" class="btn btn-outline-warning rounded-pill w-100">
+                            <i class="fa-solid fa-bag-shopping me-2"></i>Shop HomeNest
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- StyleVault -->
+            <div class="col-md-4">
+                <div class="card h-100 store-card-stylevault text-white rounded-4 overflow-hidden">
+                    <div class="card-body p-4">
+                        <div class="mb-3">
+                            <span class="badge badge-stylevault rounded-pill px-3 py-2">
+                                <i class="fa-solid fa-shirt me-1"></i> Fashion
+                            </span>
+                        </div>
+                        <h3 class="card-title text-pink fw-bold mb-2">StyleVault</h3>
+                        <p class="card-text text-silver small mb-3">Bold, urban, expressive fashion and streetwear for every attitude and occasion.</p>
+                        <ul class="list-unstyled small text-silver mb-4">
+                            <li><i class="fa-solid fa-person text-pink me-2"></i>Men</li>
+                            <li><i class="fa-solid fa-person-dress text-pink me-2"></i>Women</li>
+                            <li><i class="fa-solid fa-shoe-prints text-pink me-2"></i>Shoes</li>
+                            <li><i class="fa-solid fa-glasses text-pink me-2"></i>Accessories</li>
+                        </ul>
+                        <a href="{% url 'products' %}?store=stylevault" class="btn btn-outline-pink rounded-pill w-100">
+                            <i class="fa-solid fa-bag-shopping me-2"></i>Shop StyleVault
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Products -->
+{% if featured_products %}
+<section class="py-5 bg-darker">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="brand-font text-white neon-text mb-1">Featured Products</h2>
+                <p class="text-silver small mb-0">Handpicked just for you</p>
+            </div>
+            <a href="{% url 'products' %}" class="btn btn-sm btn-outline-light rounded-pill">
+                View All <i class="fa-solid fa-arrow-right ms-1"></i>
+            </a>
+        </div>
+        <div class="row g-3">
+            {% for product in featured_products %}
+            <div class="col-6 col-md-3">
+                <div class="card h-100 bg-dark text-white rounded-4 overflow-hidden product-card">
+                    {% if product.image %}
+                    <div class="position-relative overflow-hidden">
+                        <img src="{{ product.image.url }}" class="card-img-top product-card-img" alt="{{ product.name }}">
+                    </div>
+                    {% else %}
+                    <div class="bg-secondary d-flex align-items-center justify-content-center" style="height:180px;">
+                        <i class="fa-solid fa-image text-white fa-3x"></i>
+                    </div>
+                    {% endif %}
+                    <div class="card-body p-3">
+                        <p class="small text-muted mb-1">{{ product.category.friendly_name|default:product.category.name|default:"General" }}</p>
+                        <h6 class="card-title text-white mb-1">{{ product.name }}</h6>
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <span class="text-info fw-bold">€{{ product.price }}</span>
+                            {% if product.rating %}
+                            <small class="text-warning"><i class="fa-solid fa-star"></i> {{ product.rating|floatformat:1 }}</small>
+                            {% endif %}
+                        </div>
+                        <a href="{% url 'product_detail' product.id %}" class="btn btn-sm btn-outline-light rounded-pill w-100">
+                            View
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- New Arrivals -->
+{% if new_products %}
+<section class="py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="brand-font text-white neon-text mb-1">New Arrivals</h2>
+                <p class="text-silver small mb-0">Fresh finds, just landed</p>
+            </div>
+            <a href="{% url 'products' %}?sort=new" class="btn btn-sm btn-outline-light rounded-pill">
+                View All <i class="fa-solid fa-arrow-right ms-1"></i>
+            </a>
+        </div>
+        <div class="row g-3">
+            {% for product in new_products %}
+            <div class="col-6 col-md-3">
+                <div class="card h-100 bg-dark text-white rounded-4 overflow-hidden product-card">
+                    {% if product.image %}
+                    <div class="position-relative overflow-hidden">
+                        <span class="badge bg-success position-absolute top-0 end-0 m-2 rounded-pill px-2 py-1 small">
+                            <i class="fa-solid fa-sparkles me-1"></i>New
+                        </span>
+                        <img src="{{ product.image.url }}" class="card-img-top product-card-img" alt="{{ product.name }}">
+                    </div>
+                    {% else %}
+                    <div class="bg-secondary d-flex align-items-center justify-content-center position-relative" style="height:180px;">
+                        <span class="badge bg-success position-absolute top-0 end-0 m-2 rounded-pill px-2 py-1 small">New</span>
+                        <i class="fa-solid fa-image text-white fa-3x"></i>
+                    </div>
+                    {% endif %}
+                    <div class="card-body p-3">
+                        <p class="small text-muted mb-1">{{ product.category.friendly_name|default:product.category.name|default:"General" }}</p>
+                        <h6 class="card-title text-white mb-1">{{ product.name }}</h6>
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <span class="text-info fw-bold">€{{ product.price }}</span>
+                        </div>
+                        <a href="{% url 'product_detail' product.id %}" class="btn btn-sm btn-outline-light rounded-pill w-100">
+                            View
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Newsletter -->
+<section class="py-5 bg-darker">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 text-center">
+                <h2 class="brand-font text-white neon-text mb-2">Stay in the Loop</h2>
+                <p class="text-silver mb-4">Get the latest products, exclusive deals, and store news delivered to your inbox.</p>
+                <form class="d-flex gap-2 justify-content-center" method="GET" action="#">
+                    <label for="newsletter-email" class="visually-hidden">Email address</label>
+                    <input id="newsletter-email" type="email" name="email" class="form-control rounded-pill w-auto" 
+                           style="min-width: 250px;" placeholder="Enter your email" required>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4">
+                        Subscribe
+                    </button>
+                </form>
+                <p class="small text-muted mt-2 mb-0">No spam. Unsubscribe anytime.</p>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock %}
