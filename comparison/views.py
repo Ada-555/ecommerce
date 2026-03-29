@@ -23,13 +23,23 @@ def compare_view(request):
     })
 
 
+def _get_compare_redirect_url(request):
+    """Return the correct store-prefixed compare URL for the request."""
+    path = request.path
+    if '/petshop/' in path:
+        return '/petshop/compare/'
+    elif '/digital/' in path:
+        return '/digital/compare/'
+    return '/orderimo/compare/'
+
+
 def add_to_compare(request, product_id):
     """Add a product to the comparison list (max 3)."""
     compare_ids = request.session.get('compare_ids', [])
     if product_id not in compare_ids and len(compare_ids) < 3:
         compare_ids.append(product_id)
         request.session['compare_ids'] = compare_ids
-    return redirect('product_compare')
+    return redirect(_get_compare_redirect_url(request))
 
 
 def remove_from_compare(request, product_id):
@@ -38,10 +48,10 @@ def remove_from_compare(request, product_id):
     if product_id in compare_ids:
         compare_ids.remove(product_id)
         request.session['compare_ids'] = compare_ids
-    return redirect('product_compare')
+    return redirect(_get_compare_redirect_url(request))
 
 
 def clear_compare(request):
     """Clear all products from comparison."""
     request.session['compare_ids'] = []
-    return redirect('product_compare')
+    return redirect(_get_compare_redirect_url(request))

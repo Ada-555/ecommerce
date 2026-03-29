@@ -52,7 +52,7 @@
     </a>
     <div class="p-3 pt-0">
         <div class="d-flex gap-2">
-            <a href="{% url 'add_to_compare' product.id %}" class="btn btn-sm btn-outline-info flex-grow-1" title="Add to Compare">
+            <a href="/{{ store_slug }}/compare/add/{{ product.id }}/" class="btn btn-sm btn-outline-info flex-grow-1" title="Add to Compare">
                 <i class="fa-solid fa-scale-balanced me-1"></i>⚖ Compare
             </a>
             <a href="/{{ store_slug }}/bag/add/{{ product.id }}/" class="btn btn-sm btn-store flex-grow-1">
