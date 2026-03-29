@@ -91,7 +91,7 @@
           <a href="{{ live_link|default:"#" }}">🌐 Website</a>
           <a href="mailto:hello@orderimo.com">✉️ Contact</a>
         </div>
-        {% with store_prefix=store_slug|default:order.store|default:'orderimo' %}
+        {% with store_prefix=store_slug|default:'orderimo' %}
         <div class="footer-links">
           <a href="{{ live_link|default:"#" }}/{{ store_prefix }}/about/">About</a>
           <a href="{{ live_link|default:"#" }}/{{ store_prefix }}/privacy/">Privacy</a>
