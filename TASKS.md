@@ -17,8 +17,8 @@ Status: **112/112 tests passing** | Updated: 10:15 GMT+1
 | Newsletter signup (Mailchimp) + checkout checkbox | `236b781` |
 | Subscriptions checkout (Stripe recurring) | `9aa6e77` |
 | Multi-coupon system with stackable discounts | `9aa6e77` |
-| Product comparisons (compare page) | (by agent-comparisons-ga4-finish) |
-| GA4 analytics dashboard (ORM-based) | (by agent-comparisons-ga4-finish) |
+| Product comparisons (compare page) | `6254132` |
+| GA4 analytics dashboard (ORM-based) | `6254132` |
 | Stabilization (set_currency, URL fixes) | `5ad684e` |
 
 ---
