@@ -165,26 +165,14 @@
                     </fieldset>
 
                     <!-- Coupon codes -->
-                    <fieldset class="mb-4">
-                        <legend class="text-cyan fw-bold mb-3">
-                            <i class="fa-solid fa-tag me-1"></i>Coupon Codes
-                        </legend>
-                        <div id="coupon-inputs" class="mb-2">
-                            <div class="input-group mb-2">
-                                <input type="text" name="coupon_code_1" id="coupon_code_1"
-                                    class="form-control" placeholder="Enter coupon code (optional)"
-                                    maxlength="50" autocomplete="off">
-                                <button type="button" class="btn btn-outline-cyan" id="apply-coupon-btn">
-                                    <i class="fa-solid fa-arrow-right-arrow-left me-1"></i>Apply
-                                </button>
-                            </div>
-                            <div id="coupon-error" class="text-danger small mb-2 d-none"></div>
-                            <div id="applied-coupons" class="d-flex flex-wrap gap-2">
-                                <!-- Applied coupons will appear here -->
-                            </div>
-                            <p class="text-muted small mt-2 mb-0">Tip: You can stack up to 3 coupons. <span class="text-cyan">FREE100</span> for €10 off!</p>
+                    <div class="coupon-section mb-3">
+                        <label class="text-cyan fw-bold mb-2 d-block">Discount code</label>
+                        <div class="input-group">
+                            <input type="text" name="coupon_code" id="coupon-code" class="form-control" placeholder="Enter code">
+                            <button class="btn btn-outline-secondary" type="button" hx-post="{% url 'apply_coupon' %}" hx-vals='{"coupon_code": document.getElementById("coupon-code").value}' hx-target="#order-summary" hx-swap="innerHTML">Apply</button>
                         </div>
-                    </fieldset>
+                        <div id="coupon-message" class="mt-1"></div>
+                    </div>
 
                     <!-- Save info + payment -->
                     <fieldset class="mb-4">
@@ -205,6 +193,14 @@
                             <a href="{% url 'account_login' %}" class="text-cyan">log in</a> to save your details.
                         </p>
                         {% endif %}
+
+                        <!-- Newsletter signup -->
+                        <div class="form-check mb-3">
+                            <input type="checkbox" class="form-check-input" name="subscribe_newsletter" checked id="id-subscribe-newsletter">
+                            <label class="form-check-label text-white" for="id-subscribe-newsletter">
+                                Subscribe to our newsletter for deals & updates
+                            </label>
+                        </div>
 
                         <!-- Payment Method Selector -->
                         <div class="mb-3">

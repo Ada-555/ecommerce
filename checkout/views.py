@@ -1,4 +1,5 @@
 import json
+import logging
 import stripe
 import hashlib
 import hmac
@@ -24,6 +25,57 @@ from profiles.forms import UserProfileForm
 from bag.contexts import bag_contents
 from notifications.utils import send_order_confirmation
 from coupons.utils import validate_and_apply_coupons
+
+logger = logging.getLogger(__name__)
+
+
+def _subscribe_newsletter(email, store_slug):
+    """
+    Subscribe an email to the Mailchimp list for the given store.
+    Returns True if successful or already subscribed, False on error.
+    """
+    if not email:
+        return False
+
+    list_ids = getattr(settings, 'MAILCHIMP_LIST_IDS', {})
+    list_id = list_ids.get(store_slug)
+    if not list_id:
+        logger.warning(f"No Mailchimp list ID configured for store: {store_slug}")
+        return False
+
+    api_key = getattr(settings, 'MAILCHIMP_API_KEY', None)
+    server = getattr(settings, 'MAILCHIMP_SERVER', None)
+
+    if not api_key or not server:
+        logger.warning("Mailchimp API key or server not configured.")
+        return False
+
+    try:
+        from mailchimp_marketing import Client as MailchimpClient
+        from mailchimp_marketing.api_client import ApiClientError
+
+        mc = MailchimpClient()
+        mc.set_config({'api_key': api_key, 'server': server})
+
+        mc.lists.add_list_member(list_id, {
+            'email_address': email,
+            'status': 'pending',
+        })
+
+        logger.info(f"Newsletter subscription queued for {email} in list {list_id}")
+        return True
+
+    except ApiClientError as e:
+        error_body = getattr(e, 'body', str(e))
+        if getattr(e, 'status', None) == 400 and 'Member Exists' in str(error_body):
+            logger.info(f"Email {email} already subscribed to list {list_id}")
+            return True
+        logger.error(f"Mailchimp API error: {error_body}")
+        return False
+
+    except Exception:
+        logger.exception(f"Unexpected error subscribing {email} to newsletter")
+        return False
 
 
 def _create_stripe_checkout_session(request, order, current_bag):
@@ -200,6 +252,19 @@ def checkout(request):
         discounted_grand_total = subtotal + delivery_after_discount - coupon_discount
         # ---- End coupon handling ----
 
+        # ---- Subscription detection ----
+        is_subscription = False
+        subscription_products = []
+        for item_id, item_data in bag.items():
+            try:
+                product = Product.objects.get(id=item_id)
+                if product.is_subscription:
+                    is_subscription = True
+                    subscription_products.append(product)
+            except Product.DoesNotExist:
+                pass
+        # ---- End subscription detection ----
+
         form_data = {
             'full_name': request.POST['full_name'],
             'email': request.POST['email'],
@@ -214,12 +279,36 @@ def checkout(request):
         order_form = OrderForm(form_data)
         if order_form.is_valid():
             order = order_form.save(commit=False)
-            order.payment_method = payment_method
             order.original_bag = json.dumps(bag)
             order.store = _get_store_from_request(request)
             # Store coupon codes on the order
             order.coupon_codes = ','.join([c.code for c in applied_coupons]) if applied_coupons else ''
             order.coupon_discount = coupon_discount
+
+            # ---- Subscription handling and validation ----
+            if is_subscription:
+                # Force use of Stripe Checkout (which supports subscriptions)
+                payment_method = 'stripe_crypto'
+                # Check if any subscription product lacks stripe_price_id
+                missing_price_ids = [p.name for p in subscription_products if not p.stripe_price_id]
+                if missing_price_ids:
+                    messages.error(request, f'These subscription products are not configured for online checkout: {", ".join(missing_price_ids)}. Please contact support.')
+                    return redirect(reverse('checkout'))
+                # Prevent mixing subscription and non-subscription products
+                non_sub_exists = False
+                for item_id, item_data in bag.items():
+                    try:
+                        product = Product.objects.get(id=item_id)
+                        if not product.is_subscription:
+                            non_sub_exists = True
+                            break
+                    except Product.DoesNotExist:
+                        pass
+                if non_sub_exists:
+                    messages.error(request, 'You cannot mix subscription products and one-time purchase products in the same order. Please place them separately.')
+                    return redirect(reverse('checkout'))
+
+            order.payment_method = payment_method
 
             if payment_method == 'card':
                 # Standard card payment via Stripe PaymentIntent
@@ -236,6 +325,9 @@ def checkout(request):
                 for coupon in applied_coupons:
                     coupon.current_uses += 1
                     coupon.save()
+                # Newsletter signup
+                if 'subscribe_newsletter' in request.POST:
+                    _subscribe_newsletter(order.email, order.store)
 
             elif payment_method == 'stripe_crypto':
                 # Stripe Checkout Session for BTC/USDC
@@ -250,6 +342,9 @@ def checkout(request):
                 for coupon in applied_coupons:
                     coupon.current_uses += 1
                     coupon.save()
+                # Newsletter signup
+                if 'subscribe_newsletter' in request.POST:
+                    _subscribe_newsletter(order.email, order.store)
                 return redirect(session.url)
 
             elif payment_method == 'coingate_xmr':
@@ -263,6 +358,9 @@ def checkout(request):
                 for coupon in applied_coupons:
                     coupon.current_uses += 1
                     coupon.save()
+                # Newsletter signup
+                if 'subscribe_newsletter' in request.POST:
+                    _subscribe_newsletter(order.email, order.store)
                 coingate_url = _create_coingate_order(request, order, current_bag)
                 if coingate_url:
                     return redirect(coingate_url)
