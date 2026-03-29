@@ -20,6 +20,7 @@
 | Phase 12 Reviews (frontend) | `2d8192b` |
 | Multi-currency (EUR/USD/GBP) | `35bc9fe` |
 | Affiliate program | `a504dbf` |
+| Newsletter signup with Mailchimp | `236b781` |
 | Stabilization (set_currency, URL fixes) | `5ad684e` |
 
 ---
@@ -30,7 +31,6 @@
 |-------|------|--------|
 | agent-coupon-ui | Integrate multi-coupon into checkout UI (apply button, discount line) | 🟡 Running |
 | agent-subscriptions-checkout | Subscription checkout flow (Stripe mode='subscription') | 🟡 Running |
-| agent-newsletter-finish | Newsletter footer form + Mailchimp integration | 🟡 Running |
 | agent-abandoned-cart | Management command for abandoned cart emails | 🟟 Running |
 | agent-invoices-finish | PDF invoice generation with ReportLab | 🟡 Running |
 
