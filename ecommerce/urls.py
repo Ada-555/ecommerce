@@ -100,7 +100,7 @@ urlpatterns = [
     # path('accounts/affiliate/', affiliate_views.affiliate_dashboard, name='affiliate_dashboard'),
     # path('accounts/affiliate/create/', affiliate_views.become_affiliate, name='become_affiliate'),
     # path('affiliate/<str:code>/', affiliate_views.affiliate_landing, name='affiliate_landing'),
-    path("admin/analytics/", analytics_views.analytics_dashboard, name="analytics_dashboard"),
+    # path("admin/analytics/", analytics_views.analytics_dashboard, name="analytics_dashboard"),  # Not ready
     path('admin/', admin.site.urls),
     path('sitemap.xml', sitemap, {'sitemaps': {
         'products': ProductSitemap,
