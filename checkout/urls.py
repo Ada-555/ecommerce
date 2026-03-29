@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 from .webhooks import webhook
+from invoices.views import download_invoice
 
 urlpatterns = [
     path(
@@ -23,6 +24,10 @@ urlpatterns = [
         'order/<str:order_number>/',
         views.order_status,
         name='order_status'),
+    path(
+        'order/<str:order_number>/invoice/',
+        download_invoice,
+        name='download_invoice'),
     path(
         'coingate/callback/',
         views.coingate_callback,

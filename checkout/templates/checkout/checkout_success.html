@@ -71,15 +71,20 @@
                 </div>
             </div>
 
-            <!-- Track Order -->
+            <!-- Track Order & Invoice -->
             <div class="card product-card p-3 mb-4 text-center" style="border: 1px solid #00FFFF;">
                 <p class="text-muted mb-2 small">
                     <i class="fa-solid fa-location-dot me-1 text-cyan"></i>
                     Track your order anytime
                 </p>
-                <a href="{% url 'track_order' order.order_number %}" class="btn btn-outline-cyan rounded-pill px-4">
-                    <i class="fa-solid fa-truck-fast me-2"></i>Track Order #{{ order.order_number|truncatechars:16 }}
-                </a>
+                <div class="d-flex justify-content-center gap-2 flex-wrap">
+                    <a href="{% url 'track_order' order.order_number %}" class="btn btn-outline-cyan rounded-pill px-4">
+                        <i class="fa-solid fa-truck-fast me-2"></i>Track Order
+                    </a>
+                    <a href="{% url 'download_invoice' order.order_number %}" class="btn btn-outline-light rounded-pill px-4">
+                        <i class="fa-solid fa-file-pdf me-2"></i>Download Invoice
+                    </a>
+                </div>
             </div>
 
             <!-- Actions -->

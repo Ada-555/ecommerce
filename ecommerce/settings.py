@@ -82,6 +82,7 @@ INSTALLED_APPS = [
     'accounts',
     'stores',
     'notifications',
+    'invoices',
     'coupons',
     'newsletter',
     # other
