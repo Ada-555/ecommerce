@@ -1,0 +1,52 @@
+{% extends "admin/base.html" %}
+
+{% block header %}
+<div class="store-switcher" style="background: #1a1a2e; padding: 8px 16px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #333;">
+    <span style="color: #888; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Store View:</span>
+    <select id="store-scope-select" style="background: #2a2a3e; color: white; border: 1px solid #444; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 13px;">
+        <option value="">🗄️ All Stores</option>
+        <option value="orderimo">🛍️ Orderimo</option>
+        <option value="petshop-ie">🐾 PetShop Ireland</option>
+        <option value="digitalhub">💜 DigitalHub</option>
+    </select>
+    <style>
+    .store-stat-bar { display: flex; gap: 8px; margin-left: auto; }
+    .store-stat-pill { padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; opacity: 0.7; }
+    .store-stat-pill.orderimo { background: #00FFFF22; color: #00FFFF; }
+    .store-stat-pill.petshopie { background: #90EE9022; color: #90EE90; }
+    .store-stat-pill.digitalhub { background: #DDA0DD22; color: #DDA0DD; }
+    </style>
+</div>
+{{ block.super }}
+<script>
+(function() {
+    var select = document.getElementById('store-scope-select');
+    if (!select) return;
+    
+    // Init from URL or cookie
+    var params = new URLSearchParams(window.location.search);
+    var currentStore = params.get('store') || (document.cookie.match(/admin_store_scope=([^;]+)/) || [])[1] || '';
+    select.value = currentStore;
+    
+    // Highlight current store pill
+    if (currentStore) {
+        var pillClass = currentStore.replace('-', '');
+        var pill = document.querySelector('.store-stat-pill.' + pillClass);
+        if (pill) { pill.style.opacity = '1'; pill.style.fontWeight = 'bold'; }
+    }
+    
+    select.addEventListener('change', function() {
+        var store = this.value;
+        var url = new URL(window.location.href);
+        if (store) {
+            url.searchParams.set('store', store);
+            document.cookie = 'admin_store_scope=' + store + '; path=/; max-age=86400';
+        } else {
+            url.searchParams.delete('store');
+            document.cookie = 'admin_store_scope=; path=/; max-age=0';
+        }
+        window.location.href = url.toString();
+    });
+})();
+</script>
+{% endblock %}

@@ -15,11 +15,11 @@ class ProductVariantInline(admin.TabularInline):
 class ProductAdmin(admin.ModelAdmin):
     inlines = [ProductVariantInline]
     list_display = (
-        'name', 'sku', 'store', 'category', 'price', 'stock_quantity',
+        'name', 'sku', 'store_badge', 'category', 'price', 'stock_quantity',
         'stock_status', 'is_featured',
     )
     list_editable = ('price', 'stock_quantity')
-    search_fields = ('name', 'sku', 'store')
+    search_fields = ('name', 'sku')
     list_filter = ('store', 'category', 'featured', 'new_arrival', 'best_seller')
     ordering = ('sku',)
     list_per_page = 50
@@ -48,6 +48,32 @@ class ProductAdmin(admin.ModelAdmin):
             'fields': ('description', 'has_sizes', 'weight_kg', 'views_count')
         }),
     )
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        store_scope = request.GET.get('store') or request.COOKIES.get('admin_store_scope', '')
+        if store_scope:
+            qs = qs.filter(store=store_scope)
+        return qs
+
+    def store_badge(self, obj):
+        colors = {
+            'orderimo': '#00FFFF',
+            'petshop-ie': '#90EE90',
+            'digitalhub': '#DDA0DD',
+        }
+        names = {
+            'orderimo': 'Orderimo',
+            'petshop-ie': 'PetShop Ireland',
+            'digitalhub': 'DigitalHub',
+        }
+        color = colors.get(obj.store, '#cccccc')
+        name = names.get(obj.store, obj.store)
+        return format_html(
+            '<span style="background:{0}22; color:{0}; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:bold;">{1}</span>',
+            color, name
+        )
+    store_badge.short_description = 'Store'
 
     def stock_status(self, obj):
         if obj.stock_quantity == 0:
@@ -156,11 +182,37 @@ class ProductVariantAdmin(admin.ModelAdmin):
 
 
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('user', 'product', 'rating', 'approved', 'created_at')
+    list_display = ('user', 'product', 'rating', 'store_badge', 'approved', 'created_at')
     list_filter = ('approved', 'rating')
     list_editable = ('approved',)
     search_fields = ('user__username', 'product__name')
     actions = ['approve_selected']
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        store_scope = request.GET.get('store') or request.COOKIES.get('admin_store_scope', '')
+        if store_scope:
+            qs = qs.filter(product__store=store_scope)
+        return qs
+
+    def store_badge(self, obj):
+        colors = {
+            'orderimo': '#00FFFF',
+            'petshop-ie': '#90EE90',
+            'digitalhub': '#DDA0DD',
+        }
+        names = {
+            'orderimo': 'Orderimo',
+            'petshop-ie': 'PetShop Ireland',
+            'digitalhub': 'DigitalHub',
+        }
+        color = colors.get(obj.product.store, '#cccccc')
+        name = names.get(obj.product.store, obj.product.store)
+        return format_html(
+            '<span style="background:{0}22; color:{0}; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:bold;">{1}</span>',
+            color, name
+        )
+    store_badge.short_description = 'Store'
 
     @admin.action(description='Approve selected reviews')
     def approve_selected(self, request, queryset):

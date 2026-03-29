@@ -20,11 +20,37 @@ class BlogPageAdmin(admin.ModelAdmin):
     """ Admin for blog page """
     form = BlogPageAdminForm
     list_display = [
-        'pk', 'title', 'created_at_days_ago', 'short_content', 'preview_image']
+        'pk', 'title', 'store_badge', 'created_at_days_ago', 'short_content', 'preview_image']
     list_display_links = ['pk', 'title']
     readonly_fields = ['preview_image']
     search_fields = ['title', 'content']
     list_filter = ['store', 'created_at']
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        store_scope = request.GET.get('store') or request.COOKIES.get('admin_store_scope', '')
+        if store_scope:
+            qs = qs.filter(store=store_scope)
+        return qs
+
+    def store_badge(self, obj):
+        colors = {
+            'orderimo': '#00FFFF',
+            'petshop-ie': '#90EE90',
+            'digitalhub': '#DDA0DD',
+        }
+        names = {
+            'orderimo': 'Orderimo',
+            'petshop-ie': 'PetShop Ireland',
+            'digitalhub': 'DigitalHub',
+        }
+        color = colors.get(obj.store, '#cccccc')
+        name = names.get(obj.store, obj.store)
+        return format_html(
+            '<span style="background:{0}22; color:{0}; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:bold;">{1}</span>',
+            color, name
+        )
+    store_badge.short_description = 'Store'
 
     def created_at_days_ago(self, obj):
         days_ago = (datetime.now().date() - obj.created_at.date()).days

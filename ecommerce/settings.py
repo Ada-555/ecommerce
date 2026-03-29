@@ -120,6 +120,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
                 'ecommerce.store_context.store_context',
+                'ecommerce.admin_context.admin_store_stats',
                 'bag.contexts.bag_contents'  # required for shopping bag
             ],
             'builtins': [
