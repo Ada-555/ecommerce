@@ -40,6 +40,7 @@ urlpatterns = [
     path('orderimo/terms/', about_views.terms, name='orderimo_terms'),
     path('orderimo/cookies/', about_views.cookies, name='orderimo_cookies'),
     path('orderimo/accept-cookies/', about_views.accept_cookies, name='orderimo_accept_cookies'),
+    path('orderimo/compare/', include('comparison.urls_store')),
 
     # ========================
     # PETSHOP IRELAND STORE
@@ -59,6 +60,7 @@ urlpatterns = [
     path('petshop/terms/', about_views.terms, name='petshop_terms'),
     path('petshop/cookies/', about_views.cookies, name='petshop_cookies'),
     path('petshop/accept-cookies/', about_views.accept_cookies, name='petshop_accept_cookies'),
+    path('petshop/compare/', include('comparison.urls_store')),
 
     # ========================
     # DIGITALHUB STORE
@@ -78,6 +80,7 @@ urlpatterns = [
     path('digital/terms/', about_views.terms, name='digital_terms'),
     path('digital/cookies/', about_views.cookies, name='digital_cookies'),
     path('digital/accept-cookies/', about_views.accept_cookies, name='digital_accept_cookies'),
+    path('digital/compare/', include('comparison.urls_store')),
 
     # ========================
     # GLOBAL / LEGACY (redirect to orderimo store)
