@@ -98,3 +98,41 @@
   color: #fff;
   border-color: #800080;
 }
+
+/* Override base.css color variables per store — so .text-cyan, .btn-purple etc. auto-adapt */
+.store-orderimo {
+  --cyan: #00FFFF;
+  --purple: #800080;
+  --purple-light: #da70d6;
+  --purple-dark: #4a0066;
+  --pink: #ff69b4;
+  --teal: #008485;
+  --teal-dark: #00555C;
+  --brand-primary: #00FFFF;
+}
+
+.store-petshop-ie {
+  --cyan: #228B22;
+  --purple: #228B22;
+  --purple-light: #90EE90;
+  --purple-dark: #1a5c1a;
+  --pink: #FFA500;
+  --teal: #2d9a3e;
+  --teal-dark: #1a6b1a;
+  --brand-primary: #228B22;
+  --brand-secondary: #2d9a3e;
+  --brand-accent: #90EE90;
+}
+
+.store-digitalhub {
+  --cyan: #800080;
+  --purple: #800080;
+  --purple-light: #da70d6;
+  --purple-dark: #4a004a;
+  --pink: #ff69b4;
+  --teal: #9b30ff;
+  --teal-dark: #6a21a8;
+  --brand-primary: #800080;
+  --brand-secondary: #da70d6;
+  --brand-accent: #ff69b4;
+}

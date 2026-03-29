@@ -119,6 +119,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
+                'ecommerce.store_context.store_context',
                 'bag.contexts.bag_contents'  # required for shopping bag
             ],
             'builtins': [

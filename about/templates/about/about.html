@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block extra_title %}| About Orderimo{% endblock %}
+{% block extra_title %}| About {{ store_name }}{% endblock %}
 
 {% block breadcrumbs %}
 <nav aria-label="breadcrumb" class="breadcrumbs-nav w-100">
@@ -24,7 +24,7 @@
         <div class="row">
             <div class="col text-center">
                 <h1 class="display-6">
-                    <i class="fa-solid fa-circle-info me-2"></i>About Orderimo
+                    <i class="fa-solid fa-circle-info me-2"></i>About {{ store_name }}
                 </h1>
             </div>
         </div>
@@ -44,10 +44,10 @@
                 </span>
                 <h2 class="text-white mb-3">We Power Independent E-Commerce Stores</h2>
                 <p class="text-silver mb-3">
-                    Orderimo is a multi-store platform that lets independent brands run their own fully-branded online stores — all under one roof.
+                    {{ store_name }} is a multi-store platform that lets independent brands run their own fully-branded online stores — all under one roof.
                 </p>
                 <p class="text-silver mb-0">
-                    Whether you're looking for cutting-edge tech from <strong class="text-cyan">Plurino</strong>, curated homeware from <strong class="text-warning">HomeNest</strong>, or bold streetwear from <strong class="text-pink">StyleVault</strong> — Orderimo brings them together in one seamless shopping experience.
+                    Whether you're looking for cutting-edge tech, curated homeware, bold streetwear and more — {{ store_name }} brings them together in one seamless shopping experience.
                 </p>
             </div>
         </div>
@@ -126,7 +126,7 @@
     <section class="mb-5">
         <div class="text-center mb-4">
             <h2 class="brand-font text-white neon-text mb-1">Meet the Team</h2>
-            <p class="text-silver">The people behind Orderimo</p>
+            <p class="text-silver">The people behind {{ store_name }}</p>
         </div>
         <div class="row g-4 justify-content-center">
             <div class="col-md-4 col-lg-3 text-center">

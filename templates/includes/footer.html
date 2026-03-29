@@ -21,7 +21,7 @@
                     <i class="fa-solid fa-building me-1 text-cyan"></i> Company
                 </h6>
                 <ul class="list-unstyled mb-0 footer-links">
-                    <li><a href="{% url 'about' %}" class="text-silver text-decoration-none footer-link">About Orderimo</a></li>
+                    <li><a href="{% url 'about' %}" class="text-silver text-decoration-none footer-link">About {{ store_name }}</a></li>
                     <li><a href="{% url 'blog' %}" class="text-silver text-decoration-none footer-link">Blog</a></li>
                     <li><a href="{% url 'contact' %}" class="text-silver text-decoration-none footer-link">Contact Us</a></li>
                     <li><a href="{% url 'faq' %}" class="text-silver text-decoration-none footer-link">FAQ</a></li>
@@ -95,7 +95,7 @@
                 {% elif active_store == 'digitalhub' %}
                 &copy; 2026 <span class="text-white fw-bold">DigitalHub</span> — Instant Digital Delivery
                 {% else %}
-                &copy; 2026 <span class="text-white fw-bold">Orderimo</span> — All Rights Reserved
+                &copy; 2026 <span class="text-white fw-bold">{{ store_name }}</span> — All Rights Reserved
                 {% endif %}
                 {% endwith %}
                 </p>

@@ -11,24 +11,24 @@
     <meta name="description"
         content="Orderimo — One platform. Multiple branded stores. Shop Plurino for tech, HomeNest for homeware, and StyleVault for fashion.">
     <meta name="keywords" content="multi-store, e-commerce, tech gadgets, homeware, fashion, streetwear, online shopping">
-    <meta name="author" content="Orderimo">
+    <meta name="author" content="{{ store_name }}">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://orderimo.com">
-    <meta property="og:title" content="Orderimo">
+    <meta property="og:title" content="{{ store_name }}">
     <meta property="og:description" content="One platform. Multiple branded stores. Shop Plurino, HomeNest, and StyleVault.">
     <meta property="og:image" content="{% static 'favicon/favicon-512x512.png' %}">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://orderimo.com">
-    <meta name="twitter:title" content="Orderimo">
+    <meta name="twitter:title" content="{{ store_name }}">
     <meta name="twitter:description" content="One platform. Multiple branded stores.">
     {% block extra_meta %}{% endblock %}
     {% endblock %}
 
-    <title>Orderimo{% block extra_title %}{% endblock %}</title>
+    <title>{{ store_name }}{% block extra_title %}{% endblock %}</title>
 
     <!-- Favicons -->
     {% block favicon %}
@@ -80,7 +80,7 @@
     {% block extra_js %}{% endblock %}
 </head>
 
-<body class="d-flex flex-column min-vh-100 store-{{ request.session.active_store|default:'orderimo' }}">
+<body class="d-flex flex-column min-vh-100 {{ store_css_class|default:'store-orderimo' }}">
 
     <!-- Navigation -->
     <header class="container-fluid fixed-top top-nav-wrapper px-0">
@@ -88,7 +88,7 @@
         <div class="row g-0 top-bar d-none d-lg-flex align-items-center">
             <div class="col-12 col-lg-4 text-center text-lg-start ps-4">
                 <a href="{% url 'home' %}" class="text-decoration-none">
-                    <h4 class="brand-font text-white my-0 neon-text">Orderimo</h4>
+                    <h4 class="brand-font text-white my-0 neon-text">{{ store_name }}</h4>
                 </a>
             </div>
             <div class="col-12 col-lg-4 py-2">
@@ -169,7 +169,7 @@
         <!-- Main Navbar -->
         <nav class="navbar navbar-expand-lg navbar-dark main-nav">
             <div class="container-fluid">
-                <a class="navbar-brand d-lg-none brand-font neon-text" href="{% url 'home' %}">Orderimo</a>
+                <a class="navbar-brand d-lg-none brand-font neon-text" href="{% url 'home' %}">{{ store_name }}</a>
                 <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
                     data-bs-target="#main-nav" aria-controls="main-nav" aria-expanded="false"
                     aria-label="Toggle navigation">
