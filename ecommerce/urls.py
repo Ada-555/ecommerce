@@ -88,6 +88,7 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('profiles/', include('profiles.urls')),
     path('avatar/', include('avatar.urls')),
+    path('newsletter/', include('newsletter.urls')),
     path('admin/', admin.site.urls),
     path('sitemap.xml', sitemap, {'sitemaps': {
         'products': ProductSitemap,

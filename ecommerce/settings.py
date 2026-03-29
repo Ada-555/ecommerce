@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.x/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', '')
+SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-secret-key-not-for-production-use-only')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = 'DEVELOPMENT' in os.environ
@@ -35,6 +35,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     '192.168.0.59',
     '0.0.0.0',
+    'testserver',
 ]
 
 
@@ -81,6 +82,8 @@ INSTALLED_APPS = [
     'accounts',
     'stores',
     'notifications',
+    'coupons',
+    'newsletter',
     # other
     'crispy_forms',
     'crispy_bootstrap5',
@@ -97,6 +100,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'checkout.middleware.AbandonedCartMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
@@ -126,6 +130,7 @@ TEMPLATES = [
                 'ecommerce.admin_context.admin_store_stats',
                 'bag.contexts.bag_contents',  # required for shopping bag
                 'wishlist.context_processors.wishlist_context',
+                'comparison.context_processors.compare_context',
             ],
             'builtins': [
                 'crispy_forms.templatetags.crispy_forms_tags',
@@ -282,6 +287,23 @@ STRIPE_WH_SECRET = os.getenv('STRIPE_WH_SECRET', '')
 # CoinGate API key for XMR payments
 COINGATE_API_KEY = os.getenv('COINGATE_API_KEY', '')
 
+# =============================================================================
+# Mailchimp Newsletter Settings
+# =============================================================================
+# Get these from your Mailchimp account dashboard
+# API Key: Account -> Extras -> API Keys
+# Server prefix: found at the end of your API key after the dash (e.g. "us6")
+# List IDs: Audience -> Settings -> Audience name and defaults
+MAILCHIMP_API_KEY = os.environ.get('MAILCHIMP_API_KEY', '')
+MAILCHIMP_SERVER = os.environ.get('MAILCHIMP_SERVER', 'us1')  # e.g. 'us1', 'us6', 'us20'
+
+# Map each store slug to its Mailchimp Audience List ID
+MAILCHIMP_LIST_IDS = {
+    'orderimo': os.environ.get('MAILCHIMP_LIST_ID_ORDERIMO', ''),
+    'petshop-ie': os.environ.get('MAILCHIMP_LIST_ID_PETSHOP', ''),
+    'digitalhub': os.environ.get('MAILCHIMP_LIST_ID_DIGITAL', ''),
+}
+
 if 'DEVELOPMENT' in os.environ:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
     DEFAULT_FROM_EMAIL = 'hello@orderimo.com'
@@ -329,7 +351,7 @@ CSRF_COOKIE_HTTPONLY = True
 # PRODUCTION-ONLY SECURITY SETTINGS
 # These only apply when DEBUG=False (i.e. in production)
 # =============================================================================
-if not DEBUG:
+if not DEBUG and not os.environ.get('TESTING'):
     # Force HTTPS
     SECURE_SSL_REDIRECT = True
     SECURE_HSTS_SECONDS = 31536000  # 1 year
