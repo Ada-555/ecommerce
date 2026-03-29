@@ -1,15 +1,21 @@
-{% extends "base.html" %}
+{% extends "stores/store_base.html" %}
 {% load static %}
 
 {% block extra_title %} — Contact Us{% endblock %}
 
+{% block store_custom_css %}
+.contact-hero { background: linear-gradient(135deg, var(--dark) 0%, color-mix(in srgb, var(--primary) 8%, var(--dark)) 100%); }
+{% endblock %}
+
 {% block page_header %}
-<div class="page-header-bg py-5" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);">
+<div class="contact-hero py-5">
     <div class="container">
         <div class="row">
             <div class="col-12 text-center">
-                <h1 class="brand-font neon-text display-4 fw-bold">Contact Us</h1>
-                <p class="text-silver lead">We'd love to hear from you. Our team will respond within 24 hours.</p>
+                <h1 class="display-4 fw-bold mb-3" style="color: var(--accent);">
+                    <i class="{{ store_icon }} me-3" style="color: var(--accent);"></i>Contact Us
+                </h1>
+                <p class="lead" style="color: var(--muted);">We'd love to hear from you. Our team will respond within 24 hours.</p>
             </div>
         </div>
     </div>
@@ -21,10 +27,10 @@
     <div class="row g-5">
         <!-- Contact Form -->
         <div class="col-lg-7">
-            <div class="card neon-card shadow-lg border-0">
+            <div class="product-card shadow-lg" style="border-color: var(--border);">
                 <div class="card-body p-5">
-                    <h2 class="brand-font text-white mb-4">
-                        <i class="fa-solid fa-envelope text-cyan me-2"></i>Send us a Message
+                    <h2 class="mb-4" style="color: var(--text);">
+                        <i class="fa-solid fa-envelope me-2" style="color: var(--primary);"></i>Send us a Message
                     </h2>
 
                     {% if messages %}
@@ -36,31 +42,31 @@
                         {% endfor %}
                     {% endif %}
 
-                    <form method="POST" action="{% url 'contact' %}">
+                    <form method="POST" action="{{ request.path }}">
                         {% csrf_token %}
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label for="id_name" class="form-label text-silver">Your Name <span class="text-danger">*</span></label>
+                                <label for="id_name" class="form-label" style="color: var(--muted);">Your Name <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control form-control-lg" id="id_name" name="name"
                                        placeholder="John Doe" required>
                             </div>
                             <div class="col-md-6">
-                                <label for="id_email" class="form-label text-silver">Email Address <span class="text-danger">*</span></label>
+                                <label for="id_email" class="form-label" style="color: var(--muted);">Email Address <span class="text-danger">*</span></label>
                                 <input type="email" class="form-control form-control-lg" id="id_email" name="email"
                                        placeholder="john@example.com" required>
                             </div>
                             <div class="col-12">
-                                <label for="id_subject" class="form-label text-silver">Subject</label>
+                                <label for="id_subject" class="form-label" style="color: var(--muted);">Subject</label>
                                 <input type="text" class="form-control form-control-lg" id="id_subject" name="subject"
                                        placeholder="Order inquiry, product question, etc.">
                             </div>
                             <div class="col-12">
-                                <label for="id_message" class="form-label text-silver">Message <span class="text-danger">*</span></label>
+                                <label for="id_message" class="form-label" style="color: var(--muted);">Message <span class="text-danger">*</span></label>
                                 <textarea class="form-control form-control-lg" id="id_message" name="message"
                                           rows="6" placeholder="How can we help you?" required></textarea>
                             </div>
                             <div class="col-12">
-                                <button type="submit" class="btn btn-cyan btn-lg w-100">
+                                <button type="submit" class="btn btn-store btn-lg w-100">
                                     <i class="fa-solid fa-paper-plane me-2"></i>Send Message
                                 </button>
                             </div>
@@ -72,62 +78,62 @@
 
         <!-- Contact Info -->
         <div class="col-lg-5">
-            <div class="card neon-card shadow-lg border-0 h-100">
+            <div class="product-card shadow-lg h-100" style="border-color: var(--border);">
                 <div class="card-body p-5">
-                    <h2 class="brand-font text-white mb-4">
-                        <i class="fa-solid fa-circle-info text-cyan me-2"></i>Contact Information
+                    <h2 class="mb-4" style="color: var(--text);">
+                        <i class="fa-solid fa-circle-info me-2" style="color: var(--primary);"></i>Contact Information
                     </h2>
 
                     <div class="mb-4">
                         <div class="d-flex align-items-start mb-3">
-                            <div class="contact-icon me-3">
-                                <i class="fa-solid fa-envelope text-cyan fa-lg"></i>
+                            <div class="me-3">
+                                <i class="fa-solid fa-envelope fa-lg" style="color: var(--primary);"></i>
                             </div>
                             <div>
-                                <h5 class="text-white mb-1">Email</h5>
-                                <a href="mailto:hello@orderimo.com" class="text-silver text-decoration-none">
+                                <h5 class="mb-1" style="color: var(--text);">Email</h5>
+                                <a href="mailto:hello@orderimo.com" style="color: var(--muted); text-decoration: none;">
                                     hello@orderimo.com
                                 </a>
                             </div>
                         </div>
 
                         <div class="d-flex align-items-start mb-3">
-                            <div class="contact-icon me-3">
-                                <i class="fa-solid fa-location-dot text-cyan fa-lg"></i>
+                            <div class="me-3">
+                                <i class="fa-solid fa-location-dot fa-lg" style="color: var(--primary);"></i>
                             </div>
                             <div>
-                                <h5 class="text-white mb-1">Location</h5>
-                                <p class="text-silver mb-0">Dublin, Ireland</p>
-                                <p class="text-muted small mb-0">Serving customers across Ireland and the EU</p>
+                                <h5 class="mb-1" style="color: var(--text);">Location</h5>
+                                <p class="mb-0" style="color: var(--muted);">Dublin, Ireland</p>
+                                <p class="small mb-0" style="color: var(--muted); opacity: 0.7;">Serving customers across Ireland and the EU</p>
                             </div>
                         </div>
 
                         <div class="d-flex align-items-start mb-3">
-                            <div class="contact-icon me-3">
-                                <i class="fa-solid fa-clock text-cyan fa-lg"></i>
+                            <div class="me-3">
+                                <i class="fa-solid fa-clock fa-lg" style="color: var(--primary);"></i>
                             </div>
                             <div>
-                                <h5 class="text-white mb-1">Response Time</h5>
-                                <p class="text-silver mb-0">Our team will respond within 24 hours</p>
-                                <p class="text-muted small mb-0">Monday – Friday, 9 AM – 6 PM GMT</p>
+                                <h5 class="mb-1" style="color: var(--text);">Response Time</h5>
+                                <p class="mb-0" style="color: var(--muted);">Our team will respond within 24 hours</p>
+                                <p class="small mb-0" style="color: var(--muted); opacity: 0.7;">Monday – Friday, 9 AM – 6 PM GMT</p>
                             </div>
                         </div>
                     </div>
 
-                    <hr class="custom-hr my-4">
+                    <hr style="border-color: var(--border);">
 
-                    <h5 class="text-white mb-3">Follow Us</h5>
+                    <h5 class="mb-3" style="color: var(--text);">Follow Us</h5>
                     <div class="d-flex gap-3">
-                        <a href="#" class="btn btn-outline-cyan btn-sm rounded-circle">
+                        <a href="#" class="btn btn-outline-store btn-sm rounded-circle">
                             <i class="fa-brands fa-facebook-f"></i>
                         </a>
-                        <a href="#" class="btn btn-outline-cyan btn-sm rounded-circle">
+                        <a href="#" class="btn btn-outline-store btn-sm rounded-circle">
                             <i class="fa-brands fa-x-twitter"></i>
                         </a>
-                        <a href="#" class="btn btn-outline-cyan btn-sm rounded-circle">
+                        <a href="#" class="btn btn-outline-store btn-sm rounded-circle">
                             <i class="fa-brands fa-instagram"></i>
                         </a>
-                        <a href="#" class="btn btn-outline-cyan btn-sm rounded-circle">
+                        <a href="#" class="btn btn-outline-store btn-sm rounded-circle">
                             <i class="fa-brands fa-tiktok"></i>
                         </a>
                     </div>
