@@ -4,9 +4,6 @@ Tests send_order_confirmation, send_shipping_notification,
 send_delivery_notification, send_welcome_email, and branding utils.
 """
 
-from unittest.mock import patch, MagicMock
-from io import StringIO
-
 from django.test import TestCase, override_settings
 from django.core import mail as django_mail
 from django.contrib.auth.models import User
@@ -20,7 +17,6 @@ from .utils import (
     send_delivery_notification,
     send_welcome_email,
     get_store_branding,
-    STORE_BRANDING,
 )
 
 
@@ -104,8 +100,6 @@ class OrderConfirmationEmailTests(TestCase):
         send_order_confirmation(self.order)
         msg = django_mail.outbox[0]
         self.assertTrue(msg.alternatives)
-        # First alternative is HTML, second (if exists) would be text
-        # Our implementation uses strip_tags for text, so alternatives = [(html, text/html)]
 
     def test_send_order_confirmation_petshop_store(self):
         """Order from petshop-ie uses PetShop branding."""
@@ -176,7 +170,6 @@ class ShippingNotificationEmailTests(TestCase):
         """Handles case where tracking number is not yet available."""
         send_shipping_notification(self.order)
         self.assertEqual(len(django_mail.outbox), 1)
-        # Should not crash, email still sent
 
 
 @override_settings(
@@ -230,14 +223,14 @@ class WelcomeEmailTests(TestCase):
 
     def setUp(self):
         # Clear any residual emails (e.g. from user_created_welcome_email signal)
-        outbox = []
+        django_mail.outbox.clear()
 
     def test_send_welcome_email_sends_email(self):
         """send_welcome_email dispatches an email to the new user."""
         user = User.objects.create_user('newuser', 'welcome@test.com', 'pass123')
         send_welcome_email(user, store_slug='orderimo')
         # There may be other emails from signals; find the welcome email
-        welcome_emails = [m for m in outbox if 'Welcome' in m.subject]
+        welcome_emails = [m for m in django_mail.outbox if 'Welcome' in m.subject]
         self.assertGreaterEqual(len(welcome_emails), 1)
         last_welcome = welcome_emails[-1]
         self.assertIn('welcome@test.com', last_welcome.to)
@@ -249,7 +242,7 @@ class WelcomeEmailTests(TestCase):
         user.first_name = 'Kay'
         user.save()
         send_welcome_email(user, store_slug='orderimo')
-        welcome_emails = [m for m in outbox if 'Welcome' in m.subject]
+        welcome_emails = [m for m in django_mail.outbox if 'Welcome' in m.subject]
         body = welcome_emails[-1].alternatives[0][0]
         self.assertIn('Kay', body)
 
@@ -257,7 +250,7 @@ class WelcomeEmailTests(TestCase):
         """Welcome email for petshop store uses correct branding."""
         user = User.objects.create_user('petlover', 'petshop@user.com', 'pass123')
         send_welcome_email(user, store_slug='petshop-ie')
-        welcome_emails = [m for m in outbox if 'PetShop' in m.subject]
+        welcome_emails = [m for m in django_mail.outbox if 'PetShop' in m.subject]
         self.assertGreaterEqual(len(welcome_emails), 1)
         body = welcome_emails[-1].alternatives[0][0]
         self.assertIn('PetShop Ireland', body)

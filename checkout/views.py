@@ -25,6 +25,7 @@ from profiles.forms import UserProfileForm
 from bag.contexts import bag_contents
 from notifications.utils import send_order_confirmation
 from coupons.utils import validate_and_apply_coupons
+from django.template.loader import render_to_string
 
 logger = logging.getLogger(__name__)
 
