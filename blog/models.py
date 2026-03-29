@@ -11,6 +11,8 @@ class BlogPage(models.Model):
     image = models.ImageField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     store = models.CharField(max_length=50, blank=True, default='orderimo')
+    is_published = models.BooleanField(default=False)
+    newsletter_sent_at = models.DateTimeField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -23,3 +25,18 @@ class BlogPage(models.Model):
     def get_absolute_url(self):
         from django.urls import reverse
         return reverse('blog_page_detail', kwargs={'pk': self.pk})
+
+
+class BlogSubscriber(models.Model):
+    """Stores blog newsletter subscribers, scoped per store."""
+    email = models.EmailField(unique=True)
+    name = models.CharField(max_length=100, blank=True)
+    store = models.CharField(max_length=50, blank=True, default='orderimo')
+    is_active = models.BooleanField(default=True)
+    subscribed_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-subscribed_at']
+
+    def __str__(self):
+        return f"{self.email} ({self.store})"
