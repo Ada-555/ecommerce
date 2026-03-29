@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container my-5">
+  <h1 class="mb-4">My Subscriptions</h1>
+
+  {% if subscriptions %}
+    <div class="table-responsive">
+      <table class="table table-striped align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>Product</th>
+            <th>Interval</th>
+            <th>Status</th>
+            <th>Started</th>
+            <th>Current Period Ends</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for subscription in subscriptions %}
+            <tr>
+              <td>{{ subscription.product_name }}</td>
+              <td>{{ subscription.get_interval_display }}</td>
+              <td>
+                {% if subscription.status == 'active' %}
+                  <span class="badge bg-success">{{ subscription.get_status_display }}</span>
+                {% elif subscription.status == 'cancelled' %}
+                  <span class="badge bg-secondary">{{ subscription.get_status_display }}</span>
+                {% elif subscription.status == 'past_due' %}
+                  <span class="badge bg-warning text-dark">{{ subscription.get_status_display }}</span>
+                {% elif subscription.status == 'unpaid' %}
+                  <span class="badge bg-danger">{{ subscription.get_status_display }}</span>
+                {% else %}
+                  <span class="badge bg-info text-dark">{{ subscription.get_status_display }}</span>
+                {% endif %}
+              </td>
+              <td>{{ subscription.created_at|date:"M d, Y" }}</td>
+              <td>
+                {% if subscription.current_period_end %}
+                  {{ subscription.current_period_end|date:"M d, Y" }}
+                {% else %}
+                  —
+                {% endif %}
+              </td>
+              <td>
+                {% if subscription.status == 'active' and subscription.stripe_subscription_id %}
+                  <a href="{% url 'cancel_subscription' subscription.id %}"
+                     class="btn btn-outline-danger btn-sm"
+                     onclick="return confirm('Are you sure you want to cancel this subscription? You will still have access until the end of the billing period.');">
+                    Cancel
+                  </a>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="alert alert-info">
+      You don't have any active subscriptions. <a href="{% url 'products' %}">Browse products</a> to subscribe to a recurring plan.
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

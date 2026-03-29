@@ -122,6 +122,7 @@ def send_order_confirmation(order):
         'delivery_cost': order.delivery_cost,
         'grand_total': order.grand_total,
         'live_link': getattr(settings, 'LIVE_LINK', 'https://orderimo.com'),
+        'store_slug': order.store,
     }
 
     _send_html_email(
@@ -148,6 +149,7 @@ def send_shipping_notification(order, tracking_number=None, carrier=None, expect
         'tracking_number': tracking_number,
         'carrier': carrier or 'Our courier partner',
         'expected_delivery': expected_delivery,
+        'store_slug': order.store,
     }
 
     _send_html_email(
@@ -171,6 +173,7 @@ def send_delivery_notification(order):
 
     context = {
         'order': order,
+        'store_slug': order.store,
     }
 
     _send_html_email(
@@ -199,6 +202,7 @@ def send_welcome_email(user, store_slug='orderimo'):
     context = {
         'user': user,
         'first_name': user.first_name or user.username,
+        'store_slug': store_slug,
     }
 
     _send_html_email(

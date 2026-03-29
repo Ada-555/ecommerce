@@ -6,6 +6,7 @@ from django.conf import settings
 from .models import Order, OrderLineItem
 from products.models import Product
 from profiles.models import UserProfile
+from subscriptions.models import Subscription
 
 import stripe
 import json
@@ -163,4 +164,70 @@ class StripeWH_Handler:
         """
         return HttpResponse(
             content=f'Webhook received: {event["type"]}',
+            status=200)
+
+    def handle_invoice_payment_succeeded(self, event):
+        """
+        Handle the invoice.payment_succeeded webhook from Stripe
+        This indicates a successful recurring subscription payment.
+        """
+        invoice = event.data.object
+        stripe_subscription_id = invoice.subscription
+
+        # Find the local subscription record
+        try:
+            subscription = Subscription.objects.get(stripe_subscription_id=stripe_subscription_id)
+            subscription.status = 'active'
+            # Update the current_period_end from invoice's period_end
+            import datetime
+            period_end = datetime.datetime.fromtimestamp(invoice.lines.data[0].period.end, tz=datetime.timezone.utc)
+            subscription.current_period_end = period_end
+            subscription.save()
+        except Subscription.DoesNotExist:
+            # If no local record, you might want to create one based on customer and product info
+            # For now, just log
+            pass
+
+        return HttpResponse(
+            content=f'Webhook received: {event["type"]} | Subscription payment succeeded',
+            status=200)
+
+    def handle_customer_subscription_deleted(self, event):
+        """
+        Handle the customer.subscription.deleted webhook from Stripe
+        This indicates a subscription was cancelled.
+        """
+        stripe_subscription = event.data.object
+        stripe_subscription_id = stripe_subscription.id
+
+        try:
+            subscription = Subscription.objects.get(stripe_subscription_id=stripe_subscription_id)
+            subscription.status = 'cancelled'
+            from django.utils import timezone
+            subscription.cancelled_at = timezone.now()
+            subscription.save()
+        except Subscription.DoesNotExist:
+            pass
+
+        return HttpResponse(
+            content=f'Webhook received: {event["type"]} | Subscription cancelled',
+            status=200)
+
+    def handle_invoice_payment_failed(self, event):
+        """
+        Handle the invoice.payment_failed webhook from Stripe
+        This indicates a failed subscription payment.
+        """
+        invoice = event.data.object
+        stripe_subscription_id = invoice.subscription
+
+        try:
+            subscription = Subscription.objects.get(stripe_subscription_id=stripe_subscription_id)
+            subscription.status = 'past_due'  # or 'unpaid' depending on your logic
+            subscription.save()
+        except Subscription.DoesNotExist:
+            pass
+
+        return HttpResponse(
+            content=f'Webhook received: {event["type"]} | Subscription payment failed',
             status=200)
