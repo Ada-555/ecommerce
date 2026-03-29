@@ -39,34 +39,12 @@ html {
 
 body {
     font-family: var(--font-body);
-    background-color: var(--black);
-    color: var(--silver);
+    background-color: #0a0a0f;
+    background-image: none;
+    color: #e0e0e0;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    /* Animated background slideshow */
-    background-image: url('/media/site/bg1.webp');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    animation: bg-slideshow 35s infinite;
-}
-
-/* Background slideshow keyframes */
-@keyframes bg-slideshow {
-    0%, 18%   { background-image: url('/media/site/bg1.webp'); }
-    20%, 38%  { background-image: url('/media/site/bg2.webp'); }
-    40%, 58%  { background-image: url('/media/site/bg3.webp'); }
-    60%, 78%  { background-image: url('/media/site/bg4.webp'); }
-    80%, 100% { background-image: url('/media/site/bg5.webp'); }
-}
-
-@keyframes bg-slideshow {
-    0%, 18%   { background-image: url('/media/site/bg1.webp'); }
-    20%, 38%  { background-image: url('/media/site/bg2.webp'); }
-    40%, 58%  { background-image: url('/media/site/bg3.webp'); }
-    60%, 78%  { background-image: url('/media/site/bg4.webp'); }
-    80%, 100% { background-image: url('/media/site/bg5.webp'); }
 }
 
 /* Overlay on top of background */
