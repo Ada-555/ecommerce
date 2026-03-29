@@ -82,6 +82,9 @@ urlpatterns = [
     path('digital/accept-cookies/', about_views.accept_cookies, name='digital_accept_cookies'),
     path('digital/compare/', include('comparison.urls_store')),
 
+    # Alias for DigitalHub store (redirect /digitalhub/ → /digital/)
+    path('digitalhub/', RedirectView.as_view(url='/digital/', permanent=True)),
+
     # ========================
     # GLOBAL / LEGACY (redirect to orderimo store)
     # ========================

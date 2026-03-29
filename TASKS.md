@@ -1,6 +1,6 @@
 # Orderimo Build Dashboard
 
-Status: **130/130 tests passing** | Updated: 11:28 GMT+1
+Status: **130/130 tests passing** | Updated: 15:30 GMT+1
 
 ## ✅ Completed Features (14 total)
 
@@ -35,6 +35,31 @@ Status: **130/130 tests passing** | Updated: 11:28 GMT+1
 ## ✅ Final Polish Complete
 
 - **UX Polish**: Verified 130 tests pass, all stores load (200 OK), URLs reversible, checkout flow works, cookie banner functional
+
+---
+
+## 🩺 System Health Check — 2026-03-29 15:30 GMT+1
+
+**Summary:**
+- ✅ Git: clean, up to date with `origin/main`
+- ✅ Tests: **130/130 passed** (3m 8s)
+- ✅ Dev server: Running on port 8023
+- ✅ Endpoints: All tested endpoints return 200 (or appropriate redirects)
+  - `/orderimo/` → 200
+  - `/petshop/` → 200
+  - `/digital/` → 200
+  - `/digitalhub/` → 200 (redirects to `/digital/`)
+  - `/accounts/login/` → 200
+  - `/orderimo/checkout/` → 302→/products/ then 200 when bag empty (expected)
+  - `/orderimo/compare/` → 200
+- ✅ Dark theme: All three store base templates use dark styling
+
+**Fixes applied:**
+- Added URL alias `/digitalhub/` → `/digital/` in `ecommerce/urls.py` (fixes 404)
+
+**Notes:**
+- Allauth login page styled with dark theme (per commit 9702366)
+- Checkout gracefully handles missing Stripe keys (no crash)
 
 ---
 
