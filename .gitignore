@@ -12,3 +12,6 @@ cloudinary_python.txt
 __pycache__
 media/invoices/
 media/avatars/
+.env
+.env.local
+.env.production
