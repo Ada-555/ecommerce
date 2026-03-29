@@ -1,80 +1,119 @@
-{% extends "stores/digital_base.html" %}
+{% extends "stores/digital/digital_base.html" %}
 {% load static %}
 
 {% block content %}
 <!-- Hero -->
-<div class="text-center py-5 mb-0" style="background: linear-gradient(135deg, #08080f 0%, #150a1a 100%);">
-  <div class="container py-5">
-    <h1 class="display-4 fw-bold mb-3" style="color: var(--primary); font-family: 'JetBrains Mono', monospace;">
-      💜 DigitalHub
-    </h1>
-    <p class="lead text-muted mb-4">Instant Delivery. Lifetime Access. Download Immediately.</p>
-    <a href="/digital/products/" class="btn btn-digital btn-lg"><i class="fa-solid fa-bolt me-2"></i>Browse Products</a>
-  </div>
+<div class="text-center py-5" style="background: linear-gradient(135deg, #06060f 0%, #0f0520 50%, #06060f 100%);">
+    <div class="container py-5">
+        <div class="digital-badge mb-3" style="font-size: 0.8rem; display: inline-block;">
+            <i class="fa-solid fa-bolt me-1"></i>Instant Delivery
+        </div>
+        <h1 class="display-4 fw-bold mb-3" style="font-family: 'JetBrains Mono', monospace; color: #fff;">
+            <span style="color: #da70d6;">DigitalHub</span>
+        </h1>
+        <p class="lead mb-4" style="color: #8888aa; max-width: 520px; margin: 0 auto;">
+            E-books, online courses, software & digital downloads. Lifetime access. Download the moment you buy.
+        </p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <a href="/digital/products/" class="btn btn-digital btn-lg">
+                <i class="fa-solid fa-bag-shopping me-2"></i>Browse Products
+            </a>
+            <a href="/digital/products/?category=courses" class="btn btn-outline-digital btn-lg">
+                <i class="fa-solid fa-graduation-cap me-2"></i>Courses
+            </a>
+        </div>
+    </div>
 </div>
 
 <div class="container section-padding">
-  <!-- Categories -->
-  <h2 class="mb-4"><i class="fa-solid fa-layer-group text-digital-accent me-2"></i>Categories</h2>
-  <div class="row g-3 mb-5">
-    <div class="col-6 col-md-3">
-      <a href="/digital/products/?category=ebooks" class="text-decoration-none">
-        <div class="product-card text-center p-4">
-          <div class="fs-1 mb-2">📚</div>
-          <h6 class="text-white mb-0">E-books</h6>
+    <!-- Category Grid -->
+    <h2 class="mb-4"><i class="fa-solid fa-folder-open me-2" style="color: #da70d6;"></i>Categories</h2>
+    <div class="row g-3 mb-5">
+        <div class="col-6 col-md-3">
+            <a href="/digital/products/?category=ebooks" class="text-decoration-none">
+                <div class="p-4 text-center rounded-4 h-100" style="background: #0e0e1a; border: 1px solid rgba(128,0,128,0.25);">
+                    <div style="font-size: 2rem; color: #da70d6;">📚</div>
+                    <p class="mb-0 mt-2 fw-semibold text-white small">E-books</p>
+                </div>
+            </a>
         </div>
-      </a>
-    </div>
-    <div class="col-6 col-md-3">
-      <a href="/digital/products/?category=online_courses" class="text-decoration-none">
-        <div class="product-card text-center p-4">
-          <div class="fs-1 mb-2">🎓</div>
-          <h6 class="text-white mb-0">Courses</h6>
+        <div class="col-6 col-md-3">
+            <a href="/digital/products/?category=courses" class="text-decoration-none">
+                <div class="p-4 text-center rounded-4 h-100" style="background: #0e0e1a; border: 1px solid rgba(128,0,128,0.25);">
+                    <div style="font-size: 2rem; color: #da70d6;">🎓</div>
+                    <p class="mb-0 mt-2 fw-semibold text-white small">Online Courses</p>
+                </div>
+            </a>
         </div>
-      </a>
-    </div>
-    <div class="col-6 col-md-3">
-      <a href="/digital/products/?category=software" class="text-decoration-none">
-        <div class="product-card text-center p-4">
-          <div class="fs-1 mb-2">💻</div>
-          <h6 class="text-white mb-0">Software</h6>
+        <div class="col-6 col-md-3">
+            <a href="/digital/products/?category=software" class="text-decoration-none">
+                <div class="p-4 text-center rounded-4 h-100" style="background: #0e0e1a; border: 1px solid rgba(128,0,128,0.25);">
+                    <div style="font-size: 2rem; color: #da70d6;">💻</div>
+                    <p class="mb-0 mt-2 fw-semibold text-white small">Software</p>
+                </div>
+            </a>
         </div>
-      </a>
-    </div>
-    <div class="col-6 col-md-3">
-      <a href="/digital/products/?category=templates" class="text-decoration-none">
-        <div class="product-card text-center p-4">
-          <div class="fs-1 mb-2">📄</div>
-          <h6 class="text-white mb-0">Templates</h6>
+        <div class="col-6 col-md-3">
+            <a href="/digital/products/?category=templates" class="text-decoration-none">
+                <div class="p-4 text-center rounded-4 h-100" style="background: #0e0e1a; border: 1px solid rgba(128,0,128,0.25);">
+                    <div style="font-size: 2rem; color: #da70d6;">📝</div>
+                    <p class="mb-0 mt-2 fw-semibold text-white small">Templates</p>
+                </div>
+            </a>
         </div>
-      </a>
     </div>
-  </div>
 
-  {% if new_arrivals %}
-  <h2 class="mb-4"><i class="fa-solid fa-sparkles text-digital-accent me-2"></i>New Arrivals</h2>
-  <div class="row g-4 mb-5">
-    {% for product in new_arrivals %}
-    <div class="col-6 col-md-3">
-      <div class="product-card">
-        {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}">{% else %}<div class="d-flex align-items-center justify-content-center" style="height:200px; background: rgba(255,255,255,0.03);"><i class="fa-solid fa-image text-muted fa-3x"></i></div>{% endif %}
-        <div class="p-3">
-          <span class="digital-badge mb-2 d-inline-block">Digital</span>
-          <p class="small text-muted mb-1">{{ product.category.friendly_name|default:product.category.name|default:"" }}</p>
-          <h6 class="text-white mb-2">{{ product.name }}</h6>
-          <div class="d-flex justify-content-between align-items-center">
-            <span class="text-digital-accent fw-bold">€{{ product.price }}</span>
-            <a href="/bag/add/{{ product.id }}/?redirect_url=/digital/products/" class="btn btn-sm btn-digital">Add</a>
-          </div>
+    <!-- Featured -->
+    {% if featured %}
+    <h2 class="mb-4"><i class="fa-solid fa-fire me-2" style="color: #ff69b4;"></i>Featured</h2>
+    <div class="row g-4 mb-5">
+        {% for product in featured %}
+        <div class="col-6 col-md-4 col-lg-3">
+            {% include "stores/product_card.html" %}
         </div>
-      </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-  </div>
-  {% endif %}
+    {% endif %}
 
-  <div class="text-center mt-4">
-    <a href="/digital/products/" class="btn btn-digital btn-lg"><i class="fa-solid fa-grid-2 me-2"></i>View All Products</a>
-  </div>
+    <!-- New Arrivals -->
+    {% if new_arrivals %}
+    <h2 class="mb-4"><i class="fa-solid fa-sparkles me-2" style="color: #da70d6;"></i>New Arrivals</h2>
+    <div class="row g-4">
+        {% for product in new_arrivals %}
+        <div class="col-6 col-md-4 col-lg-3">
+            {% include "stores/product_card.html" %}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if not featured and not new_arrivals %}
+    <div class="text-center py-5">
+        <div style="font-size: 4rem;">💜</div>
+        <h3 class="mt-3 mb-2" style="color: #fff;">Coming Soon!</h3>
+        <p style="color: #8888aa;">DigitalHub is being stocked with amazing products. Check back soon.</p>
+    </div>
+    {% endif %}
+
+    <!-- Trust Banner -->
+    <div class="mt-5 p-4 rounded-4" style="background: #0e0e1a; border: 1px solid rgba(128,0,128,0.2);">
+        <div class="row text-center g-4">
+            <div class="col-md-4">
+                <i class="fa-solid fa-bolt fa-2x mb-2" style="color: #da70d6;"></i>
+                <p class="small mb-0 fw-semibold text-white">Instant Download</p>
+                <p class="small" style="color: #8888aa;">Access your products immediately after purchase</p>
+            </div>
+            <div class="col-md-4">
+                <i class="fa-solid fa-infinity fa-2x mb-2" style="color: #da70d6;"></i>
+                <p class="small mb-0 fw-semibold text-white">Lifetime Access</p>
+                <p class="small" style="color: #8888aa;">Buy once, access forever with no recurring fees</p>
+            </div>
+            <div class="col-md-4">
+                <i class="fa-solid fa-shield-halved fa-2x mb-2" style="color: #da70d6;"></i>
+                <p class="small mb-0 fw-semibold text-white">Secure Payment</p>
+                <p class="small" style="color: #8888aa;">Stripe-powered checkout. 256-bit encryption.</p>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

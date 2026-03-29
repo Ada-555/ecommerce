@@ -1,79 +1,87 @@
-{% extends "stores/petshop_base.html" %}
+{% extends "stores/petshop/pet_base.html" %}
 {% load static %}
 
 {% block content %}
 <!-- Hero -->
-<div class="hero-pet text-center py-5 mb-0">
-  <div class="container py-5">
-    <h1 class="display-4 fw-bold mb-3" style="color: var(--accent);">
-      🐾 PetShop Ireland
-    </h1>
-    <p class="lead mb-4" style="color: #b8e6b8;">Ireland's Best Pet Supplies — Everything Your Pets Need! 🇮🇪</p>
-    <a href="/petshop/products/" class="btn btn-pet btn-lg"><i class="fa-solid fa-cart-shopping me-2"></i>Shop Now</a>
-  </div>
+<div class="pet-hero text-center py-5">
+    <div class="container py-5">
+        <div style="font-size: 4rem; margin-bottom: 1rem;">🐾</div>
+        <h1 class="display-4 fw-bold mb-3" style="font-family: 'Poppins', sans-serif; color: #90EE90;">PetShop Ireland</h1>
+        <p class="lead mb-4" style="color: #7a9a7a; max-width: 500px; margin: 0 auto;">Ireland's best pet supplies. Dog beds, cat litter, fish tanks, bird cages and more. Fast delivery across all 32 counties.</p>
+        <a href="/petshop/products/" class="btn btn-pet btn-lg">
+            <i class="fa-solid fa-bag-shopping me-2"></i>Shop Now
+        </a>
+    </div>
 </div>
 
 <div class="container section-padding">
-  <!-- Shop by Pet -->
-  <h2 class="mb-4 text-white"><i class="fa-solid fa-paw text-pet-accent me-2"></i>Shop by Pet</h2>
-  <div class="row g-3 mb-5">
-    <div class="col-6 col-md-3">
-      <a href="/petshop/products/?category=dogs" class="text-decoration-none">
-        <div class="product-card text-center p-4">
-          <div class="fs-1 mb-2">🐶</div>
-          <h6 class="text-white mb-0">Dogs</h6>
+    <!-- Category Grid -->
+    <h2 class="mb-4"><i class="fa-solid fa-paw me-2" style="color: #90EE90;"></i>Shop by Pet</h2>
+    <div class="row g-3 mb-5">
+        <div class="col-6 col-md-3">
+            <a href="/petshop/products/?category=dogs" class="text-decoration-none">
+                <div class="p-4 text-center bg-dark rounded-4 h-100" style="background: #111a11; border: 1px solid rgba(34,139,34,0.2);">
+                    <div style="font-size: 2.5rem;">🐕</div>
+                    <p class="mb-0 mt-2 fw-semibold text-white">Dogs</p>
+                </div>
+            </a>
         </div>
-      </a>
-    </div>
-    <div class="col-6 col-md-3">
-      <a href="/petshop/products/?category=cats" class="text-decoration-none">
-        <div class="product-card text-center p-4">
-          <div class="fs-1 mb-2">🐱</div>
-          <h6 class="text-white mb-0">Cats</h6>
+        <div class="col-6 col-md-3">
+            <a href="/petshop/products/?category=cats" class="text-decoration-none">
+                <div class="p-4 text-center bg-dark rounded-4 h-100" style="background: #111a11; border: 1px solid rgba(34,139,34,0.2);">
+                    <div style="font-size: 2.5rem;">🐈</div>
+                    <p class="mb-0 mt-2 fw-semibold text-white">Cats</p>
+                </div>
+            </a>
         </div>
-      </a>
-    </div>
-    <div class="col-6 col-md-3">
-      <a href="/petshop/products/?category=fish_aquatics" class="text-decoration-none">
-        <div class="product-card text-center p-4">
-          <div class="fs-1 mb-2">🐟</div>
-          <h6 class="text-white mb-0">Fish</h6>
+        <div class="col-6 col-md-3">
+            <a href="/petshop/products/?category=fish_aquatics" class="text-decoration-none">
+                <div class="p-4 text-center bg-dark rounded-4 h-100" style="background: #111a11; border: 1px solid rgba(34,139,34,0.2);">
+                    <div style="font-size: 2.5rem;">🐟</div>
+                    <p class="mb-0 mt-2 fw-semibold text-white">Fish</p>
+                </div>
+            </a>
         </div>
-      </a>
-    </div>
-    <div class="col-6 col-md-3">
-      <a href="/petshop/products/?category=birds" class="text-decoration-none">
-        <div class="product-card text-center p-4">
-          <div class="fs-1 mb-2">🐦</div>
-          <h6 class="text-white mb-0">Birds</h6>
+        <div class="col-6 col-md-3">
+            <a href="/petshop/products/?category=birds" class="text-decoration-none">
+                <div class="p-4 text-center bg-dark rounded-4 h-100" style="background: #111a11; border: 1px solid rgba(34,139,34,0.2);">
+                    <div style="font-size: 2.5rem;">🦜</div>
+                    <p class="mb-0 mt-2 fw-semibold text-white">Birds</p>
+                </div>
+            </a>
         </div>
-      </a>
     </div>
-  </div>
 
-  {% if new_arrivals %}
-  <h2 class="mb-4 text-white"><i class="fa-solid fa-sparkles text-pet-accent me-2"></i>New Arrivals</h2>
-  <div class="row g-4 mb-5">
-    {% for product in new_arrivals %}
-    <div class="col-6 col-md-3">
-      <div class="product-card">
-        {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}">{% else %}<div class="d-flex align-items-center justify-content-center" style="height:220px; background: rgba(255,255,255,0.05);"><i class="fa-solid fa-image text-muted fa-3x"></i></div>{% endif %}
-        <div class="p-3">
-          <p class="small mb-1" style="color: #b8e6b8;">{{ product.category.friendly_name|default:product.category.name|default:"" }}</p>
-          <h6 class="text-white mb-2">{{ product.name }}</h6>
-          <div class="d-flex justify-content-between align-items-center">
-            <span class="text-pet-accent fw-bold">€{{ product.price }}</span>
-            <a href="/bag/add/{{ product.id }}/?redirect_url=/petshop/products/" class="btn btn-sm btn-pet">Add</a>
-          </div>
+    <!-- Featured Products -->
+    {% if featured %}
+    <h2 class="mb-4"><i class="fa-solid fa-fire me-2" style="color: #FFA500;"></i>Bestsellers</h2>
+    <div class="row g-4 mb-5">
+        {% for product in featured %}
+        <div class="col-6 col-md-4 col-lg-3">
+            {% include "stores/product_card.html" %}
         </div>
-      </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-  </div>
-  {% endif %}
+    {% endif %}
 
-  <div class="text-center mt-4">
-    <a href="/petshop/products/" class="btn btn-pet btn-lg"><i class="fa-solid fa-grid-2 me-2"></i>View All Products</a>
-  </div>
+    <!-- New Arrivals -->
+    {% if new_arrivals %}
+    <h2 class="mb-4"><i class="fa-solid fa-sparkles me-2" style="color: #90EE90;"></i>New Arrivals</h2>
+    <div class="row g-4">
+        {% for product in new_arrivals %}
+        <div class="col-6 col-md-4 col-lg-3">
+            {% include "stores/product_card.html" %}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if not featured and not new_arrivals %}
+    <div class="text-center py-5">
+        <div style="font-size: 4rem;">🐾</div>
+        <h3 class="text-white mt-3 mb-2">Coming Soon!</h3>
+        <p style="color: #7a9a7a;">PetShop Ireland is being stocked. Check back soon for our full range.</p>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}
