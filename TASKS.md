@@ -13,7 +13,7 @@
 | # | Task | Status | Agent | Notes |
 |---|------|--------|-------|-------|
 | 1 | Per-store admin | ✅ DONE | per-store-admin | Store-scoped admin views |
-| 2 | Phase 12 Reviews — star ratings, moderation, verified buyer | 🟡 IN PROGRESS | orderimo-phase12-reviews | Running 2h+, deep in implementation |
+| 2 | Phase 12 Reviews — star ratings, moderation, verified buyer | 🟡 IN PROGRESS | phase12-frontend | Backend exists, new frontend-only agent spawned |
 | 3 | Order tracking page — trackable link after purchase | 🟡 IN PROGRESS | order-tracking-retry | Respawning with 30m timeout |
 | 4 | Email notifications — confirmation, shipping, delivery | 🟡 IN PROGRESS | email-notifications-retry | Respawning with 30m timeout |
 | 5 | Wishlist / Save for later — heart icon | 🟡 IN PROGRESS | wishlist-retry | Respawning with 30m timeout |
@@ -55,6 +55,8 @@
 | 2026-03-29 08:00 | order-tracking, email, wishlist | Initial runs timed out (10m) | ⚠️ Timeout |
 | 2026-03-29 08:18 | order-tracking-retry, email-notifications-retry, wishlist-retry | Respawning with 30min timeouts — resuming from partial work | 🟡 Running |
 | 2026-03-29 08:19 | crypto-payments | Starting crypto payments (BTC, USDC, XMR) | 🟩 Started |
+| 2026-03-29 08:30 | orderimo-phase12-reviews | KILLED — 2.5h stuck in git loop, Review model already existed | ❌ Killed |
+| 2026-03-29 08:32 | phase12-frontend | Spawned frontend-only agent (20min) — templates only | 🟡 Running |
 
 ---
 
