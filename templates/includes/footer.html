@@ -33,9 +33,9 @@
                     <i class="fa-solid fa-headset me-1 text-cyan"></i> Support
                 </h6>
                 <ul class="list-unstyled mb-0 footer-links">
-                    <li><a href="{% url 'about_page_detail' pk='6' %}" class="text-silver text-decoration-none footer-link">Privacy Policy</a></li>
+                    <li><a href="{% url 'privacy_policy' %}" class="text-silver text-decoration-none footer-link">Privacy Policy</a></li>
                     <li><a href="{% url 'about_page_detail' pk='8' %}" class="text-silver text-decoration-none footer-link">Returns Policy</a></li>
-                    <li><a href="{% url 'about_page_detail' pk='7' %}" class="text-silver text-decoration-none footer-link">FAQ</a></li>
+                    <li><a href="{% url 'faq' %}" class="text-silver text-decoration-none footer-link">FAQ</a></li>
                     <li><a href="#" class="text-silver text-decoration-none footer-link">Track Your Order</a></li>
                 </ul>
             </div>
@@ -45,9 +45,9 @@
                     <i class="fa-solid fa-scale me-1 text-cyan"></i> Legal
                 </h6>
                 <ul class="list-unstyled mb-0 footer-links">
-                    <li><a href="#" class="text-silver text-decoration-none footer-link">Terms & Conditions</a></li>
-                    <li><a href="#" class="text-silver text-decoration-none footer-link">Privacy Policy</a></li>
-                    <li><a href="#" class="text-silver text-decoration-none footer-link">Cookie Policy</a></li>
+                    <li><a href="{% url 'terms' %}" class="text-silver text-decoration-none footer-link">Terms & Conditions</a></li>
+                    <li><a href="{% url 'privacy_policy' %}" class="text-silver text-decoration-none footer-link">Privacy Policy</a></li>
+                    <li><a href="{% url 'cookies' %}" class="text-silver text-decoration-none footer-link">Cookie Policy</a></li>
                 </ul>
             </div>
         </div>

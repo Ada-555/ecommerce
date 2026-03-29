@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_title %} — Terms & Conditions{% endblock %}
+
+{% block page_header %}
+<div class="page-header-bg py-5" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h1 class="brand-font neon-text display-4 fw-bold">Terms & Conditions</h1>
+                <p class="text-silver lead">Last updated: March 2026</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <div class="card neon-card shadow-lg border-0">
+                <div class="card-body p-5 text-silver">
+
+                    <p>These Terms and Conditions ("Terms") govern your use of the Orderimo website and services (collectively, the "Service") operated by Orderimo Ltd ("we", "our", "us"). By accessing or using our website at <a href="https://orderimo.com" class="text-cyan">orderimo.com</a>, you agree to be bound by these Terms. If you do not agree to these Terms, please do not use our Service.</p>
+
+                    <h3 class="text-white mt-5 mb-3">1. Acceptance of Terms</h3>
+                    <p>By creating an account, placing an order, or browsing our website, you acknowledge that you have read, understood, and agree to be bound by these Terms and our <a href="{% url 'privacy_policy' %}" class="text-cyan">Privacy Policy</a>. These Terms constitute a legally binding agreement between you and Orderimo Ltd.</p>
+
+                    <h3 class="text-white mt-5 mb-3">2. Eligibility</h3>
+                    <p>You must be at least 18 years old and have the legal capacity to enter into contracts to place an order on our website. By placing an order, you represent and warrant that you meet these requirements. If you are under 18, you may only use our website with the involvement of a parent or guardian.</p>
+
+                    <h3 class="text-white mt-5 mb-3">3. Products and Descriptions</h3>
+                    <p>We endeavour to display accurate product descriptions, images, prices, and availability. However, we do not warrant that product descriptions, images, or other content are accurate, complete, reliable, current, or error-free. If a product you receive differs materially from its description, your sole remedy is to return it in unused condition for a refund within 30 days. All prices are displayed in Euros (€) and include VAT at the applicable Irish rate.</p>
+
+                    <h3 class="text-white mt-5 mb-3">4. Orders and Payment</h3>
+                    <p>All orders are subject to availability and confirmation of the order price. By placing an order, you make an offer to purchase the products. We reserve the right to reject or cancel any order for any reason, including but not limited to: product unavailability, pricing errors, suspected fraud, or non-payment. Payment is processed securely via Stripe. By providing payment details, you authorise us to charge the total order amount (including delivery fees) to your chosen payment method. All payments are processed in Euros (€).</p>
+
+                    <h3 class="text-white mt-5 mb-3">5. Pricing and Availability</h3>
+                    <p>Prices are subject to change without notice. We reserve the right to modify or discontinue any product without notice. In the event of a pricing error on our website, we reserve the right to cancel any affected orders and issue a full refund. Product availability is subject to stock levels. If a product becomes unavailable after you place an order, we will notify you and offer an alternative or full refund.</p>
+
+                    <h3 class="text-white mt-5 mb-3">6. Delivery</h3>
+                    <p>We deliver to addresses within Ireland and the European Union. Delivery charges and timeframes are as follows:</p>
+                    <ul>
+                        <li><strong>Ireland:</strong> 3–5 business days (standard), €4.99 flat rate (free on orders over €80)</li>
+                        <li><strong>EU:</strong> 5–10 business days, rates vary by country</li>
+                    </ul>
+                    <p>Delivery timeframes are estimates only. We are not responsible for delays caused by customs, carrier issues, or events outside our control. Risk of loss and title for products pass to you upon delivery to the carrier.</p>
+
+                    <h3 class="text-white mt-5 mb-3">7. Returns and Refunds</h3>
+                    <p>We offer a 30-day return policy on all physical products. To be eligible for a return:</p>
+                    <ul>
+                        <li>Items must be in their original condition, unused, and with all original packaging and tags attached.</li>
+                        <li>Proof of purchase (order confirmation email) must be provided.</li>
+                        <li>Digital products are non-refundable once downloaded or accessed.</li>
+                    </ul>
+                    <p>To initiate a return, please contact us at <a href="mailto:returns@orderimo.com" class="text-cyan">returns@orderimo.com</a> or via our <a href="{% url 'contact' %}" class="text-cyan">contact form</a>. Refunds will be issued to your original payment method within 5–10 business days of receipt of the returned item.</p>
+
+                    <h3 class="text-white mt-5 mb-3">8. Account Responsibilities</h3>
+                    <p>You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account. You agree to notify us immediately of any unauthorised use of your account. We reserve the right to suspend or terminate accounts that violate these Terms or engage in fraudulent, abusive, or illegal activity.</p>
+
+                    <h3 class="text-white mt-5 mb-3">9. Intellectual Property</h3>
+                    <p>All content on our website, including but not limited to text, graphics, logos, images, product descriptions, and software, is the property of Orderimo Ltd or its content suppliers and is protected by Irish and international copyright, trademark, and other intellectual property laws. You may not reproduce, distribute, modify, or create derivative works from any content without our prior written consent.</p>
+
+                    <h3 class="text-white mt-5 mb-3">10. User-Generated Content</h3>
+                    <p>You may submit reviews, comments, or other content to our website. By submitting content, you grant us a non-exclusive, royalty-free, perpetual, irrevocable right to use, reproduce, modify, and distribute such content in any form. You represent that you own or have the necessary rights to submit such content and that it does not infringe the rights of third parties.</p>
+
+                    <h3 class="text-white mt-5 mb-3">11. Prohibited Uses</h3>
+                    <p>You may not use our website or services for any illegal or unauthorised purpose. You agree not to:</p>
+                    <ul>
+                        <li>Violate any applicable law or regulation</li>
+                        <li>Attempt to gain unauthorised access to our systems</li>
+                        <li>Use automated tools (scrapers, bots) to extract data from our website</li>
+                        <li>Interfere with or disrupt our website or servers</li>
+                        <li>Transmit any viruses, malware, or other harmful code</li>
+                        <li>Engage in any form of harassment, abuse, or hate speech</li>
+                    </ul>
+
+                    <h3 class="text-white mt-5 mb-3">12. Disclaimer of Warranties</h3>
+                    <p>OUR WEBSITE AND SERVICES ARE PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. WE DO NOT WARRANT THAT OUR WEBSITE WILL BE UNINTERRUPTED, SECURE, OR ERROR-FREE. WE MAKE NO WARRANTIES ABOUT THE ACCURACY, RELIABILITY, OR COMPLETENESS OF ANY CONTENT ON OUR WEBSITE.</p>
+
+                    <h3 class="text-white mt-5 mb-3">13. Limitation of Liability</h3>
+                    <p>TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, ORDERIMO LTD AND ITS DIRECTORS, EMPLOYEES, PARTNERS, AND AGENTS SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING BUT NOT LIMITED TO LOSS OF PROFITS, DATA, USE, OR GOODWILL, ARISING OUT OF OR RELATED TO YOUR USE OF OUR WEBSITE OR SERVICES. IN NO EVENT SHALL OUR TOTAL LIABILITY EXCEED THE AMOUNT YOU PAID US FOR THE PRODUCTS OR SERVICES GIVING RISE TO THE CLAIM WITHIN THE 12 MONTHS PRECEDING THE EVENT.</p>
+
+                    <h3 class="text-white mt-5 mb-3">14. Indemnification</h3>
+                    <p>You agree to indemnify, defend, and hold harmless Orderimo Ltd and its affiliates, directors, employees, and agents from and against any claims, liabilities, damages, losses, and expenses (including legal fees) arising out of or related to your violation of these Terms or your use of our website.</p>
+
+                    <h3 class="text-white mt-5 mb-3">15. Governing Law</h3>
+                    <p>These Terms shall be governed by and construed in accordance with the laws of Ireland, without regard to its conflict of law provisions. Any disputes arising out of or related to these Terms or your use of our website shall be subject to the exclusive jurisdiction of the courts of Ireland.</p>
+
+                    <h3 class="text-white mt-5 mb-3">16. Changes to These Terms</h3>
+                    <p>We reserve the right to modify these Terms at any time. We will notify you of significant changes by posting a notice on our website or sending an email. Continued use of our website after changes take effect constitutes your acceptance of the revised Terms.</p>
+
+                    <h3 class="text-white mt-5 mb-3">17. Severability</h3>
+                    <p>If any provision of these Terms is found to be unenforceable or invalid, that provision shall be limited or eliminated to the minimum extent necessary, and the remaining provisions shall remain in full force and effect.</p>
+
+                    <h3 class="text-white mt-5 mb-3">18. Contact Information</h3>
+                    <p>If you have any questions about these Terms, please contact us:</p>
+                    <ul>
+                        <li><strong>Email:</strong> <a href="mailto:legal@orderimo.com" class="text-cyan">legal@orderimo.com</a></li>
+                        <li><strong>Location:</strong> Dublin, Ireland</li>
+                        <li><strong>Contact Form:</strong> <a href="{% url 'contact' %}" class="text-cyan">Contact Us</a></li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

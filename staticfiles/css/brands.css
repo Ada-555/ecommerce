@@ -1,0 +1,79 @@
+/* =====================================================
+   Orderimo — Brand CSS Variables
+   ===================================================== */
+
+/* ---- Plurino (Cyan/Tech) ---- */
+:root[data-store="plurino"],
+.store-plurino {
+    --brand-primary: #00FFFF;
+    --brand-secondary: #0099CC;
+    --brand-accent: #00CCCC;
+    --brand-bg: #001a1a;
+}
+
+/* ---- HomeNest (Amber/Homeware) ---- */
+:root[data-store="homenest"],
+.store-homenest {
+    --brand-primary: #FFB347;
+    --brand-secondary: #CC8800;
+    --brand-accent: #FFD700;
+    --brand-bg: #1a1200;
+}
+
+/* ---- StyleVault (Pink/Fashion) ---- */
+:root[data-store="stylevault"],
+.store-stylevault {
+    --brand-primary: #FF69B4;
+    --brand-secondary: #FF1493;
+    --brand-accent: #FFB6C1;
+    --brand-bg: #1a0011;
+}
+
+/* Default store colors (Orderimo generic) */
+:root[data-store="orderimo"],
+.store-orderimo,
+:root {
+    --brand-primary: #800080;
+    --brand-secondary: #9b30ff;
+    --brand-accent: #ffa0ff;
+    --brand-bg: #0a0010;
+}
+
+/* ---- Store Card Styles ---- */
+.store-card-plurino {
+    border: 2px solid #00FFFF;
+    background: linear-gradient(135deg, #001a1a 0%, #003333 100%);
+}
+.store-card-plurino:hover {
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+}
+
+.store-card-homenest {
+    border: 2px solid #FFB347;
+    background: linear-gradient(135deg, #1a1200 0%, #332200 100%);
+}
+.store-card-homenest:hover {
+    box-shadow: 0 0 20px rgba(255, 179, 71, 0.3);
+}
+
+.store-card-stylevault {
+    border: 2px solid #FF69B4;
+    background: linear-gradient(135deg, #1a0011 0%, #330022 100%);
+}
+.store-card-stylevault:hover {
+    box-shadow: 0 0 20px rgba(255, 105, 180, 0.3);
+}
+
+/* ---- Store Badge Styles ---- */
+.badge-plurino {
+    background-color: #00FFFF;
+    color: #000;
+}
+.badge-homenest {
+    background-color: #FFB347;
+    color: #000;
+}
+.badge-stylevault {
+    background-color: #FF69B4;
+    color: #000;
+}

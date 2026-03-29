@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_title %}| About PetShop Ireland{% endblock %}
+
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb" class="breadcrumbs-nav w-100">
+    <div class="container">
+        <ol class="breadcrumb mb-0 small">
+            <li class="breadcrumb-item">
+                <a href="{% url 'home' %}" class="text-cyan text-decoration-none">
+                    <i class="fa-solid fa-house me-1"></i>Home
+                </a>
+            </li>
+            <li class="breadcrumb-item active text-white" aria-current="page">About PetShop Ireland</li>
+        </ol>
+    </div>
+</nav>
+{% endblock %}
+
+{% block page_header %}
+<div class="page-header w-100">
+    <div class="container">
+        <div class="row">
+            <div class="col text-center">
+                <h1 class="display-6">
+                    <i class="fa-solid fa-paw me-2" style="color:#228B22;"></i>About PetShop Ireland
+                </h1>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container mb-5">
+
+    <!-- Hero -->
+    <section class="row mb-5 align-items-center">
+        <div class="col-lg-6 mb-4 mb-lg-0">
+            <div class="p-4 rounded-4" style="background: rgba(34,139,34,0.1); border: 1px solid rgba(34,139,34,0.25);">
+                <span class="badge rounded-pill px-3 py-2 mb-3" style="background:#FFA500; color:#000;">
+                    <i class="fa-solid fa-flag me-1"></i> Proudly Irish 🇮🇪
+                </span>
+                <h2 class="text-white mb-3">Ireland's Best Pet Supplies — Delivered Fast</h2>
+                <p class="text-silver mb-3">
+                    PetShop Ireland is an Irish-owned online pet supplies store, delivering everything your furry, feathery, and fishy friends need across Ireland.
+                </p>
+                <p class="text-silver mb-0">
+                    From premium dog beds and organic cat food to aquarium kits and bird cages — we partner with trusted brands including Royal Canin, Pedigree, and Felix to bring you quality products at fair prices. Based in Dublin, we ship to all 32 counties.
+                </p>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="row g-3">
+                <div class="col-6 text-center">
+                    <div class="p-3 rounded-4 bg-darker h-100">
+                        <div class="display-4 mb-2">🐾</div>
+                        <h4 class="text-white fw-bold mb-1">5,000+</h4>
+                        <p class="text-muted small mb-0">Happy Irish Pets</p>
+                    </div>
+                </div>
+                <div class="col-6 text-center">
+                    <div class="p-3 rounded-4 bg-darker h-100">
+                        <div class="display-4 mb-2">🇮🇪</div>
+                        <h4 class="text-white fw-bold mb-1">32</h4>
+                        <p class="text-muted small mb-0">Counties Delivered</p>
+                    </div>
+                </div>
+                <div class="col-6 text-center">
+                    <div class="p-3 rounded-4 bg-darker h-100">
+                        <div class="display-4 mb-2">📦</div>
+                        <h4 class="text-white fw-bold mb-1">Next-Day</h4>
+                        <p class="text-muted small mb-0">Delivery Available</p>
+                    </div>
+                </div>
+                <div class="col-6 text-center">
+                    <div class="p-3 rounded-4 bg-darker h-100">
+                        <div class="display-4 mb-2">💚</div>
+                        <h4 class="text-white fw-bold mb-1">30-Day</h4>
+                        <p class="text-muted small mb-0">Returns Policy</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Categories -->
+    <section class="mb-5">
+        <div class="text-center mb-4">
+            <h2 class="text-white mb-1">
+                <i class="fa-solid fa-shop me-2" style="color:#228B22;"></i>What We Stock
+            </h2>
+            <p class="text-silver">Everything for every kind of pet — and every kind of pet owner</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4 col-lg-2 col-6 text-center">
+                <div class="p-3 bg-darker rounded-4 h-100">
+                    <div class="display-5 mb-2">🐕</div>
+                    <h6 class="text-white mb-1">Dogs</h6>
+                    <p class="text-muted small mb-0">Beds, toys, collars, food & treats</p>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-2 col-6 text-center">
+                <div class="p-3 bg-darker rounded-4 h-100">
+                    <div class="display-5 mb-2">🐈</div>
+                    <h6 class="text-white mb-1">Cats</h6>
+                    <p class="text-muted small mb-0">Litter, toys, food & beds</p>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-2 col-6 text-center">
+                <div class="p-3 bg-darker rounded-4 h-100">
+                    <div class="display-5 mb-2">🐠</div>
+                    <h6 class="text-white mb-1">Fish</h6>
+                    <p class="text-muted small mb-0">Tanks, filters, food & decor</p>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-2 col-6 text-center">
+                <div class="p-3 bg-darker rounded-4 h-100">
+                    <div class="display-5 mb-2">🐰</div>
+                    <h6 class="text-white mb-1">Small Pets</h6>
+                    <p class="text-muted small mb-0">Hutches, food & accessories</p>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-2 col-6 text-center">
+                <div class="p-3 bg-darker rounded-4 h-100">
+                    <div class="display-5 mb-2">🦜</div>
+                    <h6 class="text-white mb-1">Birds</h6>
+                    <p class="text-muted small mb-0">Cages, perches, food & toys</p>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-2 col-6 text-center">
+                <div class="p-3 bg-darker rounded-4 h-100">
+                    <div class="display-5 mb-2">🍖</div>
+                    <h6 class="text-white mb-1">Pet Food</h6>
+                    <p class="text-muted small mb-0">Pedigree, Royal Canin, Felix & more</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="mb-5">
+        <div class="text-center mb-4">
+            <h2 class="text-white mb-1">Why Irish Pet Owners Choose Us</h2>
+            <p class="text-silver">We know pets. We know Ireland. That's the difference.</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="p-4 bg-darker rounded-4 h-100">
+                    <div class="mb-3">
+                        <span class="badge fs-4" style="background:rgba(34,139,34,0.2); color:#228B22;">
+                            <i class="fa-solid fa-truck-fast"></i>
+                        </span>
+                    </div>
+                    <h5 class="text-white mb-2">Irish-Owned, Irish-Delivered</h5>
+                    <p class="text-muted small mb-0">
+                        We are based in Dublin and ship to all 32 counties. Most orders placed before 2 PM ship same day. An Post and DPD delivery options available.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4 bg-darker rounded-4 h-100">
+                    <div class="mb-3">
+                        <span class="badge fs-4" style="background:rgba(34,139,34,0.2); color:#228B22;">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </span>
+                    </div>
+                    <h5 class="text-white mb-2">Trusted Brands Only</h5>
+                    <p class="text-muted small mb-0">
+                        We stock only genuine products from trusted brands — Pedigree, Royal Canin, Felix, AquaLife, and more. No counterfeit goods, no cheap imitations.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4 bg-darker rounded-4 h-100">
+                    <div class="mb-3">
+                        <span class="badge fs-4" style="background:rgba(34,139,34,0.2); color:#228B22;">
+                            <i class="fa-solid fa-heart"></i>
+                        </span>
+                    </div>
+                    <h5 class="text-white mb-2">Pet Experts on Hand</h5>
+                    <p class="text-muted small mb-0">
+                        Our team includes qualified pet care advisors. Email us at hello@petshopie.com and we'll recommend the right product for your pet's specific needs.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="mb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="text-center mb-4">
+                    <h2 class="text-white mb-1">Get In Touch</h2>
+                    <p class="text-silver">Questions about your pet? We'd love to hear from you.</p>
+                </div>
+                <div class="card product-card p-4">
+                    <div class="row g-4">
+                        <div class="col-md-4 text-center border-end border-secondary">
+                            <i class="fa-solid fa-envelope fa-2x mb-2" style="color:#228B22;"></i>
+                            <h6 class="text-white mb-1">Email</h6>
+                            <p class="text-muted small mb-0">hello@petshopie.com</p>
+                        </div>
+                        <div class="col-md-4 text-center border-end border-secondary">
+                            <i class="fa-solid fa-clock fa-2x mb-2" style="color:#228B22;"></i>
+                            <h6 class="text-white mb-1">Hours</h6>
+                            <p class="text-muted small mb-0">Mon-Fri 9am-6pm IST</p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <i class="fa-brands fa-facebook fa-2x mb-2" style="color:#228B22;"></i>
+                            <h6 class="text-white mb-1">Follow Us</h6>
+                            <p class="text-muted small mb-0">@PetShopIreland</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="text-center">
+        <h3 class="text-white mb-3">Ready to treat your pet?</h3>
+        <a href="{% url 'products' %}" class="btn btn-lg rounded-pill px-5" style="background:#228B22; color:#fff;">
+            <i class="fa-solid fa-bag-shopping me-2"></i>Shop PetShop Ireland
+        </a>
+    </section>
+
+</div>
+{% endblock %}

@@ -109,11 +109,15 @@ class BagViewsTests(TestCase):
         self.assertNotIn(self.product.id, bag)
 
     def test_adjust_bag_with_size_zero_handled(self):
-        """Adjusting a sized product to zero via POST returns 302 (simplified)."""
+        """Adjusting a sized product via POST returns 302 (simplified)."""
         product_with_sizes = Product.objects.create(
             name='Sized Product', description='D', price=35.00, has_sizes=True
         )
+        add_url = reverse('add_to_bag', args=[product_with_sizes.id])
         adj_url = reverse('adjust_bag', args=[product_with_sizes.id])
+        # First add to bag
+        self.client.post(add_url, data={'quantity': 1, 'product_size': 'L', 'redirect_url': '/'})
+        # Then adjust
         response = self.client.post(adj_url, data={'quantity': 3, 'product_size': 'L'})
         self.assertEqual(response.status_code, 302)
 

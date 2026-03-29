@@ -8,23 +8,23 @@ def index(request):
     # Featured products (featured=True, up to 4)
     featured_products = list(Product.objects.filter(
         featured=True
-    ).exclude(image='').exclude(image__isnull=True)[:4])
+    ).exclude(image='').exclude(image__isnull=True).exclude(category__isnull=True)[:4])
 
     # If not enough featured, fill with random products
     if len(featured_products) < 4:
         additional = list(Product.objects.exclude(
             id__in=[p.id for p in featured_products]
-        ).order_by('?')[:4 - len(featured_products)])
+        ).exclude(category__isnull=True).order_by('?')[:4 - len(featured_products)])
         featured_products.extend(additional)
 
     # New arrivals (4 most recent)
     new_products = list(
-        Product.objects.order_by('-id')[:4]
+        Product.objects.exclude(category__isnull=True).order_by('-id')[:4]
     )
 
     # Best sellers (4 products with highest views_count)
     best_sellers = list(
-        Product.objects.order_by('-views_count')[:4]
+        Product.objects.exclude(category__isnull=True).order_by('-views_count')[:4]
     )
 
     # All categories for "Shop by Category" section

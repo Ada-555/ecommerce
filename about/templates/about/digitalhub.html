@@ -1,0 +1,271 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_title %}| About DigitalHub{% endblock %}
+
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb" class="breadcrumbs-nav w-100">
+    <div class="container">
+        <ol class="breadcrumb mb-0 small">
+            <li class="breadcrumb-item">
+                <a href="{% url 'home' %}" class="text-cyan text-decoration-none">
+                    <i class="fa-solid fa-house me-1"></i>Home
+                </a>
+            </li>
+            <li class="breadcrumb-item active text-white" aria-current="page">About DigitalHub</li>
+        </ol>
+    </div>
+</nav>
+{% endblock %}
+
+{% block page_header %}
+<div class="page-header w-100">
+    <div class="container">
+        <div class="row">
+            <div class="col text-center">
+                <h1 class="display-6">
+                    <i class="fa-solid fa-bolt me-2" style="color:#800080;"></i>About DigitalHub
+                </h1>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container mb-5">
+
+    <!-- Hero -->
+    <section class="row mb-5 align-items-center">
+        <div class="col-lg-6 mb-4 mb-lg-0">
+            <div class="p-4 rounded-4" style="background: rgba(128,0,128,0.1); border: 1px solid rgba(128,0,128,0.25);">
+                <span class="badge rounded-pill px-3 py-2 mb-3" style="background:#FF69B4; color:#fff;">
+                    <i class="fa-solid fa-bolt me-1"></i> Instant Delivery. Lifetime Access.
+                </span>
+                <h2 class="text-white mb-3">Digital Products That Actually Deliver</h2>
+                <p class="text-silver mb-3">
+                    DigitalHub is your marketplace for premium digital products — e-books, online courses, software, templates, and stock media. We curate and quality-check every product before it goes on sale.
+                </p>
+                <p class="text-silver mb-0">
+                    No physical shipping. No waiting. No environmental footprint. Buy now and start using your product within seconds. Every purchase comes with lifetime access and free updates.
+                </p>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="row g-3">
+                <div class="col-6 text-center">
+                    <div class="p-3 rounded-4 bg-darker h-100">
+                        <div class="display-4 mb-2" style="color:#800080;">💜</div>
+                        <h4 class="text-white fw-bold mb-1">200+</h4>
+                        <p class="text-muted small mb-0">Digital Products</p>
+                    </div>
+                </div>
+                <div class="col-6 text-center">
+                    <div class="p-3 rounded-4 bg-darker h-100">
+                        <div class="display-4 mb-2" style="color:#800080;">⚡</div>
+                        <h4 class="text-white fw-bold mb-1">Instant</h4>
+                        <p class="text-muted small mb-0">Download Access</p>
+                    </div>
+                </div>
+                <div class="col-6 text-center">
+                    <div class="p-3 rounded-4 bg-darker h-100">
+                        <div class="display-4 mb-2" style="color:#800080;">♾️</div>
+                        <h4 class="text-white fw-bold mb-1">Lifetime</h4>
+                        <p class="text-muted small mb-0">Updates Included</p>
+                    </div>
+                </div>
+                <div class="col-6 text-center">
+                    <div class="p-3 rounded-4 bg-darker h-100">
+                        <div class="display-4 mb-2" style="color:#800080;">🔒</div>
+                        <h4 class="text-white fw-bold mb-1">Secure</h4>
+                        <p class="text-muted small mb-0">Stripe Checkout</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="mb-5">
+        <div class="text-center mb-4">
+            <h2 class="text-white mb-1">
+                <i class="fa-solid fa-folder-open me-2" style="color:#800080;"></i>What We Offer
+            </h2>
+            <p class="text-silver">Five categories of digital products for creators, professionals, and learners</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4 text-center">
+                <div class="p-4 bg-darker rounded-4 h-100">
+                    <div class="display-5 mb-3">📚</div>
+                    <h5 class="text-white mb-2">E-books</h5>
+                    <p class="text-muted small mb-0">
+                        Comprehensive PDF guides and manuals on business, productivity, health, and lifestyle. Written by experts, updated annually.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="p-4 bg-darker rounded-4 h-100">
+                    <div class="display-5 mb-3">🎓</div>
+                    <h5 class="text-white mb-2">Online Courses</h5>
+                    <p class="text-muted small mb-0">
+                        Video-based courses on coding, marketing, design, and business. Access codes delivered instantly. Certificate on completion.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="p-4 bg-darker rounded-4 h-100">
+                    <div class="display-5 mb-3">🛠️</div>
+                    <h5 class="text-white mb-2">Software & Tools</h5>
+                    <p class="text-muted small mb-0">
+                        Digital tools, plugins, and software licences. One-time purchase, lifetime access. No subscription required.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-6 text-center">
+                <div class="p-4 bg-darker rounded-4 h-100">
+                    <div class="display-5 mb-3">🎨</div>
+                    <h5 class="text-white mb-2">Templates</h5>
+                    <p class="text-muted small mb-0">
+                        Ready-to-use templates for Canva, Excel, Notion, and more. Simply open, customise, and use. Commercial licence included.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-6 text-center">
+                <div class="p-4 bg-darker rounded-4 h-100">
+                    <div class="display-5 mb-3">📸</div>
+                    <h5 class="text-white mb-2">Stock Media</h5>
+                    <p class="text-muted small mb-0">
+                        High-resolution stock photos, music tracks, and video clips. Commercial licence included with every purchase.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="mb-5">
+        <div class="text-center mb-4">
+            <h2 class="text-white mb-1">How Digital Delivery Works</h2>
+            <p class="text-silver">From purchase to product in under 60 seconds</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-3 text-center">
+                <div class="p-4 bg-darker rounded-4 h-100">
+                    <div class="display-3 mb-3" style="color:#800080;">1</div>
+                    <h5 class="text-white mb-2">Browse & Buy</h5>
+                    <p class="text-muted small mb-0">
+                        Find the digital product you need. Add to bag and checkout securely with Stripe. No account required to purchase.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-3 text-center">
+                <div class="p-4 bg-darker rounded-4 h-100">
+                    <div class="display-3 mb-3" style="color:#800080;">2</div>
+                    <h5 class="text-white mb-2">Instant Access</h5>
+                    <p class="text-muted small mb-0">
+                        Receive your download link by email immediately after payment. No waiting, no approval process, no holding queue.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-3 text-center">
+                <div class="p-4 bg-darker rounded-4 h-100">
+                    <div class="display-3 mb-3" style="color:#800080;">3</div>
+                    <h5 class="text-white mb-2">Download & Use</h5>
+                    <p class="text-muted small mb-0">
+                        Download your file directly from our secure server. Use on unlimited devices. Lifetime access from any location.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-3 text-center">
+                <div class="p-4 bg-darker rounded-4 h-100">
+                    <div class="display-3 mb-3" style="color:#800080;">4</div>
+                    <h5 class="text-white mb-2">Free Updates</h5>
+                    <p class="text-muted small mb-0">
+                        When we update a product, your existing download is updated too. No re-purchase, no additional cost. Ever.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Guarantee -->
+    <section class="mb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="p-4 rounded-4 text-center" style="background: rgba(128,0,128,0.08); border: 1px solid rgba(128,0,128,0.2);">
+                    <h2 class="text-white mb-3">Our Promise to You</h2>
+                    <div class="row g-4 text-start">
+                        <div class="col-md-4">
+                            <div class="d-flex gap-3">
+                                <i class="fa-solid fa-check-circle fa-2x flex-shrink-0" style="color:#800080;"></i>
+                                <div>
+                                    <h6 class="text-white mb-1">Quality Guarantee</h6>
+                                    <p class="text-muted small mb-0">Every product is tested before listing. If it's not as described, email us for a full refund within 30 days.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="d-flex gap-3">
+                                <i class="fa-solid fa-check-circle fa-2x flex-shrink-0" style="color:#800080;"></i>
+                                <div>
+                                    <h6 class="text-white mb-1">Secure Checkout</h6>
+                                    <p class="text-muted small mb-0">All payments processed by Stripe. Your card details are never stored on our servers.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="d-flex gap-3">
+                                <i class="fa-solid fa-check-circle fa-2x flex-shrink-0" style="color:#800080;"></i>
+                                <div>
+                                    <h6 class="text-white mb-1">Lifetime Access</h6>
+                                    <p class="text-muted small mb-0">Buy once, access forever. Re-download anytime from your order confirmation email.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="mb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="text-center mb-4">
+                    <h2 class="text-white mb-1">Need Help Finding Something?</h2>
+                    <p class="text-silver">Can't find what you need? We're here to help.</p>
+                </div>
+                <div class="card product-card p-4">
+                    <div class="row g-4">
+                        <div class="col-md-4 text-center border-end border-secondary">
+                            <i class="fa-solid fa-envelope fa-2x mb-2" style="color:#800080;"></i>
+                            <h6 class="text-white mb-1">Email</h6>
+                            <p class="text-muted small mb-0">hello@digitalhub.store</p>
+                        </div>
+                        <div class="col-md-4 text-center border-end border-secondary">
+                            <i class="fa-solid fa-clock fa-2x mb-2" style="color:#800080;"></i>
+                            <h6 class="text-white mb-1">Response Time</h6>
+                            <p class="text-muted small mb-0">Within 24 hours</p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <i class="fa-brands fa-twitter fa-2x mb-2" style="color:#800080;"></i>
+                            <h6 class="text-white mb-1">Follow Us</h6>
+                            <p class="text-muted small mb-0">@DigitalHubStore</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="text-center">
+        <h3 class="text-white mb-3">Ready to get started?</h3>
+        <a href="{% url 'products' %}" class="btn btn-lg rounded-pill px-5" style="background:#800080; color:#fff;">
+            <i class="fa-solid fa-bag-shopping me-2"></i>Browse DigitalHub Products
+        </a>
+    </section>
+
+</div>
+{% endblock %}
