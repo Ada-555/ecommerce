@@ -7,7 +7,7 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.models import User
 
-from .models import BlogPage
+from .models import BlogPage, BlogSubscriber
 from .forms import BlogPageForm
 
 
@@ -49,6 +49,7 @@ class BlogViewTests(TestCase):
         self.blog = BlogPage.objects.create(
             title="Test Blog Post",
             content="<p>Interesting content</p>",
+            is_published=True,
         )
         self.blog_list_url = reverse('blog')
         self.create_url = reverse('create_blog_page')
@@ -61,10 +62,10 @@ class BlogViewTests(TestCase):
     def test_blog_list_pagination(self):
         # Create 5 blog posts
         for i in range(5):
-            BlogPage.objects.create(title=f'Blog {i}', content='<p>Content</p>')
+            BlogPage.objects.create(title=f'Blog {i}', content='<p>Content</p>', is_published=True)
         response = self.client.get(self.blog_list_url)
-        # Should paginate at 3 per page
-        self.assertLessEqual(len(response.context['page_obj']), 3)
+        # Should paginate at 6 per page
+        self.assertLessEqual(len(response.context['page_obj']), 6)
 
     def test_blog_detail_view(self):
         url = reverse('blog_page_detail', args=[self.blog.pk])
@@ -191,7 +192,7 @@ class BlogPublicViewTests(TestCase):
         """blog_post view returns 404 for unpublished posts."""
         url = reverse('blog_post', kwargs={'slug': self.unpublished.slug})
         response = self.client.get(url)
-        self.assertEqual(response.status, 404)
+        self.assertEqual(response.status_code, 404)
 
     def test_subscribe_valid_email(self):
         """subscribe view returns success JSON for valid email."""

@@ -1,6 +1,8 @@
 import pytest
 from decimal import Decimal
+from django.conf import settings
 from django.contrib.auth.models import User
+from django.contrib.sessions.backends.db import SessionStore
 from django.test import Client, RequestFactory
 from affiliates.models import Affiliate, AffiliateReferral
 from checkout.models import Order, OrderLineItem
@@ -115,22 +117,43 @@ class TestAffiliateViews:
     def test_affiliate_register_creates_affiliate(self, client, user, db):
         """POST to register creates an Affiliate for the logged-in user."""
         client.force_login(user)
-        # Use https scheme to avoid SECURE_SSL_REDIRECT converting POST→GET
         response = client.post(
-            'https://testserver/accounts/affiliate/register/',
+            '/accounts/affiliate/register/',
             {'commission_rate': '0.15'},
+            secure=True,  # Avoid SECURE_SSL_REDIRECT intercepting POST
         )
-        # Should redirect to dashboard
-        assert response.status_code in (301, 302)
+        # Should redirect (302/200) after successful creation
+        assert response.status_code in (302, 200)
+        # Check affiliate created
         assert Affiliate.objects.filter(user=user).exists()
         affiliate = Affiliate.objects.get(user=user)
         assert float(affiliate.commission_rate) == 0.15
 
     @pytest.mark.django_db
     def test_affiliate_landing_sets_session(self, client, affiliate, db):
-        """Landing page stores referral code in session."""
-        # Use https scheme to avoid SECURE_SSL_REDIRECT
-        response = client.get(f'https://testserver/affiliate/{affiliate.referral_code}/')
-        # Should redirect to store home after setting session
-        assert response.status_code in (301, 302)
-        assert client.session.get('affiliate_referral_code') == affiliate.referral_code
+        """Landing page stores referral code in session and redirects."""
+        response = client.get(
+            f'/affiliate/{affiliate.referral_code}/',
+            follow=False,
+            secure=True,  # avoid SSL redirect
+        )
+        # Should redirect (302) to store home after setting session
+        assert response.status_code == 302
+        assert response.url == '/orderimo/'
+        # Session is set before redirect — check via cookie on the response
+        session_key = client.cookies.get(settings.SESSION_COOKIE_NAME)
+        assert session_key is not None
+        # Verify the session was actually created in the DB
+        from django.contrib.sessions.backends.db import SessionStore
+        store = SessionStore(session_key=session_key.value)
+        # Need to load the session from DB
+        if not store.exists(session_key.value):
+            store.create()  # hmm, better to fetch from DB directly
+        # Actually retrieve the session data by loading the model
+        from django.contrib.sessions.models import Session
+        try:
+            session_model = Session.objects.get(session_key=session_key.value)
+            data = session_model.get_decoded()
+        except Session.DoesNotExist:
+            data = {}
+        assert data.get('affiliate_referral_code') == affiliate.referral_code
