@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load review_tags %}
 
 {% block extra_title %}| {{ product.name }}{% endblock %}
 
@@ -372,7 +373,6 @@
                     <div class="position-relative">
                         <a href="/{{ store_slug }}/products/{{ rp.id }}/" class="d-block">
                             {% if rp.image %}
-                            
                             <img src="{{ rp.image.url }}" class="card-img-top" loading="lazy"
                                  alt="{{ rp.name }}"
                                  style="height: 160px; object-fit: cover;">
@@ -428,8 +428,7 @@
                 <div class="card product-card h-100 border-0 rounded-4 overflow-hidden bg-darker">
                     <a href="/{{ store_slug }}/products/{{ rp.id }}/" class="d-block">
                         {% if rp.image %}
-                        
-                            <img src="{{ rp.image.url }}" class="card-img-top" loading="lazy"
+                        <img src="{{ rp.image.url }}" class="card-img-top" loading="lazy"
                              alt="{{ rp.name }}"
                              style="height: 120px; object-fit: cover;">
                         {% else %}
@@ -450,7 +449,10 @@
     </div>
     {% endif %}
 
-    <!-- Reviews Section -->
+    {# ═══════════════════════════════════════════════════════ #}
+    {# REVIEWS SECTION                                        #}
+    {# ═══════════════════════════════════════════════════════ #}
+    {% rating_breakdown product as breakdown %}
     <div class="row mt-5" id="reviews">
         <div class="col-12">
             <h3 class="text-white mb-4">
@@ -459,68 +461,110 @@
             </h3>
         </div>
 
-        {# Average rating display #}
+        {# ── Average rating + rating breakdown ── #}
         {% with product.average_rating as avg_rating %}
         {% with product.review_count as rcount %}
         {% if avg_rating %}
         <div class="col-12 mb-4">
-            <div class="bg-darker rounded-4 p-3 d-inline-flex align-items-center gap-3">
-                <span class="text-gold fs-3">
-                    {% for i in "12345" %}
-                        {% if forloop.counter <= avg_rating|floatformat:0 %}
-                            <i class="fa-solid fa-star"></i>
-                        {% else %}
-                            <i class="fa-regular fa-star"></i>
-                        {% endif %}
-                    {% endfor %}
-                </span>
-                <span class="text-white fw-bold fs-5">{{ avg_rating }}/5</span>
-                <span class="text-silver">based on {{ rcount }} review{{ rcount|pluralize:"s" }}</span>
+            <div class="bg-darker rounded-4 p-4">
+                <div class="d-flex flex-wrap align-items-center gap-4">
+                    {# Big average score #}
+                    <div class="text-center" style="min-width:100px;">
+                        <span class="text-white fw-bold" style="font-size:3rem; line-height:1;">{{ avg_rating|floatformat:1 }}</span>
+                        <div class="text-gold fs-5 mt-1">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= avg_rating|floatformat:0 %}
+                                    <i class="fa-solid fa-star"></i>
+                                {% else %}
+                                    <i class="fa-regular fa-star"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <small class="text-silver">{{ rcount }} review{{ rcount|pluralize:"s" }}</small>
+                    </div>
+
+                    {# Rating breakdown bars (5★ → 1★) #}
+                    <div class="flex-grow-1" style="min-width:200px; max-width:420px;">
+                        {% for star in "54321"|make_list %}
+                            {% with forloop.counter as star_num %}
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <span class="text-gold small fw-bold" style="width:20px;text-align:right;">{{ star_num }}★</span>
+                                <div class="progress flex-grow-1 rounded-pill"
+                                     style="height:8px; background:rgba(255,255,255,0.08);">
+                                    {% with breakdown|get_star_count:star_num as bc %}
+                                    {% widthratio bc 1 rcount as pct %}
+                                    <div class="progress-bar bg-warning rounded-pill"
+                                         role="progressbar"
+                                         style="width:{{ pct }}%"
+                                         aria-valuenow="{{ bc }}"
+                                         aria-valuemin="0"
+                                         aria-valuemax="{{ rcount }}">
+                                    </div>
+                                    {% endwith %}
+                                </div>
+                                <span class="text-silver small" style="width:24px;text-align:right;">
+                                    {% with breakdown|get_star_count:star_num as bc %}{{ bc|default:"0" }}{% endwith %}
+                                </span>
+                            </div>
+                            {% endwith %}
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
         </div>
         {% else %}
         <div class="col-12 mb-4">
-            <p class="text-silver">No reviews yet. Be the first to review this product!</p>
+            <div class="bg-darker rounded-4 p-4 text-center">
+                <i class="fa-solid fa-star-half-stroke text-gold fa-2x mb-2 d-block"></i>
+                <p class="text-silver mb-0">No reviews yet — be the first to share your thoughts!</p>
+            </div>
         </div>
         {% endif %}
         {% endwith %}
         {% endwith %}
 
-        {# Approved reviews list #}
-        {% for review in product.reviews.all %}
-            {% if review.approved %}
-            <div class="col-12 mb-3">
-                <div class="bg-darker rounded-4 p-3">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <div>
-                            <span class="text-gold">
-                                {% for i in "12345" %}
-                                    {% if forloop.counter <= review.rating %}
-                                        <i class="fa-solid fa-star"></i>
-                                    {% else %}
-                                        <i class="fa-regular fa-star"></i>
-                                    {% endif %}
-                                {% endfor %}
-                            </span>
-                            <span class="text-white fw-bold ms-2">{{ review.user.username }}</span>
-                        </div>
-                        <small class="text-silver">{{ review.created_at|date:"M d, Y" }}</small>
+        {# ── Approved reviews list (newest first) ── #}
+        {% approved_reviews product as sorted_reviews %}
+        {% for review in sorted_reviews %}
+        <div class="col-12 mb-3">
+            <div class="bg-darker rounded-4 p-3">
+                <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap gap-2">
+                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                        {# Star rating #}
+                        <span class="text-gold">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= review.rating %}
+                                    <i class="fa-solid fa-star"></i>
+                                {% else %}
+                                    <i class="fa-regular fa-star"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </span>
+                        {# Username + verified buyer badge #}
+                        <span class="text-white fw-bold">{{ review.user.username }}</span>
+                        {% is_verified_buyer review.user product as verified %}
+                        {% if verified %}
+                        <span class="badge bg-success rounded-pill px-2 py-0 small"
+                              title="Verified Buyer">
+                            🛒 Verified
+                        </span>
+                        {% endif %}
                     </div>
-                    <p class="text-silver mb-0">{{ review.comment|linebreaks }}</p>
+                    <small class="text-silver">{{ review.created_at|date:"M d, Y" }}</small>
                 </div>
+                <p class="text-silver mb-0">{{ review.comment|linebreaks }}</p>
             </div>
-            {% endif %}
+        </div>
         {% endfor %}
 
-        {# Review form for logged-in users #}
+        {# ── Submit review form ── #}
         {% if request.user.is_authenticated %}
-            {# Check if user already reviewed - handled by view context #}
             {% if has_user_reviewed %}
             <div class="col-12 mt-3">
-                <div class="bg-darker rounded-4 p-3">
+                <div class="bg-darker rounded-4 p-3 text-center">
                     <p class="text-silver mb-0">
                         <i class="fa-solid fa-check-circle text-success me-1"></i>
-                        You reviewed this product.
+                        You've already reviewed this product. Thank you!
                     </p>
                 </div>
             </div>
@@ -528,31 +572,60 @@
             <div class="col-12 mt-3">
                 <div class="bg-darker rounded-4 p-4">
                     <h5 class="text-white mb-3">
-                        <i class="fa-solid fa-pen me-2"></i>Write a Review
+                        <i class="fa-solid fa-pen me-2 text-cyan"></i>Write a Review
                     </h5>
-                    <form method="POST" action="/{{ store_slug }}/products/add_review/{{ product.id }}/">
+
+                    <form method="POST" action="/{{ store_slug }}/products/add_review/{{ product.id }}/"
+                          id="review-form" novalidate>
                         {% csrf_token %}
+
+                        {# ── Clickable star rating ── #}
                         <div class="mb-3">
-                            <label for="id_rating" class="form-label text-silver">Your Rating</label>
-                            {{ review_form.rating }}
+                            <label class="form-label text-silver d-block">Your Rating <span class="text-danger">*</span></label>
+                            <div class="star-rating-wrapper" aria-label="Select a star rating">
+                                {% for i in "12345" %}
+                                <i class="fa-star fa-regular text-secondary fs-4 star-btn"
+                                   data-value="{{ forloop.counter }}"
+                                   role="radio"
+                                   aria-checked="false"
+                                   tabindex="0"
+                                   style="cursor:pointer; transition:color 0.15s;"></i>
+                                {% endfor %}
+                                <input type="hidden" name="rating" id="id_rating" value="" required>
+                            </div>
+                            <div class="invalid-feedback d-block" id="rating-error" style="display:none; color:#ff6b6b;">
+                                Please select a star rating.
+                            </div>
                         </div>
+
+                        {# ── Comment ── #}
                         <div class="mb-3">
-                            <label for="id_comment" class="form-label text-silver">Your Review</label>
-                            {{ review_form.comment }}
+                            <label for="id_comment" class="form-label text-silver">Your Review <span class="text-danger">*</span></label>
+                            <textarea name="comment" id="id_comment" rows="4"
+                                      class="form-control bg-dark text-white border-secondary rounded-3"
+                                      placeholder="Share your experience with this product..."
+                                      required></textarea>
                         </div>
+
                         <button type="submit" class="btn btn-glow rounded-pill">
                             <i class="fa-solid fa-paper-plane me-2"></i>Submit Review
                         </button>
+                        <small class="text-silver ms-2">
+                            <i class="fa-solid fa-info-circle me-1"></i>Reviews are moderated before publishing.
+                        </small>
                     </form>
                 </div>
             </div>
             {% endif %}
         {% else %}
             <div class="col-12 mt-3">
-                <div class="bg-darker rounded-4 p-3 text-center">
-                    <p class="text-silver mb-0">
-                        <a href="{% url 'account_login' %}?next={{ request.path }}#reviews" class="text-cyan">Log in</a>
-                        to write a review.
+                <div class="bg-darker rounded-4 p-4 text-center">
+                    <p class="text-silver mb-2">
+                        <a href="{% url 'account_login' %}?next={{ request.path }}#reviews"
+                           class="text-cyan text-decoration-none fw-bold">
+                            <i class="fa-solid fa-right-to-bracket me-1"></i>Log in
+                        </a>
+                        to write a review and share your thoughts.
                     </p>
                 </div>
             </div>
@@ -565,4 +638,58 @@
 {% block postloadjs %}
 {{ block.super }}
 {% include 'products/includes/quantity_input_script.html' %}
+
+{# ── Star rating interactivity ── #}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const wrapper = document.querySelector('.star-rating-wrapper');
+    if (!wrapper) return;
+
+    const hiddenInput = wrapper.querySelector('input[name="rating"]');
+    const stars = wrapper.querySelectorAll('.star-btn');
+    const errorMsg = document.getElementById('rating-error');
+    const form = document.getElementById('review-form');
+
+    function setStars(value) {
+        hiddenInput.value = value;
+        stars.forEach(function (star) {
+            const val = parseInt(star.getAttribute('data-value'), 10);
+            if (val <= value) {
+                star.classList.remove('fa-regular', 'fa-star');
+                star.classList.add('fa-solid', 'fa-star');
+                star.style.color = '#ffc107';
+            } else {
+                star.classList.remove('fa-solid', 'fa-star');
+                star.classList.add('fa-regular', 'fa-star');
+                star.style.color = '';
+            }
+        });
+    }
+
+    stars.forEach(function (star) {
+        star.addEventListener('click', function () {
+            setStars(parseInt(star.getAttribute('data-value'), 10));
+            if (errorMsg) errorMsg.style.display = 'none';
+        });
+
+        star.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                setStars(parseInt(star.getAttribute('data-value'), 10));
+            }
+        });
+    });
+
+    if (form) {
+        form.addEventListener('submit', function (e) {
+            if (!hiddenInput.value) {
+                e.preventDefault();
+                if (errorMsg) errorMsg.style.display = 'block';
+                return;
+            }
+            if (errorMsg) errorMsg.style.display = 'none';
+        });
+    }
+});
+</script>
 {% endblock %}

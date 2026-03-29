@@ -17,6 +17,7 @@
 | Order tracking page (full) | `dd6886b` | ✅ tracking/<int:order_number>/, status fields, success page |
 | Wishlist / Save for later | `5bfc59a` | ✅ model, views, HTMX toggle, per-store |
 | Crypto payments (BTC/USDC/XMR) | `dd1084b` | ✅ Stripe crypto + CoinGate for XMR |
+| Phase 12 — Review templates | (local) | ✅ Star ratings, verified buyer badge, rating breakdown, clickable review form |
 
 ---
 
@@ -24,7 +25,7 @@
 
 | Agent | Owns | Features |
 |-------|------|----------|
-| **phase12-frontend** | `products/templates/` | Review display, submit form, verified buyer badge |
+| ~~**phase12-frontend**~~ | ~~`products/templates/`~~ | ✅ Review display, submit form, verified buyer badge, star ratings |
 | **agent-payments** | `coupons/`, `subscriptions/` | Multi-coupon + Stripe subscriptions |
 | **agent-ops** | `newsletter/`, `invoices/` | Newsletter (Mailchimp), abandoned cart, PDF invoices |
 | ~~**wishlist-retry**~~ | ~~`wishlist/`~~ | ✅ Done |
@@ -53,7 +54,7 @@
 | 08:45 | order-tracking-retry | ✅ Done (tracking page + status) |
 | 08:46 | agent-ops | 🟡 Running |
 | 08:46 | agent-payments | 🟡 Running |
-| 08:46 | phase12-frontend | 🟡 Running |
+| 08:46 | phase12-frontend | ✅ Done |
 
 ---
 
