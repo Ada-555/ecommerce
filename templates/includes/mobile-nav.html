@@ -1,0 +1,58 @@
+<div class="d-lg-none mobile-nav bg-purple-light py-2 px-3" id="mobile-nav">
+    <div class="row g-2 align-items-center">
+        <!-- Search -->
+        <div class="col-12">
+            <form method="GET" action="{% url 'products' %}">
+                <div class="input-group">
+                    <label for="mobile-search" class="visually-hidden">Search products</label>
+                    <input id="mobile-search" class="form-control" type="text" name="q"
+                        placeholder="Search..." aria-label="Search products">
+                    <button class="btn btn-outline-light" type="submit">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <!-- Account -->
+        <div class="col-4">
+            {% if request.user.is_authenticated %}
+            <div class="dropdown w-100">
+                <button class="btn btn-outline-light w-100 dropdown-toggle" type="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fa-regular fa-user me-1"></i>Account
+                </button>
+                <ul class="dropdown-menu w-100 shadow neon-dropdown">
+                    {% if request.user.is_superuser %}
+                    <li><a class="dropdown-item" href="{% url 'add_product' %}">
+                        <i class="fa-solid fa-plus me-2"></i>Add Product</a></li>
+                    {% endif %}
+                    <li><a class="dropdown-item" href="{% url 'profile' %}">
+                        <i class="fa-regular fa-user me-2"></i>Profile</a></li>
+                    <li><a class="dropdown-item" href="{% url 'avatar_detail' %}">
+                        <i class="fa-solid fa-robot me-2"></i>My aiPunk</a></li>
+                    <li><a class="dropdown-item" href="{% url 'account_logout' %}">
+                        <i class="fa-solid fa-right-from-bracket me-2"></i>Logout</a></li>
+                </ul>
+            </div>
+            {% else %}
+            <a href="{% url 'account_login' %}" class="btn btn-outline-light w-100">
+                <i class="fa-regular fa-key me-1"></i>Login
+            </a>
+            {% endif %}
+        </div>
+        <!-- Bag -->
+        <div class="col-4">
+            <a href="{% url 'view_bag' %}" class="btn btn-outline-light w-100 {% if grand_total %}active{% endif %}">
+                <i class="fa-solid fa-bag-shopping me-1"></i>
+                {% if grand_total %}€{{ grand_total|floatformat:0 }}{% else %}Bag{% endif %}
+            </a>
+        </div>
+        <!-- Mobile Menu toggle -->
+        <div class="col-4">
+            <button class="btn btn-outline-light w-100" type="button" data-bs-toggle="collapse"
+                data-bs-target="#main-nav" aria-expanded="false">
+                <i class="fa-solid fa-bars me-1"></i>Menu
+            </button>
+        </div>
+    </div>
+</div>

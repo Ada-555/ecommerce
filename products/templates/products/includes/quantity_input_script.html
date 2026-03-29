@@ -1,44 +1,50 @@
 <script>
+    // Quantity input control — vanilla JS (no jQuery)
+    document.addEventListener('DOMContentLoaded', function () {
 
-    // Disable +/- buttons outside 1-99 range
-    function handleEnableDisable(itemId) {
-        var currentValue = parseInt($(`#id_qty_${itemId}`).val());
-        var minusDisabled = currentValue < 2;
-        var plusDisabled = currentValue > 98;
-        $(`#decrement-qty_${itemId}`).prop('disabled', minusDisabled);
-        $(`#increment-qty_${itemId}`).prop('disabled', plusDisabled);
-    }
+        function handleEnableDisable(itemId) {
+            var input = document.getElementById('id_qty_' + itemId);
+            if (!input) return;
+            var currentValue = parseInt(input.value);
+            var minusBtn = document.getElementById('decrement-qty_' + itemId);
+            var plusBtn = document.getElementById('increment-qty_' + itemId);
+            if (minusBtn) minusBtn.disabled = currentValue < 2;
+            if (plusBtn) plusBtn.disabled = currentValue > 98;
+        }
 
-    // Ensure proper enabling/disabling of all inputs on page load
-    var allQtyInputs = $('.qty_input');
-    for(var i = 0; i < allQtyInputs.length; i++){
-        var itemId = $(allQtyInputs[i]).data('item_id');
-        handleEnableDisable(itemId);
-    }
+        // Init all quantity inputs
+        document.querySelectorAll('.qty_input').forEach(function (input) {
+            var itemId = input.dataset.item_id;
+            handleEnableDisable(itemId);
+            input.addEventListener('change', function () {
+                handleEnableDisable(itemId);
+            });
+        });
 
-    // Check enable/disable every time the input is changed
-    $('.qty_input').change(function() {
-        var itemId = $(this).data('item_id');
-        handleEnableDisable(itemId);
-    });
+        // Increment buttons
+        document.querySelectorAll('.increment-qty').forEach(function (btn) {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+                var itemId = this.dataset.item_id;
+                var input = document.getElementById('id_qty_' + itemId);
+                if (input) {
+                    input.value = Math.min(99, parseInt(input.value) + 1);
+                    handleEnableDisable(itemId);
+                }
+            });
+        });
 
-    // Increment quantity
-    $('.increment-qty').click(function(e) {
-       e.preventDefault();
-       var closestInput = $(this).closest('.input-group').find('.qty_input')[0];
-       var currentValue = parseInt($(closestInput).val());
-       $(closestInput).val(currentValue + 1);
-       var itemId = $(this).data('item_id');
-       handleEnableDisable(itemId);
-    });
-
-    // Decrement quantity
-    $('.decrement-qty').click(function(e) {
-       e.preventDefault();
-       var closestInput = $(this).closest('.input-group').find('.qty_input')[0];
-       var currentValue = parseInt($(closestInput).val());
-       $(closestInput).val(currentValue - 1);
-       var itemId = $(this).data('item_id');
-       handleEnableDisable(itemId);
+        // Decrement buttons
+        document.querySelectorAll('.decrement-qty').forEach(function (btn) {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+                var itemId = this.dataset.item_id;
+                var input = document.getElementById('id_qty_' + itemId);
+                if (input) {
+                    input.value = Math.max(1, parseInt(input.value) - 1);
+                    handleEnableDisable(itemId);
+                }
+            });
+        });
     });
 </script>

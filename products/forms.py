@@ -1,4 +1,7 @@
 from django import forms
+from django.core.validators import MinValueValidator
+from decimal import Decimal
+
 from .widgets import CustomClearableFileInput
 from .models import Product, Category
 
@@ -19,5 +22,7 @@ class ProductForm(forms.ModelForm):
         friendly_names = [(c.id, c.get_friendly_name()) for c in categories]
 
         self.fields['category'].choices = friendly_names
+        # Add non-negative price validation
+        self.fields['price'].validators = [MinValueValidator(Decimal('0.01'))]
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'border-black rounded-2'

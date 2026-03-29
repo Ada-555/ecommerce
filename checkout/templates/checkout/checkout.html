@@ -5,154 +5,234 @@
 {% block extra_title %}| Checkout{% endblock %}
 
 {% block extra_meta %}
-    <meta name="robots" content="noindex,nofollow">
+<meta name="robots" content="noindex,nofollow">
 {% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'checkout/css/checkout.css' %}">
+<link rel="stylesheet" href="{% static 'checkout/css/checkout.css' %}">
 {% endblock %}
 
 {% block page_header %}
-    <div class="container header-container">
+<div class="page-header w-100">
+    <div class="container">
         <div class="row">
-            <div class="col"></div>
+            <div class="col text-center">
+                <h1 class="display-6">
+                    <i class="fa-solid fa-lock me-2"></i>Checkout
+                </h1>
+            </div>
         </div>
     </div>
+</div>
 {% endblock %}
 
 {% block content %}
-    <div class="overlay"></div>
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <hr>
-                <h2 class="logo-font mb-4">Checkout</h2>
-                <hr>
-            </div>
-        </div>
+<div class="container mb-5">
+    <div class="row g-4">
 
-        <div class="row">
-            <div class="col-12 col-lg-6 order-lg-last mb-5">
-                <p class="text-muted">Order Summary ({{ product_count }})</p>
-                <div class="row">
-                    <div class="col-7 offset-2">
-                        <p class="mb-1 mt-0 small text-muted">Item</p>
-                    </div>
-                    <div class="col-3 text-right">
-                        <p class="mb-1 mt-0 small text-muted">Subtotal</p>
-                    </div>
-                </div>
-                {% for item in bag_items %}
-                    <div class="row">
-                        <div class="col-2 mb-1">
-                            <a href="{% url 'product_detail' item.product.id %}">
-                                {% if item.product.image %}
-                                    <img class="w-100" src="{{ item.product.image.url }}" alt="{{ product.name }}">
-                                {% else %}
-                                    <img class="w-100" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
-                                {% endif %}
-                            </a>
-                        </div>
-                        <div class="col-7">
-                            <p class="my-0"><strong>{{ item.product.name }}</strong></p>
-                            <p class="my-0 small">Size: {% if item.product.has_sizes %}{{ item.size|upper }}{% else %}N/A{% endif %}</p>
-                            <p class="my-0 small text-muted">Qty: {{ item.quantity }}</p>
-                        </div>
-                        <div class="col-3 text-right">
-                            <p class="my-0 small text-muted">€{{ item.product.price | calc_subtotal:item.quantity }}</p>
-                        </div>
-                    </div>
-                {% endfor %}
-                <hr class="my-0">
-                <div class="row text-black text-right">
-                    <div class="col-7 offset-2">
-                        <p class="my-0">Order Total:</p>
-                        <p class="my-0">Delivery:</p>
-                        <p class="my-0">Grand Total:</p>
-                    </div>
-                    <div class="col-3">
-                        <p class="my-0">€{{ total | floatformat:2 }}</p>
-                        <p class="my-0">€{{ delivery | floatformat:2 }}</p>
-                        <p class="my-0"><strong>€{{ grand_total | floatformat:2 }}</strong></p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-lg-6">
-                <p class="text-muted">Please fill out the form below to complete your order</p>
-                <form action="{% url 'checkout' %}" method="POST" id="payment-form">
+        <!-- Order Form (left) -->
+        <div class="col-12 col-lg-7">
+            <div class="card product-card p-3">
+                <h4 class="text-white mb-3">
+                    <i class="fa-solid fa-user me-2 text-cyan"></i>Your Details
+                </h4>
+
+                <form method="POST" id="payment-form" novalidate>
                     {% csrf_token %}
-                    <fieldset class="rounded px-3 mb-3">
-                        <legend class="fieldset-label small text-black px-2 w-auto">Details</legend>
-                        {{ order_form.full_name | as_crispy_field }}
-                        {{ order_form.email | as_crispy_field }}
-                    </fieldset>
-                    <fieldset class="rounded px-3 mb-3">
-                        <legend class="fieldset-label small text-black px-2 w-auto">Delivery</legend>
-                        {{ order_form.phone_number | as_crispy_field }}
-                        {{ order_form.street_address1 | as_crispy_field }}
-                        {{ order_form.street_address2 | as_crispy_field }}
-                        {{ order_form.town_or_city | as_crispy_field }}
-                        {{ order_form.county | as_crispy_field }}
-                        {{ order_form.country | as_crispy_field }}
-                        {{ order_form.postcode | as_crispy_field }}
-                        <div class="form-check form-check-inline float-right mr-0">
-							{% if user.is_authenticated %}
-								<label class="form-check-label" for="id-save-info">Save this delivery information to my profile</label>
-                                <input class="form-check-input ml-2 mr-0" type="checkbox" id="id-save-info" name="save-info" checked>
-							{% else %}
-								<label class="form-check-label" for="id-save-info">
-                                    <a class="text-info" href="{% url 'account_signup' %}">Create an account</a> or 
-                                    <a class="text-info" href="{% url 'account_login' %}">login</a> to save this information
-                                </label>
-							{% endif %}
-						</div>
-                    </fieldset>
-                    <fieldset class="px-3">
-                        <legend class="fieldset-label small text-black px-2 w-auto">Payment</legend>
-                        <!-- A Stripe card element will go here -->
-                        <div class="mb-3" id="card-element"></div>
-                        <!-- Used to display form errors -->
-                        <div class="mb-3 text-danger" id="card-errors" role="alert"></div>
-                        <!-- Pass the client secret to the view so we can get the payment intent ID -->
-                        <input type="hidden" value="{{ client_secret }}" name="client_secret">
+
+                    <!-- Details section -->
+                    <fieldset class="mb-4">
+                        <legend class="text-cyan fw-bold mb-3">
+                            <i class="fa-solid fa-id-card me-1"></i>Details
+                        </legend>
+                        <div class="row g-3">
+                            <div class="col-12">
+                                {{ order_form.full_name|as_crispy_field }}
+                            </div>
+                            <div class="col-12">
+                                {{ order_form.email|as_crispy_field }}
+                            </div>
+                            <div class="col-12">
+                                {{ order_form.phone_number|as_crispy_field }}
+                            </div>
+                        </div>
                     </fieldset>
 
-                    <div class="submit-button text-right my-4">
-						<p class="small text-danger mb-2">
-							<span class="icon">
-								<i class="fas fa-exclamation-circle"></i>
-							</span>
-							<span>Your card will be charged <strong>€{{ grand_total|floatformat:2 }}</strong></span>
-						</p>                    
-						<a href="{% url 'view_bag' %}" class="btn btn-primary">
-							<span class="icon">
-								<i class="fas fa-chevron-left"></i>
-							</span>
-							<span class="font-weight-bold">Adjust Bag</span>
-						</a>
-						<button id="submit-button" class="btn btn-secondary">
-							<span class="font-weight-bold">Complete Order</span>
-							<span class="icon">
-								<i class="fas fa-lock"></i>
-							</span>
-						</button>
-					</div>
+                    <!-- Delivery section -->
+                    <fieldset class="mb-4">
+                        <legend class="text-cyan fw-bold mb-3">
+                            <i class="fa-solid fa-truck me-1"></i>Delivery
+                        </legend>
+                        <div class="row g-3">
+                            <div class="col-12">
+                                {{ order_form.street_address1|as_crispy_field }}
+                            </div>
+                            <div class="col-12">
+                                {{ order_form.street_address2|as_crispy_field }}
+                            </div>
+                            <div class="col-12 col-md-6">
+                                {{ order_form.town_or_city|as_crispy_field }}
+                            </div>
+                            <div class="col-12 col-md-6">
+                                {{ order_form.county|as_crispy_field }}
+                            </div>
+                            <div class="col-12 col-md-6">
+                                {{ order_form.country|as_crispy_field }}
+                            </div>
+                            <div class="col-12 col-md-6">
+                                {{ order_form.postcode|as_crispy_field }}
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- Save info + payment -->
+                    <fieldset class="mb-4">
+                        <legend class="text-cyan fw-bold mb-3">
+                            <i class="fa-solid fa-credit-card me-1"></i>Payment
+                        </legend>
+                        {% if user.is_authenticated %}
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="id-save-info"
+                                name="save-info" {% if save_info %}checked{% endif %}>
+                            <label class="form-check-label text-white" for="id-save-info">
+                                Save delivery information to my profile
+                            </label>
+                        </div>
+                        {% else %}
+                        <p class="text-muted small mb-3">
+                            <a href="{% url 'account_signup' %}" class="text-cyan">Create an account</a> or
+                            <a href="{% url 'account_login' %}" class="text-cyan">log in</a> to save your details.
+                        </p>
+                        {% endif %}
+
+                        <!-- Stripe card element -->
+                        <div class="mb-3">
+                            <label for="card-element" class="form-label text-white">Card Details</label>
+                            <div id="card-element" class="p-3 rounded-3"></div>
+                            <div id="card-errors" class="text-danger small mt-2" role="alert"></div>
+                        </div>
+                    </fieldset>
+
+                    <!-- Submit -->
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="{% url 'view_bag' %}" class="btn btn-outline-light rounded-pill">
+                            <i class="fa-solid fa-bag-shopping me-2"></i>Back to Bag
+                        </a>
+                        <button type="submit" id="submit-button" class="btn btn-glow rounded-pill px-4">
+                            <i class="fa-solid fa-lock me-2"></i>Pay €{{ grand_total|floatformat:2 }}
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
+
+        <!-- Order Summary (right) -->
+        <div class="col-12 col-lg-5">
+            <div class="card product-card p-3">
+                <h4 class="text-white mb-3">
+                    <i class="fa-solid fa-receipt me-2 text-cyan"></i>Order Summary
+                    <span class="badge bg-purple float-end">{{ product_count }} item{{ product_count|pluralize }}</span>
+                </h4>
+
+                <!-- Line items -->
+                <div class="bag-items-list mb-3">
+                    {% for item in bag_items %}
+                    <div class="d-flex justify-content-between align-items-center py-2 border-bottom border-secondary">
+                        <div class="d-flex align-items-center gap-2">
+                            {% if item.product.image %}
+                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}"
+                                class="rounded" style="width: 48px; height: 48px; object-fit: cover;">
+                            {% else %}
+                            <img src="{{ MEDIA_URL }}noimage.png" alt="No image"
+                                class="rounded" style="width: 48px; height: 48px; object-fit: cover;">
+                            {% endif %}
+                            <div>
+                                <p class="text-white small mb-0 fw-bold">{{ item.product.name }}</p>
+                                {% if item.product.has_sizes %}
+                                <small class="text-muted">Size: {{ item.size|upper }}</small>
+                                {% endif %}
+                                <p class="text-muted small mb-0">Qty: {{ item.quantity }}</p>
+                            </div>
+                        </div>
+                        <span class="text-cyan fw-bold">€{{ item.product.price | calc_subtotal:item.quantity }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                {% include "bag/bag-total.html" %}
+
+                <hr class="custom-hr my-3">
+
+                <p class="text-muted small mb-0">
+                    <i class="fa-solid fa-shield-halved me-1 text-cyan"></i>
+                    Your payment is secured by Stripe. We never store your card details.
+                </p>
+            </div>
+        </div>
     </div>
-    <div id="loading-overlay">
-        <h1 class="text-light logo-font loading-spinner">
-            <span class="icon">
-                <i class="fas fa-3x fa-sync-alt fa-spin"></i>
-            </span>
-        </h1>
-    </div>
+</div>
 {% endblock %}
 
 {% block postloadjs %}
-    {{ block.super }}
-    {{ stripe_public_key|json_script:"id_stripe_public_key" }}
-    {{ client_secret|json_script:"id_client_secret" }}
-    <script src="{% static 'checkout/js/stripe_elements.js' %}"></script>
+{{ block.super }}
+<script>
+    // Stripe payment element
+    var stripe = Stripe('{{ stripe_public_key }}');
+    var elements = stripe.elements();
+
+    var style = {
+        base: {
+            color: '#ffffff',
+            fontFamily: '"Inter", sans-serif',
+            fontSmoothing: 'antialiased',
+            fontSize: '15px',
+            '::placeholder': { color: 'rgba(255,255,255,0.4)' },
+        },
+        invalid: { color: '#ff6b6b', iconColor: '#ff6b6b' }
+    };
+
+    var card = elements.create('card', { style: style });
+    card.mount('#card-element');
+
+    card.on('change', function(event) {
+        var displayError = document.getElementById('card-errors');
+        if (event.error) {
+            displayError.textContent = event.error.message;
+        } else {
+            displayError.textContent = '';
+        }
+    });
+
+    // Form submission
+    var form = document.getElementById('payment-form');
+    form.addEventListener('submit', function(ev) {
+        ev.preventDefault();
+
+        var submitBtn = document.getElementById('submit-button');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Processing...';
+
+        // Handle cache_checkout_data if needed (for custom fields)
+        stripe.confirmCardPayment('{{ client_secret }}', {
+            payment_method: {
+                card: card,
+                billing_details: {
+                    name: document.getElementById('id_full_name').value,
+                    email: document.getElementById('id_email').value,
+                }
+            }
+        }).then(function(result) {
+            if (result.error) {
+                var errorEl = document.getElementById('card-errors');
+                errorEl.textContent = result.error.message;
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fa-solid fa-lock me-2"></i>Pay €{{ grand_total|floatformat:2 }}';
+            } else {
+                if (result.paymentIntent.status === 'succeeded') {
+                    form.submit();
+                }
+            }
+        });
+    });
+</script>
 {% endblock %}

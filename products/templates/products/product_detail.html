@@ -4,124 +4,159 @@
 {% block extra_title %}| {{ product.name }}{% endblock %}
 
 {% block page_header %}
-<div class="container header-container">
-    <div class="row">
-        <div class="col"></div>
+<div class="page-header w-100">
+    <div class="container">
+        <div class="row">
+            <div class="col text-center">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-cyan">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'products' %}" class="text-cyan">Products</a></li>
+                        {% if product.category %}
+                        <li class="breadcrumb-item">
+                            <a href="{% url 'products' %}?category={{ product.category.name }}" class="text-cyan">
+                                {{ product.category.friendly_name|default:product.category.name }}
+                            </a>
+                        </li>
+                        {% endif %}
+                        <li class="breadcrumb-item active text-white" aria-current="page">{{ product.name|truncatechars:30 }}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
 
 {% block content %}
-<div class="overlay"></div>
 {% include "products/delete_page_modal.html" %}
-<div class="container mb-4">
-    <div class="row">
-        <div class="col-12 col-md-6 col-lg-4 offset-lg-2">
-            <div class="image-container my-5">
-                <!-- Product Image -->
+
+<div class="container mb-5">
+    <div class="row g-4 gx-lg-5">
+
+        <!-- Product Image -->
+        <div class="col-12 col-md-6 col-lg-5">
+            <div class="product-image-wrapper rounded-4 overflow-hidden neon-border-light">
                 {% if product.image %}
-                <a href="{{ product.image.url }}" target="_blank">
-                    <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="Image of {{ product.name }}">
+                <a href="{{ product.image.url }}" target="_blank" class="d-block">
+                    <img class="img-fluid w-100" src="{{ product.image.url }}"
+                        alt="{{ product.name }}" style="max-height: 520px; object-fit: cover;">
                 </a>
                 {% else %}
-                <a href="">
-                    <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.png" alt="No image for {{ product.name }}">
-                </a>
+                <div class="text-center py-5 bg-dark">
+                    <i class="fa-solid fa-image text-muted fa-5x"></i>
+                    <p class="text-muted mt-2">No image available</p>
+                </div>
                 {% endif %}
             </div>
-        </div>
-        <!-- Product Details -->
-        <div class="col-12 col-md-6 col-lg-4">
-            <div class="product-details-container mb-5 mt-md-5">
-                <h2 class="my-2 text-black">{{ product.name }}</h2>
-                <p class="lead text-left font-weight-bold mb-0 typewriter-text">€{{ product.price }}</p>
-                {% if product.category %}
-                <p class="small mt-1 mb-0">
-                    <a href="{% url 'products' %}?category={{ product.category.name }}" class="text-muted text-hover-teal">
-                        <i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}
-                    </a>
-                </p>
-                {% endif %}
-                {% if product.rating %}
-                <small class="text-muted"><i class="fas fa-star mr-1"></i>{{ product.rating }} / 5</small>
-                {% else %}
-                <small class="text-muted">No Rating</small>
-                {% endif %}
-
-                {% if request.user.is_superuser %}
-                <small class="ml-3">
-                    <a class="text-white btn-black bg-purple p-1" href="{% url 'edit_product' product.id %}">Edit</a> |
-                    <button type="button" class="text-white btn-black bg-danger border-danger border-1" data-toggle="modal" data-target="#deletePageModal">
-                        Delete
-                    </button>
-                </small>
-                {% endif %}
-
-                <p class="mt-3">{{ product.description }}</p>
-                <form class="form" action="{% url 'add_to_bag' product.id %}" method="POST">
-                    {% csrf_token %}
-                    <div class="form-row">
-                        {% with product.has_sizes as s %}
-                        {% if s %}
-                        <div class="col-12">
-                            <p><strong>Size:</strong></p>
-                            <select class="form-control w-50 rounded-2" name="product_size" id='id_product_size'>
-                                <option value="xs">XS</option>
-                                <option value="s">S</option>
-                                <option value="m" selected>M</option>
-                                <option value="l">L</option>
-                                <option value="xl">XL</option>
-                            </select>
-                        </div>
+            {% if product.rating %}
+            <div class="mt-3 text-center">
+                <span class="text-gold">
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= product.rating|floatformat:0 %}
+                            <i class="fa-solid fa-star"></i>
+                        {% else %}
+                            <i class="fa-regular fa-star"></i>
                         {% endif %}
-                        <div class="col-12">
-                            <p class="mt-3"><strong>Quantity:</strong></p>
-                            <div class="form-group w-100">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <button class="decrement-qty btn btn-black"
-                                            data-item_id="{{ product.id }}" id="decrement-qty_{{ product.id }}"
-                                            aria-label="Decrease Quantity">
-                                            <span class="icon">
-                                                <i class="fas fa-minus"></i>
-                                            </span>
-                                        </button>
-                                    </div>
-                                    <div class="px-2">
-                                        <label for="id_qty_{{ product.id }}" class="sr-only">Quantity</label>
-                                        <input class="form-control qty_input rounded-2" type="number" name="quantity" value="1"
-                                            min="1" max="99" data-item_id="{{ product.id }}" id="id_qty_{{ product.id }}"
-                                            aria-label="Quantity" aria-describedby="quantity-desc">
-                                        <div id="quantity-desc" class="sr-only">Enter a quantity between 1 and 99.</div>
-                                    </div>
-                                    <div class="input-group-append">
-                                        <button class="increment-qty btn btn-black"
-                                            data-item_id="{{ product.id }}" id="increment-qty_{{ product.id }}"
-                                            aria-label="Increase Quantity">
-                                            <span class="icon">
-                                                <i class="fas fa-plus"></i>
-                                            </span>
-                                        </button>
-                                    </div>
-                                </div>
+                    {% endfor %}
+                </span>
+                <small class="text-muted ms-1">{{ product.rating }} / 5</small>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Product Info -->
+        <div class="col-12 col-md-6 col-lg-7">
+            <div class="ps-md-3">
+                <!-- Name & Price -->
+                <h2 class="display-6 text-white mb-2">{{ product.name }}</h2>
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <span class="display-5 fw-bold text-cyan">€{{ product.price }}</span>
+                    {% if product.category %}
+                    <a href="{% url 'products' %}?category={{ product.category.name }}"
+                        class="badge badge-purple text-decoration-none">
+                        <i class="fa-solid fa-tag me-1"></i>
+                        {{ product.category.friendly_name|default:product.category.name }}
+                    </a>
+                    {% endif %}
+                </div>
+
+                <!-- Admin actions -->
+                {% if request.user.is_superuser %}
+                <div class="mb-3 d-flex gap-2">
+                    <a href="{% url 'edit_product' product.id %}" class="btn btn-sm btn-outline-warning rounded-pill">
+                        <i class="fa-solid fa-pen me-1"></i>Edit
+                    </a>
+                    <button type="button" class="btn btn-sm btn-outline-danger rounded-pill"
+                        data-bs-toggle="modal" data-bs-target="#deletePageModal{{ product.id }}">
+                        <i class="fa-solid fa-trash me-1"></i>Delete
+                    </button>
+                </div>
+                {% endif %}
+
+                <!-- Description -->
+                <div class="mb-4">
+                    <h5 class="text-white mb-2">Description</h5>
+                    <p class="text-silver">{{ product.description|linebreaks }}</p>
+                </div>
+
+                <!-- Add to Bag form -->
+                <form action="{% url 'add_to_bag' product.id %}" method="POST" class="add-to-bag-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="redirect_url" value="{{ request.path }}">
+
+                    <!-- Size selector -->
+                    {% if product.has_sizes %}
+                    <div class="mb-3">
+                        <label for="id_product_size" class="form-label text-white fw-bold">Size:</label>
+                        <select class="form-select w-auto" name="product_size" id="id_product_size" style="min-width: 120px;">
+                            <option value="xs">XS</option>
+                            <option value="s">S</option>
+                            <option value="m" selected>M</option>
+                            <option value="l">L</option>
+                            <option value="xl">XL</option>
+                            <option value="xxl">XXL</option>
+                        </select>
+                    </div>
+                    {% endif %}
+
+                    <!-- Quantity + Add to Bag -->
+                    <div class="row g-3 align-items-end">
+                        <div class="col-auto">
+                            <label for="id_qty_{{ product.id }}" class="form-label text-white fw-bold">Quantity:</label>
+                            <div class="input-group" style="width: 160px;">
+                                <button class="btn btn-outline-light decrement-qty rounded-start-pill"
+                                    data-item_id="{{ product.id }}" id="decrement-qty_{{ product.id }}"
+                                    aria-label="Decrease quantity">
+                                    <i class="fa-solid fa-minus"></i>
+                                </button>
+                                <input class="form-control text-center qty_input" type="number" name="quantity"
+                                    value="1" min="1" max="99" data-item_id="{{ product.id }}"
+                                    id="id_qty_{{ product.id }}" aria-label="Quantity">
+                                <button class="btn btn-outline-light increment-qty rounded-end-pill"
+                                    data-item_id="{{ product.id }}" id="increment-qty_{{ product.id }}"
+                                    aria-label="Increase quantity">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
                             </div>
-                        </div>                        
-                        <div class="col-6 text-center">
-                            <a href="{% url 'products' %}" class="btn btn-primary p-1 float-left">
-                                <span class="icon">
-                                    <i class="fas fa-chevron-left"></i>
-                                </span>
-                                <span>Keep Shopping</span>
-                            </a>
                         </div>
-                        <div class="col-6 text-center">
-                            <input type="submit" class="btn btn-secondary p-1 float-right heartbeat-hover" value="🛒 Add to Bag">
+                        <div class="col">
+                            <button type="submit" class="btn btn-glow w-100 rounded-pill py-2 fw-bold">
+                                <i class="fa-solid fa-bag-shopping me-2"></i>Add to Bag
+                            </button>
                         </div>
-                        <input type="hidden" name="redirect_url" value="{{ request.path }}">
-                    {% endwith %}
                     </div>
                 </form>
 
+                <!-- Back / Continue shopping -->
+                <div class="mt-4 d-flex gap-3">
+                    <a href="{% url 'products' %}" class="btn btn-outline-light rounded-pill">
+                        <i class="fa-solid fa-chevron-left me-2"></i>Continue Shopping
+                    </a>
+                    <a href="{% url 'view_bag' %}" class="btn btn-purple rounded-pill">
+                        <i class="fa-solid fa-bag-shopping me-2"></i>View Bag
+                    </a>
+                </div>
             </div>
         </div>
     </div>

@@ -1,8 +1,26 @@
-<h6><strong>Bag Total: €{{ total|floatformat:2 }}</strong></h6>
-<h6>Delivery: €{{ delivery|floatformat:2 }}</h6>
-<h4 class="mt-4 text-black"><strong>Grand Total: €{{ grand_total|floatformat:2 }}</strong></h4>
-{% if free_delivery_delta > 0 %}
-    <p class="mb-1 text-danger">
-        You could get free delivery by spending just <strong>€{{ free_delivery_delta }}</strong> more!
-    </p>
-{% endif %}
+<div class="bag-summary">
+    <div class="d-flex justify-content-between text-white mb-1">
+        <span>Bag Total</span>
+        <span class="fw-medium">€{{ total|floatformat:2 }}</span>
+    </div>
+    <div class="d-flex justify-content-between text-white mb-1">
+        <span>Delivery</span>
+        <span class="fw-medium">€{{ delivery|floatformat:2 }}</span>
+    </div>
+    <hr class="custom-hr">
+    <div class="d-flex justify-content-between text-cyan fw-bold fs-5 mb-2">
+        <span>Grand Total</span>
+        <span>€{{ grand_total|floatformat:2 }}</span>
+    </div>
+    {% if free_delivery_delta > 0 %}
+    <div class="alert alert-warning py-2 px-3 small rounded-pill text-center mb-2">
+        <i class="fa-solid fa-truck me-1"></i>
+        Spend <strong>€{{ free_delivery_delta }}</strong> more for free delivery!
+    </div>
+    {% else %}
+    <div class="alert alert-success py-2 px-3 small rounded-pill text-center mb-2">
+        <i class="fa-solid fa-check-circle me-1"></i>
+        You've unlocked <strong>free delivery!</strong>
+    </div>
+    {% endif %}
+</div>
