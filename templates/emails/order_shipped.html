@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<body style="font-family: Arial, sans-serif; background: #000; color: #fff; padding: 20px;">
+  <h2 style="color: #FF69B4;">Your Order Has Shipped! 🚚</h2>
+  <p>Hi {{ order.full_name }},</p>
+  <p>Great news! Your order <strong>#{{ order.order_number }}</strong> is on its way.</p>
+  <p><strong>Delivery Address:</strong><br>
+  {{ order.street_address1 }}{% if order.street_address2 %}, {{ order.street_address2 }}{% endif %}<br>
+  {{ order.town_or_city }}{% if order.county %}, {{ order.county }}{% endif %}<br>
+  {{ order.country }}</p>
+  {% if tracking_number %}
+  <p><strong>Tracking Number:</strong> {{ tracking_number }}</p>
+  {% endif %}
+  <p>Thank you for shopping with Orderimo!</p>
+  <p>— Orderimo Team</p>
+</body>
+</html>

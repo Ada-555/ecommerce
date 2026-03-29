@@ -190,7 +190,44 @@
     {% include 'includes/mobile-nav.html' %}
 
     <!-- Breadcrumbs -->
-    {% block breadcrumbs %}{% endblock %}
+    {% block breadcrumbs %}
+    <nav aria-label="breadcrumb" class="breadcrumbs-nav w-100">
+        <div class="container">
+            <ol class="breadcrumb mb-0 small">
+                <li class="breadcrumb-item">
+                    <a href="{% url 'home' %}" class="text-cyan text-decoration-none">
+                        <i class="fa-solid fa-house me-1"></i>Home
+                    </a>
+                </li>
+                <li class="breadcrumb-item active text-white" aria-current="page">Products</li>
+            </ol>
+        </div>
+    </nav>
+    {% endblock %}
+
+    <!-- Structured Data: BreadcrumbList -->
+    {% block structured_data %}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "{{ request.build_absolute_uri|slice:":-1" }}"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Products",
+                "item": "{{ request.build_absolute_uri }}products/"
+            }
+        ]
+    }
+    </script>
+    {% endblock %}
 
     <!-- Toast Messages -->
     {% if messages %}

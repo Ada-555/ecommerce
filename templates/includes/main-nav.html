@@ -1,14 +1,12 @@
+{% load static %}
+
 <div class="collapse navbar-collapse" id="main-nav">
     <ul class="navbar-nav mx-auto gap-1 gap-lg-2">
-        <li class="nav-item d-block d-lg-none">
-            <a class="nav-link text-white text-center" href="{% url 'home' %}">
-                <i class="fa-solid fa-house me-1"></i>Home
-            </a>
-        </li>
+
         <!-- All Products -->
         <li class="nav-item dropdown">
             <a class="nav-link text-white text-center dropdown-toggle" href="#" id="all-products"
-                data-bs-toggle="dropdown" role="button" aria-expanded="false">
+                data-bs-toggle="dropdown" aria-expanded="false" role="button">
                 <i class="fa-solid fa-shop me-1"></i>All Products
             </a>
             <ul class="dropdown-menu neon-dropdown shadow" aria-labelledby="all-products">
@@ -25,80 +23,412 @@
                     <i class="fa-solid fa-shopping-bag me-2"></i>All Products</a></li>
             </ul>
         </li>
-        <!-- Plurino -->
-        <li class="nav-item dropdown">
+
+        <!-- Plurino — MEGA MENU -->
+        <li class="nav-item dropdown mega-menu-wrapper">
             <a class="nav-link text-cyan text-center dropdown-toggle" href="#" id="plurino"
-                data-bs-toggle="dropdown" role="button" aria-expanded="false">
+                data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" role="button">
                 <i class="fa-solid fa-microchip me-1"></i>Plurino
             </a>
-            <ul class="dropdown-menu neon-dropdown shadow" aria-labelledby="plurino">
-                <li class="px-3 py-2 text-muted small fw-bold">Tech Gadgets & Accessories</li>
-                <li><a class="dropdown-item" href="{% url 'products' %}?category=phones_tablets">
-                    <i class="fa-solid fa-mobile-screen me-2 text-muted"></i>Phones & Tablets</a></li>
-                <li><a class="dropdown-item" href="{% url 'products' %}?category=computers_laptops">
-                    <i class="fa-solid fa-laptop me-2 text-muted"></i>Computers & Laptops</a></li>
-                <li><a class="dropdown-item" href="{% url 'products' %}?category=audio_headphones">
-                    <i class="fa-solid fa-headphones me-2 text-muted"></i>Audio & Headphones</a></li>
-                <li><a class="dropdown-item" href="{% url 'products' %}?category=accessories">
-                    <i class="fa-solid fa-plug me-2 text-muted"></i>Accessories</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item fw-bold" href="{% url 'products' %}?store=plurino">
-                    <i class="fa-solid fa-shop me-2"></i>All Plurino</a></li>
-            </ul>
+            <div class="dropdown-menu mega-menu neon-dropdown shadow-lg border-0 rounded-3 py-3"
+                 aria-labelledby="plurino">
+                <div class="container">
+                    <div class="row g-4">
+                        <!-- Subcategories columns -->
+                        <div class="col-lg-8">
+                            <div class="row">
+                                <div class="col-6 col-md-4">
+                                    <h6 class="text-cyan fw-bold small text-uppercase mb-2">
+                                        <i class="fa-solid fa-mobile-screen me-1"></i>Phones & Tablets
+                                    </h6>
+                                    <ul class="list-unstyled mb-3">
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=phones_tablets">Smartphones</a></li>
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=phones_tablets">Tablets & iPads</a></li>
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=phones_tablets">Phone Cases</a></li>
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=phones_tablets">Screen Protectors</a></li>
+                                    </ul>
+                                    <h6 class="text-cyan fw-bold small text-uppercase mb-2">
+                                        <i class="fa-solid fa-laptop me-1"></i>Computers
+                                    </h6>
+                                    <ul class="list-unstyled mb-0">
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=computers_laptops">Laptops</a></li>
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=computers_laptops">Desktops</a></li>
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=computers_laptops">Monitors</a></li>
+                                    </ul>
+                                </div>
+                                <div class="col-6 col-md-4">
+                                    <h6 class="text-cyan fw-bold small text-uppercase mb-2">
+                                        <i class="fa-solid fa-headphones me-1"></i>Audio
+                                    </h6>
+                                    <ul class="list-unstyled mb-3">
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=audio_headphones">Headphones</a></li>
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=audio_headphones">Earbuds</a></li>
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=audio_headphones">Speakers</a></li>
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=audio_headphones">Soundbars</a></li>
+                                    </ul>
+                                    <h6 class="text-cyan fw-bold small text-uppercase mb-2">
+                                        <i class="fa-solid fa-plug me-1"></i>Accessories
+                                    </h6>
+                                    <ul class="list-unstyled mb-0">
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=accessories">Cables & Chargers</a></li>
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=accessories">Power Banks</a></li>
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=accessories">Stands & Mounts</a></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <h6 class="text-cyan fw-bold small text-uppercase mb-2">
+                                        <i class="fa-solid fa-wand-magic-sparkles me-1"></i>Featured
+                                    </h6>
+                                    <div class="card bg-dark border-0">
+                                        {% if plurino_featured %}
+                                        {% with plurino_featured|first as fp %}
+                                        <a href="{% url 'product_detail' fp.id %}" class="text-decoration-none">
+                                            {% if fp.image %}
+                                            <img src="{{ fp.image.url }}" class="card-img-top" alt="{{ fp.name }}"
+                                                 style="height: 120px; object-fit: cover;">
+                                            {% else %}
+                                            <div class="bg-secondary d-flex align-items-center justify-content-center" style="height:120px;">
+                                                <i class="fa-solid fa-image text-white fa-2x"></i>
+                                            </div>
+                                            {% endif %}
+                                            <div class="card-body p-2">
+                                                <p class="text-white small fw-bold mb-1 text-truncate">{{ fp.name }}</p>
+                                                <span class="text-cyan fw-bold">€{{ fp.price }}</span>
+                                                {% if fp.new_arrival %}
+                                                <span class="badge bg-success ms-1 py-0 px-1 small">New</span>
+                                                {% endif %}
+                                            </div>
+                                        </a>
+                                        {% endwith %}
+                                        {% else %}
+                                        <div class="p-3 text-center">
+                                            <i class="fa-solid fa-microchip text-cyan fa-2x mb-2"></i>
+                                            <p class="text-silver small mb-0">Shop Plurino for the latest tech</p>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Store CTA -->
+                        <div class="col-lg-4 d-none d-lg-block">
+                            <div class="p-3 rounded-3 text-center" style="background: rgba(0,210,255,0.08); border: 1px solid rgba(0,210,255,0.2);">
+                                <h6 class="text-cyan fw-bold mb-2">Shop Plurino</h6>
+                                <p class="text-silver small mb-3">Smart, sleek, cutting-edge tech gadgets for the modern lifestyle.</p>
+                                <a href="{% url 'products' %}?store=plurino" class="btn btn-sm btn-outline-cyan rounded-pill w-100">
+                                    <i class="fa-solid fa-bag-shopping me-1"></i>All Plurino Products
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </li>
-        <!-- HomeNest -->
-        <li class="nav-item dropdown">
+
+        <!-- HomeNest — MEGA MENU -->
+        <li class="nav-item dropdown mega-menu-wrapper">
             <a class="nav-link text-warning text-center dropdown-toggle" href="#" id="homenest"
-                data-bs-toggle="dropdown" role="button" aria-expanded="false">
+                data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" role="button">
                 <i class="fa-solid fa-house-chimney me-1"></i>HomeNest
             </a>
-            <ul class="dropdown-menu neon-dropdown shadow" aria-labelledby="homenest">
-                <li class="px-3 py-2 text-muted small fw-bold">Curated Home & Living</li>
-                <li><a class="dropdown-item" href="{% url 'products' %}?category=bedroom">
-                    <i class="fa-solid fa-bed me-2 text-muted"></i>Bedroom</a></li>
-                <li><a class="dropdown-item" href="{% url 'products' %}?category=kitchen">
-                    <i class="fa-solid fa-kitchen-set me-2 text-muted"></i>Kitchen</a></li>
-                <li><a class="dropdown-item" href="{% url 'products' %}?category=decor">
-                    <i class="fa-solid fa-palette me-2 text-muted"></i>Decor</a></li>
-                <li><a class="dropdown-item" href="{% url 'products' %}?category=garden">
-                    <i class="fa-solid fa-seedling me-2 text-muted"></i>Garden</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item fw-bold" href="{% url 'products' %}?store=homenest">
-                    <i class="fa-solid fa-house me-2"></i>All HomeNest</a></li>
-            </ul>
+            <div class="dropdown-menu mega-menu neon-dropdown shadow-lg border-0 rounded-3 py-3"
+                 aria-labelledby="homenest">
+                <div class="container">
+                    <div class="row g-4">
+                        <div class="col-lg-8">
+                            <div class="row">
+                                <div class="col-6 col-md-4">
+                                    <h6 class="text-warning fw-bold small text-uppercase mb-2">
+                                        <i class="fa-solid fa-bed me-1"></i>Bedroom
+                                    </h6>
+                                    <ul class="list-unstyled mb-3">
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=bedroom">Bedding Sets</a></li>
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=bedroom">Pillows</a></li>
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=bedroom">Mattresses</a></li>
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=bedroom">Curtains</a></li>
+                                    </ul>
+                                    <h6 class="text-warning fw-bold small text-uppercase mb-2">
+                                        <i class="fa-solid fa-kitchen-set me-1"></i>Kitchen
+                                    </h6>
+                                    <ul class="list-unstyled mb-0">
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=kitchen">Cookware</a></li>
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=kitchen">Utensils</a></li>
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=kitchen">Storage</a></li>
+                                    </ul>
+                                </div>
+                                <div class="col-6 col-md-4">
+                                    <h6 class="text-warning fw-bold small text-uppercase mb-2">
+                                        <i class="fa-solid fa-palette me-1"></i>Decor
+                                    </h6>
+                                    <ul class="list-unstyled mb-3">
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=decor">Wall Art</a></li>
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=decor">Candles</a></li>
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=decor">Vases</a></li>
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=decor">Mirrors</a></li>
+                                    </ul>
+                                    <h6 class="text-warning fw-bold small text-uppercase mb-2">
+                                        <i class="fa-solid fa-seedling me-1"></i>Garden
+                                    </h6>
+                                    <ul class="list-unstyled mb-0">
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=garden">Planters</a></li>
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=garden">Garden Tools</a></li>
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=garden">Outdoor Furniture</a></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <h6 class="text-warning fw-bold small text-uppercase mb-2">
+                                        <i class="fa-solid fa-wand-magic-sparkles me-1"></i>Featured
+                                    </h6>
+                                    <div class="card bg-dark border-0">
+                                        {% if homenest_featured %}
+                                        {% with homenest_featured|first as fp %}
+                                        <a href="{% url 'product_detail' fp.id %}" class="text-decoration-none">
+                                            {% if fp.image %}
+                                            <img src="{{ fp.image.url }}" class="card-img-top" alt="{{ fp.name }}"
+                                                 style="height: 120px; object-fit: cover;">
+                                            {% else %}
+                                            <div class="bg-secondary d-flex align-items-center justify-content-center" style="height:120px;">
+                                                <i class="fa-solid fa-image text-white fa-2x"></i>
+                                            </div>
+                                            {% endif %}
+                                            <div class="card-body p-2">
+                                                <p class="text-white small fw-bold mb-1 text-truncate">{{ fp.name }}</p>
+                                                <span class="text-warning fw-bold">€{{ fp.price }}</span>
+                                                {% if fp.new_arrival %}
+                                                <span class="badge bg-success ms-1 py-0 px-1 small">New</span>
+                                                {% endif %}
+                                            </div>
+                                        </a>
+                                        {% endwith %}
+                                        {% else %}
+                                        <div class="p-3 text-center">
+                                            <i class="fa-solid fa-house text-warning fa-2x mb-2"></i>
+                                            <p class="text-silver small mb-0">Shop HomeNest for home essentials</p>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 d-none d-lg-block">
+                            <div class="p-3 rounded-3 text-center" style="background: rgba(255,193,7,0.08); border: 1px solid rgba(255,193,7,0.2);">
+                                <h6 class="text-warning fw-bold mb-2">Shop HomeNest</h6>
+                                <p class="text-silver small mb-3">Warm, cozy, curated homeware and interiors for every space.</p>
+                                <a href="{% url 'products' %}?store=homenest" class="btn btn-sm btn-outline-warning rounded-pill w-100">
+                                    <i class="fa-solid fa-bag-shopping me-1"></i>All HomeNest Products
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </li>
-        <!-- StyleVault -->
-        <li class="nav-item dropdown">
+
+        <!-- StyleVault — MEGA MENU -->
+        <li class="nav-item dropdown mega-menu-wrapper">
             <a class="nav-link text-pink text-center dropdown-toggle" href="#" id="stylevault"
-                data-bs-toggle="dropdown" role="button" aria-expanded="false">
+                data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" role="button">
                 <i class="fa-solid fa-shirt me-1"></i>StyleVault
             </a>
-            <ul class="dropdown-menu neon-dropdown shadow" aria-labelledby="stylevault">
-                <li class="px-3 py-2 text-muted small fw-bold">Fashion & Streetwear</li>
-                <li><a class="dropdown-item" href="{% url 'products' %}?category=men">
-                    <i class="fa-solid fa-person me-2 text-muted"></i>Men</a></li>
-                <li><a class="dropdown-item" href="{% url 'products' %}?category=women">
-                    <i class="fa-solid fa-person-dress me-2 text-muted"></i>Women</a></li>
-                <li><a class="dropdown-item" href="{% url 'products' %}?category=shoes">
-                    <i class="fa-solid fa-shoe-prints me-2 text-muted"></i>Shoes</a></li>
-                <li><a class="dropdown-item" href="{% url 'products' %}?category=fashion_accessories">
-                    <i class="fa-solid fa-glasses me-2 text-muted"></i>Accessories</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item fw-bold" href="{% url 'products' %}?store=stylevault">
-                    <i class="fa-solid fa-shirt me-2"></i>All StyleVault</a></li>
-            </ul>
+            <div class="dropdown-menu mega-menu neon-dropdown shadow-lg border-0 rounded-3 py-3"
+                 aria-labelledby="stylevault">
+                <div class="container">
+                    <div class="row g-4">
+                        <div class="col-lg-8">
+                            <div class="row">
+                                <div class="col-6 col-md-4">
+                                    <h6 class="text-pink fw-bold small text-uppercase mb-2">
+                                        <i class="fa-solid fa-person me-1"></i>Men
+                                    </h6>
+                                    <ul class="list-unstyled mb-3">
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=men">T-Shirts</a></li>
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=men">Hoodies</a></li>
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=men">Jackets</a></li>
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=men">Trousers</a></li>
+                                    </ul>
+                                    <h6 class="text-pink fw-bold small text-uppercase mb-2">
+                                        <i class="fa-solid fa-person-dress me-1"></i>Women
+                                    </h6>
+                                    <ul class="list-unstyled mb-0">
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=women">Dresses</a></li>
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=women">Tops</a></li>
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=women">Jeans</a></li>
+                                    </ul>
+                                </div>
+                                <div class="col-6 col-md-4">
+                                    <h6 class="text-pink fw-bold small text-uppercase mb-2">
+                                        <i class="fa-solid fa-shoe-prints me-1"></i>Shoes
+                                    </h6>
+                                    <ul class="list-unstyled mb-3">
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=shoes">Sneakers</a></li>
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=shoes">Boots</a></li>
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=shoes">Sandals</a></li>
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=shoes">Heels</a></li>
+                                    </ul>
+                                    <h6 class="text-pink fw-bold small text-uppercase mb-2">
+                                        <i class="fa-solid fa-glasses me-1"></i>Accessories
+                                    </h6>
+                                    <ul class="list-unstyled mb-0">
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=fashion_accessories">Watches</a></li>
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=fashion_accessories">Jewellery</a></li>
+                                        <li><a class="dropdown-item py-1 px-2 small" href="{% url 'products' %}?category=fashion_accessories">Bags</a></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <h6 class="text-pink fw-bold small text-uppercase mb-2">
+                                        <i class="fa-solid fa-wand-magic-sparkles me-1"></i>Featured
+                                    </h6>
+                                    <div class="card bg-dark border-0">
+                                        {% if stylevault_featured %}
+                                        {% with stylevault_featured|first as fp %}
+                                        <a href="{% url 'product_detail' fp.id %}" class="text-decoration-none">
+                                            {% if fp.image %}
+                                            <img src="{{ fp.image.url }}" class="card-img-top" alt="{{ fp.name }}"
+                                                 style="height: 120px; object-fit: cover;">
+                                            {% else %}
+                                            <div class="bg-secondary d-flex align-items-center justify-content-center" style="height:120px;">
+                                                <i class="fa-solid fa-image text-white fa-2x"></i>
+                                            </div>
+                                            {% endif %}
+                                            <div class="card-body p-2">
+                                                <p class="text-white small fw-bold mb-1 text-truncate">{{ fp.name }}</p>
+                                                <span class="text-pink fw-bold">€{{ fp.price }}</span>
+                                                {% if fp.new_arrival %}
+                                                <span class="badge bg-success ms-1 py-0 px-1 small">New</span>
+                                                {% endif %}
+                                            </div>
+                                        </a>
+                                        {% endwith %}
+                                        {% else %}
+                                        <div class="p-3 text-center">
+                                            <i class="fa-solid fa-shirt text-pink fa-2x mb-2"></i>
+                                            <p class="text-silver small mb-0">Shop StyleVault for streetwear</p>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 d-none d-lg-block">
+                            <div class="p-3 rounded-3 text-center" style="background: rgba(255,105,180,0.08); border: 1px solid rgba(255,105,180,0.2);">
+                                <h6 class="text-pink fw-bold mb-2">Shop StyleVault</h6>
+                                <p class="text-silver small mb-3">Bold, urban, expressive fashion and streetwear for every occasion.</p>
+                                <a href="{% url 'products' %}?store=stylevault" class="btn btn-sm btn-outline-pink rounded-pill w-100">
+                                    <i class="fa-solid fa-bag-shopping me-1"></i>All StyleVault Products
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </li>
-        <!-- Blog link -->
+
+        <!-- Blog -->
         <li class="nav-item">
             <a class="nav-link text-white text-center" href="{% url 'blog' %}">
                 <i class="fa-solid fa-blog me-1"></i>Blog
             </a>
         </li>
-        <!-- About link -->
+
+        <!-- About -->
         <li class="nav-item">
             <a class="nav-link text-white text-center" href="{% url 'about' %}">
                 <i class="fa-solid fa-circle-info me-1"></i>About
             </a>
         </li>
     </ul>
+</div>
+
+<!-- Mobile accordion nav (for small screens) -->
+<div class="accordion d-lg-none" id="mobile-category-accordion">
+    <!-- Plurino accordion -->
+    <div class="accordion-item bg-dark border-0">
+        <h2 class="accordion-header">
+            <button class="accordion-button bg-dark text-cyan collapsed" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#plurino-mobile"
+                    aria-expanded="false">
+                <i class="fa-solid fa-microchip me-2"></i>Plurino — Tech
+            </button>
+        </h2>
+        <div id="plurino-mobile" class="accordion-collapse collapse"
+             data-bs-parent="#mobile-category-accordion">
+            <div class="accordion-body bg-darker py-2">
+                <a class="dropdown-item text-silver py-1 small" href="{% url 'products' %}?category=phones_tablets">
+                    <i class="fa-solid fa-mobile-screen me-2 text-muted"></i>Phones & Tablets
+                </a>
+                <a class="dropdown-item text-silver py-1 small" href="{% url 'products' %}?category=computers_laptops">
+                    <i class="fa-solid fa-laptop me-2 text-muted"></i>Computers & Laptops
+                </a>
+                <a class="dropdown-item text-silver py-1 small" href="{% url 'products' %}?category=audio_headphones">
+                    <i class="fa-solid fa-headphones me-2 text-muted"></i>Audio & Headphones
+                </a>
+                <a class="dropdown-item text-silver py-1 small" href="{% url 'products' %}?category=accessories">
+                    <i class="fa-solid fa-plug me-2 text-muted"></i>Accessories
+                </a>
+                <a class="dropdown-item fw-bold text-cyan py-1 small" href="{% url 'products' %}?store=plurino">
+                    <i class="fa-solid fa-bag-shopping me-2"></i>All Plurino
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- HomeNest accordion -->
+    <div class="accordion-item bg-dark border-0">
+        <h2 class="accordion-header">
+            <button class="accordion-button bg-dark text-warning collapsed" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#homenest-mobile"
+                    aria-expanded="false">
+                <i class="fa-solid fa-house-chimney me-2"></i>HomeNest — Home
+            </button>
+        </h2>
+        <div id="homenest-mobile" class="accordion-collapse collapse"
+             data-bs-parent="#mobile-category-accordion">
+            <div class="accordion-body bg-darker py-2">
+                <a class="dropdown-item text-silver py-1 small" href="{% url 'products' %}?category=bedroom">
+                    <i class="fa-solid fa-bed me-2 text-muted"></i>Bedroom
+                </a>
+                <a class="dropdown-item text-silver py-1 small" href="{% url 'products' %}?category=kitchen">
+                    <i class="fa-solid fa-kitchen-set me-2 text-muted"></i>Kitchen
+                </a>
+                <a class="dropdown-item text-silver py-1 small" href="{% url 'products' %}?category=decor">
+                    <i class="fa-solid fa-palette me-2 text-muted"></i>Decor
+                </a>
+                <a class="dropdown-item text-silver py-1 small" href="{% url 'products' %}?category=garden">
+                    <i class="fa-solid fa-seedling me-2 text-muted"></i>Garden
+                </a>
+                <a class="dropdown-item fw-bold text-warning py-1 small" href="{% url 'products' %}?store=homenest">
+                    <i class="fa-solid fa-bag-shopping me-2"></i>All HomeNest
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- StyleVault accordion -->
+    <div class="accordion-item bg-dark border-0">
+        <h2 class="accordion-header">
+            <button class="accordion-button bg-dark text-pink collapsed" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#stylevault-mobile"
+                    aria-expanded="false">
+                <i class="fa-solid fa-shirt me-2"></i>StyleVault — Fashion
+            </button>
+        </h2>
+        <div id="stylevault-mobile" class="accordion-collapse collapse"
+             data-bs-parent="#mobile-category-accordion">
+            <div class="accordion-body bg-darker py-2">
+                <a class="dropdown-item text-silver py-1 small" href="{% url 'products' %}?category=men">
+                    <i class="fa-solid fa-person me-2 text-muted"></i>Men
+                </a>
+                <a class="dropdown-item text-silver py-1 small" href="{% url 'products' %}?category=women">
+                    <i class="fa-solid fa-person-dress me-2 text-muted"></i>Women
+                </a>
+                <a class="dropdown-item text-silver py-1 small" href="{% url 'products' %}?category=shoes">
+                    <i class="fa-solid fa-shoe-prints me-2 text-muted"></i>Shoes
+                </a>
+                <a class="dropdown-item text-silver py-1 small" href="{% url 'products' %}?category=fashion_accessories">
+                    <i class="fa-solid fa-glasses me-2 text-muted"></i>Accessories
+                </a>
+                <a class="dropdown-item fw-bold text-pink py-1 small" href="{% url 'products' %}?store=stylevault">
+                    <i class="fa-solid fa-bag-shopping me-2"></i>All StyleVault
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
