@@ -102,6 +102,7 @@ class TestAffiliateReferralSignal:
 
 
 class TestAffiliateViews:
+    @pytest.mark.django_db
     def test_affiliate_dashboard_requires_login(self, client):
         """Unauthenticated users are redirected to login."""
         response = client.get('/accounts/affiliate/', follow=True)
@@ -110,22 +111,26 @@ class TestAffiliateViews:
         final_url = response.redirect_chain[-1][0] if response.redirect_chain else ''
         assert '/accounts/login/' in final_url or response.status_code == 200
 
+    @pytest.mark.django_db
     def test_affiliate_register_creates_affiliate(self, client, user, db):
         """POST to register creates an Affiliate for the logged-in user."""
         client.force_login(user)
+        # Use https scheme to avoid SECURE_SSL_REDIRECT converting POST→GET
         response = client.post(
-            '/accounts/affiliate/register/',
+            'https://testserver/accounts/affiliate/register/',
             {'commission_rate': '0.15'},
         )
-        # Should redirect to dashboard (not follow template render in test env)
+        # Should redirect to dashboard
         assert response.status_code in (301, 302)
         assert Affiliate.objects.filter(user=user).exists()
         affiliate = Affiliate.objects.get(user=user)
         assert float(affiliate.commission_rate) == 0.15
 
+    @pytest.mark.django_db
     def test_affiliate_landing_sets_session(self, client, affiliate, db):
         """Landing page stores referral code in session."""
-        response = client.get(f'/affiliate/{affiliate.referral_code}/')
-        # Redirects to store home after setting session
+        # Use https scheme to avoid SECURE_SSL_REDIRECT
+        response = client.get(f'https://testserver/affiliate/{affiliate.referral_code}/')
+        # Should redirect to store home after setting session
         assert response.status_code in (301, 302)
         assert client.session.get('affiliate_referral_code') == affiliate.referral_code
