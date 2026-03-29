@@ -28,6 +28,7 @@ def _fuzzy_match(query, candidates, threshold=0.6):
 def all_products(request):
     """ A view to show all products, including sorting and search queries """
     active_store = request.session.get('active_store', 'orderimo')
+    print(f"DEBUG: Filtering products by store={active_store}")
     products = Product.objects.filter(store=active_store).select_related('category').order_by('id')
     query = None
     categories = None
@@ -119,6 +120,7 @@ def category_detail(request, slug):
     """ A view to show products in a specific category """
     category = get_object_or_404(Category, name=slug)
     active_store = request.session.get('active_store', 'orderimo')
+    print(f"DEBUG: Filtering products by store={active_store}")
 
     sort = request.GET.get('sort', None)
     direction = request.GET.get('direction', None)
@@ -184,6 +186,7 @@ def category_detail(request, slug):
 def product_detail(request, product_id):
     """ A view to show individual product details """
     active_store = request.session.get('active_store', 'orderimo')
+    print(f"DEBUG: Filtering products by store={active_store}")
 
     product = get_object_or_404(Product.objects.select_related('category'), pk=product_id, store=active_store)
 

@@ -69,7 +69,11 @@ urlpatterns = [
     path('about/', include('about.urls')),
     path('accounts/', include('allauth.urls')),
     path('admin/', admin.site.urls),
-    path('sitemap.xml', include('ecommerce.sitemaps')),
+    path('sitemap.xml', sitemap, {'sitemaps': {
+        'products': ProductSitemap,
+        'categories': CategorySitemap,
+        'blog': BlogSitemap,
+    }}, name='django.contrib.sitemaps.views.sitemap'),
 ]
 
 if settings.DEBUG:
