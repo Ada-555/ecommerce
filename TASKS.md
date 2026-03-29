@@ -16,6 +16,7 @@
 | Email notifications (full) | `5a07479` | ✅ 1,851 lines — order confirmation/shipped/delivered, welcome |
 | Order tracking page (full) | `dd6886b` | ✅ tracking/<int:order_number>/, status fields, success page |
 | Wishlist / Save for later | `5bfc59a` | ✅ model, views, HTMX toggle, per-store |
+| Wishlist / Save for later (final) | `2bee7da` | ✅ HTMX toggle with pulse animation, heart icon on product cards & detail, per-store wishlist page |
 | Crypto payments (BTC/USDC/XMR) | `dd1084b` | ✅ Stripe crypto + CoinGate for XMR |
 | Phase 12 — Review templates | (local) | ✅ Star ratings, verified buyer badge, rating breakdown, clickable review form |
 
@@ -52,6 +53,7 @@
 | 08:44 | crypto-payments | ✅ Done |
 | 08:45 | wishlist-retry | ✅ Done (HTMX toggle) |
 | 08:45 | order-tracking-retry | ✅ Done (tracking page + status) |
+| 08:51 | wishlist-retry | ✅ Final commit 2bee7da (heart icon, pulse, per-store) |
 | 08:46 | agent-ops | 🟡 Running |
 | 08:46 | agent-payments | 🟡 Running |
 | 08:46 | phase12-frontend | ✅ Done |
@@ -65,5 +67,5 @@
 
 ---
 
-_Last updated: 2026-03-29 08:50 GMT+1_
+_Last updated: 2026-03-29 08:52 GMT+1_
 
