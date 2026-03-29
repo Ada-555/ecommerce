@@ -19,8 +19,8 @@
     --white: #FFFFFF;
     --bg-overlay: rgba(0, 0, 0, 0.72);
 
-    --font-display: 'Audiowide', cursive;
-    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Outfit', sans-serif;
 
     --transition-fast: 150ms ease;
     --transition-normal: 250ms ease;

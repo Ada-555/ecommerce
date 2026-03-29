@@ -15,12 +15,12 @@ class ProductVariantInline(admin.TabularInline):
 class ProductAdmin(admin.ModelAdmin):
     inlines = [ProductVariantInline]
     list_display = (
-        'name', 'sku', 'category', 'price', 'stock_quantity',
+        'name', 'sku', 'store', 'category', 'price', 'stock_quantity',
         'stock_status', 'is_featured',
     )
     list_editable = ('price', 'stock_quantity')
-    search_fields = ('name', 'sku')
-    list_filter = ('category', 'featured', 'new_arrival', 'best_seller')
+    search_fields = ('name', 'sku', 'store')
+    list_filter = ('store', 'category', 'featured', 'new_arrival', 'best_seller')
     ordering = ('sku',)
     list_per_page = 50
 
@@ -36,7 +36,7 @@ class ProductAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (None, {
-            'fields': ('name', 'sku', 'brand', 'category')
+            'fields': ('name', 'sku', 'store', 'brand', 'category')
         }),
         ('Pricing & Media', {
             'fields': ('price', 'rating', 'image', 'image_url')

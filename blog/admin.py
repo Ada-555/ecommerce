@@ -24,7 +24,7 @@ class BlogPageAdmin(admin.ModelAdmin):
     list_display_links = ['pk', 'title']
     readonly_fields = ['preview_image']
     search_fields = ['title', 'content']
-    list_filter = ['created_at']
+    list_filter = ['store', 'created_at']
 
     def created_at_days_ago(self, obj):
         days_ago = (datetime.now().date() - obj.created_at.date()).days
