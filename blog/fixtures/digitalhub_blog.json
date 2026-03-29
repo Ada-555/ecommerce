@@ -1,0 +1,32 @@
+[
+  {
+    "model": "blog.blogpage",
+    "pk": 201,
+    "fields": {
+      "title": "How to Start an Online Course Business in 2026",
+      "content": "<p>The online education industry is worth over $400 billion and growing. Here's your complete roadmap to building a profitable online course business from scratch.</p><h3>Find Your Profitable Niche</h3><p>The best course topics combine three elements: something you're knowledgeable about, something people want to learn, and something they can afford to pay for. Use tools like Google Trends and Ubersuggest to validate demand. Look for topics with consistent or growing search volume.</p><h3>Build Your Course Before You Perfect It</h3><p>The biggest mistake new course creators make is spending months perfecting content before launching. Get a minimum viable course out there — even 2-3 hours of content — and iterate based on student feedback. Your first course will likely be your worst. That's normal.</p><h3>Choose the Right Platform</h3><p>Platforms like Teachable, Thinkific, and Gumroad each have strengths. Self-hosted via your own website gives you full control and margins but requires more technical setup. Marketplaces like Udemy offer built-in traffic but take significant commission and limit pricing flexibility.</p><h3>Create Compelling Content</h3><p>You don't need professional studio-quality video — a decent webcam, good lighting, and clear audio go a long way. Use screen recordings for software tutorials. Structure content into short modules (5-10 minutes each) for better engagement. Include downloadable resources and templates.</p><h3>Launch and Market Your Course</h3><p>Build an email list before launching — even 500 subscribers gives you traction. Use a waitlist and pre-sell at a discount. After launch, leverage affiliates, joint ventures, and content marketing (blog posts, YouTube, podcast appearances) to drive ongoing sales.</p>",
+      "image": "",
+      "created_at": "2026-01-20T11:00:00Z"
+    }
+  },
+  {
+    "model": "blog.blogpage",
+    "pk": 202,
+    "fields": {
+      "title": "Top 10 Digital Products That Sell Like Hotcakes",
+      "content": "<p>Digital products offer the highest margins in e-commerce — no inventory, no shipping, instant delivery. Here are the digital product categories consistently generating six-figure incomes for creators.</p><h3>1. Notion Templates</h3><p>The Notion ecosystem has exploded. Productivity enthusiasts and small businesses pay €15-50 for pre-built workspace templates. Canva-based templates for social media posts and brand kits sell well in the €20-40 range. With minimal competition compared to 2022, there's still serious money to be made.</p><h3>2. E-books & Guides</h3><p>Long-form e-books (50-200+ pages) on specific topics command €19-49. The best sellers are niche and actionable — not generic. Topics around freelancing, productivity, investing, and health consistently sell. Update annually to maintain value.</p><h3>3. Online Course Access Codes</h3><p>Video courses on platforms like Thinkific or your own hosted site can sell for €49-499. The key is solving a specific problem with clear, measurable outcomes. 'How to get your first freelance client in 30 days' outsells 'Learn graphic design' every time.</p><h3>4. Lightroom Presets & Photo Filters</h3><p>Mobile photography is huge. Preset packs for Lightroom Mobile sell for €9-29. They're cheap to produce and infinitely scalable. Bundle with before/after tutorials for higher perceived value.</p><h3>5. Social Media Content Calendars</h3><p>90-day content calendars with post ideas, captions, hashtags, and graphics sell for €19-49 to small business owners and influencers. Bundle with Canva templates for upsell opportunities.</p><h3>6-10: Software Tools, Planners, Stock Assets, Contract Templates, Audio Packs</h3><p>The common thread: solve a specific pain point, deliver instantly, and build trust with free content first.</p>",
+      "image": "",
+      "created_at": "2026-02-14T15:45:00Z"
+    }
+  },
+  {
+    "model": "blog.blogpage",
+    "pk": 203,
+    "fields": {
+      "title": "The E-book Publishing Guide: From Idea to €5K/Month",
+      "content": "<p>E-books remain one of the easiest digital products to create and sell. With the right strategy, a single well-targeted e-book can generate consistent passive income. Here's how to do it.</p><h3>Selecting Your Topic</h3><p>Don't write what you wish you knew — write what you already know. Your expertise is your competitive advantage. Ideal e-book topics are specific enough to have a dedicated audience but broad enough to attract many buyers. 'How to Start a Freelance Copywriting Business in Ireland' beats 'How to Make Money Online' every time.</p><h3>Structuring Your E-book</h3><p>Use a clear framework: problem, solution, steps, resources. 100-150 pages is the sweet spot — comprehensive enough to justify the price, not so long it takes a year to write. Include worksheets, checklists, and templates your reader can use immediately.</p><h3>Writing Efficiently</h3><p>Set a daily word target (500-1000 words) and stick to it. Write first, edit later. Use voice-to-text tools like Otter.ai to speed up first drafts. Outsource editing and design once you have a sales page live and validated demand.</p><h3>Design & Formatting</h3><p>A professional cover is non-negotiable — use Canva Pro or hire a designer on Fiverr (€50-150). Internal formatting should be clean, use heading hierarchy, and include visual elements like callout boxes and images. PDF is the safest format. Consider EPUB for Amazon Kindle distribution as well.</p><h3>Pricing & Sales Strategy</h3><p>Price at €19-49 for a comprehensive guide. Build an email list before launch — even 200 subscribers can generate your first €2-5K. Use a launch sequence: free lead magnet → email sequence → launch day. For ongoing sales, invest in targeted Facebook ads with a clear return-on-ad-spend calculation.</p>",
+      "image": "",
+      "created_at": "2026-03-10T13:20:00Z"
+    }
+  }
+]

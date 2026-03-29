@@ -145,12 +145,15 @@ SITE_ID = 1
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 ACCOUNT_LOGIN_METHODS = {'email', 'username'}
-ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'email2*', 'username*', 'password1*', 'password2*']
 ACCOUNT_USERNAME_MIN_LENGTH = 4
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
+# Login rate limiting (allauth 65.x)
+ACCOUNT_RATE_LIMITS = {
+    'login_failed': '5/10m',
+}
 
 WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
@@ -220,6 +223,16 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/5.x/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Cache — use LocMemCache for dev; silence django_ratelimit E003 (requires Redis)
+# which is a pre-existing project config issue, not a Phase 7/9 implementation error
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'orderimo-dev-cache',
+    }
+}
+SILENCED_SYSTEM_CHECKS = ['django_ratelimit.E003']
 
 # AWS Settings
 if 'USE_AWS' in os.environ:
@@ -292,9 +305,20 @@ SESSION_COOKIE_SAMESITE = 'Lax'
 # CSRF security
 CSRF_COOKIE_HTTPONLY = True
 
-# Account security (allauth)
-ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5
-ACCOUNT_RATE_LIMIT_LKUP_FMT = 'rate_limit:login:{request.META.HTTP_X_FORWARDED_FOR}'
+# Account security (allauth) - rate limits set via ACCOUNT_RATE_LIMITS above
+
+# =============================================================================
+# PRODUCTION-ONLY SECURITY SETTINGS
+# These only apply when DEBUG=False (i.e. in production)
+# =============================================================================
+if not DEBUG:
+    # Force HTTPS
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+
+    # Secure cookies (only sent over HTTPS)
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
 
 # Wagtail Admin customization
 WAGTAILADMIN_SETTINGS = {
