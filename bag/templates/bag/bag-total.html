@@ -3,11 +3,18 @@
         <span>Bag Total</span>
         <span class="fw-medium">€{{ total|floatformat:2 }}</span>
     </div>
-    {% if coupon_discount and coupon_discount > 0 %}
-    <div class="d-flex justify-content-between text-success mb-1">
-        <span><i class="fa-solid fa-tag me-1"></i>Coupon Discount</span>
-        <span class="fw-medium">-€{{ coupon_discount|floatformat:2 }}</span>
-    </div>
+    {% if applied_coupons %}
+        {% for coupon in applied_coupons %}
+        <div class="d-flex justify-content-between text-success mb-1">
+            <span><i class="fa-solid fa-tag me-1"></i>{{ coupon.code }}</span>
+            <span class="fw-medium">-€{{ coupon.discount|floatformat:2 }}</span>
+        </div>
+        {% endfor %}
+    {% elif coupon_discount and coupon_discount > 0 %}
+        <div class="d-flex justify-content-between text-success mb-1">
+            <span><i class="fa-solid fa-tag me-1"></i>Coupon Discount</span>
+            <span class="fw-medium">-€{{ coupon_discount|floatformat:2 }}</span>
+        </div>
     {% endif %}
     <div class="d-flex justify-content-between text-white mb-1">
         <span>Delivery</span>

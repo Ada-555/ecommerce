@@ -72,6 +72,7 @@ INSTALLED_APPS = [
     # custom
     'home',
     'products',
+    'comparison',
     'bag',
     'wishlist',
     'checkout',
@@ -134,7 +135,7 @@ TEMPLATES = [
                 # 'ecommerce.context_processors.currency_context',  # Not implemented yet
                 'bag.contexts.bag_contents',  # required for shopping bag
                 'wishlist.context_processors.wishlist_context',
-                # 'comparison.context_processors.compare_context',
+                'comparison.context_processors.compare_context',
             ],
             'builtins': [
                 'crispy_forms.templatetags.crispy_forms_tags',

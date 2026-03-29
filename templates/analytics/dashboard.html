@@ -1,0 +1,214 @@
+{% extends "stores/orderimo_base.html" %}
+{% load static %}
+
+{% block title %}Analytics Dashboard — {{ store_name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .stat-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 1.5rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+    .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary);
+        margin: 0.5rem 0;
+    }
+    .stat-label {
+        color: var(--muted);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .chart-container {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    .chart-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--text);
+    }
+    .bar-chart {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    .bar-row {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    .bar-label {
+        width: 120px;
+        text-align: right;
+        color: var(--muted);
+        font-size: 0.85rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .bar-track {
+        flex-grow: 1;
+        background: rgba(255,255,255,0.05);
+        border-radius: 4px;
+        height: 24px;
+        overflow: hidden;
+    }
+    .bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--primary) 0%, #00b4d8 100%);
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding-right: 8px;
+        color: white;
+        font-size: 0.8rem;
+        font-weight: 600;
+        transition: width 0.5s ease;
+    }
+    .top-products-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+    .top-products-table th, .top-products-table td {
+        padding: 0.75rem;
+        border-bottom: 1px solid var(--border);
+        text-align: left;
+    }
+    .top-products-table th {
+        background: rgba(0,180,216,0.06);
+        color: var(--primary);
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .top-products-table tr:hover {
+        background: rgba(255,255,255,0.02);
+    }
+    .rank-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: var(--primary);
+        color: white;
+        font-weight: 700;
+        font-size: 0.85rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="mb-4"><i class="fa-solid fa-chart-line me-2" style="color:var(--primary);"></i>Analytics Dashboard</h2>
+
+    <!-- Key Stats Row -->
+    <div class="row mb-4">
+        <div class="col-md-6 col-lg-3">
+            <div class="stat-card">
+                <div class="stat-label">Total Revenue</div>
+                <div class="stat-value">€{{ total_revenue|floatformat:2 }}</div>
+                <small class="text-muted">(Paid orders)</small>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="stat-card">
+                <div class="stat-label">Average Order Value</div>
+                <div class="stat-value">€{{ avg_order_value|floatformat:2 }}</div>
+                <small class="text-muted">based on {{ paid_orders_count }} orders</small>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="stat-card">
+                <div class="stat-label">Total Orders</div>
+                <div class="stat-value">{{ status_counts|sum }}</div>
+                <small class="text-muted">all statuses</small>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="stat-card">
+                <div class="stat-label">Top Product Sales</div>
+                <div class="stat-value">{{ top_products|length }}</div>
+                <small class="text-muted">top 10 listed</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Orders by Status Chart -->
+        <div class="col-lg-6 mb-4">
+            <div class="chart-container">
+                <h3 class="chart-title">Orders by Status</h3>
+                {% if status_labels and status_counts %}
+                <div class="bar-chart">
+                    {% for label, count in status_labels|zip:status_counts %}
+                    <div class="bar-row">
+                        <div class="bar-label">{{ label }}</div>
+                        <div class="bar-track">
+                            {% with total=status_counts|sum %}
+                            <div class="bar-fill" style="width: {% widthratio count total 100 %}%;">
+                                {{ count }}
+                            </div>
+                            {% endwith %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-muted text-center">No order data available.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Top 10 Products Table -->
+        <div class="col-lg-6 mb-4">
+            <div class="chart-container">
+                <h3 class="chart-title">Top 10 Products (by Quantity Sold)</h3>
+                {% if top_products %}
+                <div class="table-responsive">
+                    <table class="top-products-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Product</th>
+                                <th>SKU</th>
+                                <th class="text-end">Qty</th>
+                                <th class="text-end">Revenue</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in top_products %}
+                            <tr>
+                                <td><span class="rank-badge">{{ forloop.counter }}</span></td>
+                                <td>{{ product.product__name|truncatechars:30 }}</td>
+                                <td class="text-muted small">{{ product.product__sku|default:"—" }}</td>
+                                <td class="text-end fw-bold">{{ product.total_quantity }}</td>
+                                <td class="text-end" style="color:var(--primary);">€{{ product.total_revenue|floatformat:2 }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted text-center">No product sales data available.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

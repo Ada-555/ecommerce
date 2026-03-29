@@ -218,6 +218,70 @@ def _get_store_from_request(request):
         return 'orderimo'
 
 
+@require_POST
+def apply_coupon(request):
+    """HTMX endpoint to apply a coupon and update order summary."""
+    code = request.POST.get('coupon_code', '').strip().upper()
+    if not code:
+        bag_ctx = bag_contents(request)
+        context = {
+            'bag_items': bag_ctx['bag_items'],
+            'product_count': bag_ctx['product_count'],
+            'total': bag_ctx['total'],
+            'delivery': bag_ctx['delivery'],
+            'free_delivery_delta': bag_ctx['free_delivery_delta'],
+            'free_delivery_threshold': bag_ctx['free_delivery_threshold'],
+            'coupon_error': 'Please enter a coupon code.',
+            'applied_coupons': [],
+            'coupon_discount': Decimal('0.00'),
+        }
+        html = render_to_string('checkout/order_summary_fragment.html', context, request=request)
+        return HttpResponse(html)
+
+    bag_ctx = bag_contents(request)
+    subtotal = bag_ctx['total']
+    applied_codes = request.session.get('applied_coupons', [])
+    test_codes = applied_codes + [code]
+    total_discount, valid_coupons, error = validate_and_apply_coupons(test_codes, subtotal)
+    if error:
+        context = {
+            'bag_items': bag_ctx['bag_items'],
+            'product_count': bag_ctx['product_count'],
+            'total': subtotal,
+            'delivery': bag_ctx['delivery'],
+            'free_delivery_delta': bag_ctx['free_delivery_delta'],
+            'free_delivery_threshold': bag_ctx['free_delivery_threshold'],
+            'coupon_error': error,
+            'applied_coupons': [],
+            'coupon_discount': Decimal('0.00'),
+        }
+        html = render_to_string('checkout/order_summary_fragment.html', context, request=request)
+        return HttpResponse(html)
+
+    valid_codes = [c.code for c in valid_coupons]
+    request.session['applied_coupons'] = valid_codes
+
+    free_shipping = any(c.discount_type == 'free_shipping' for c in valid_coupons)
+    delivery = Decimal('0.00') if free_shipping else bag_ctx['delivery']
+    grand_total = subtotal + delivery - total_discount
+
+    applied_data = [{'code': c.code, 'discount': c.calculate_discount(subtotal)} for c in valid_coupons]
+
+    context = {
+        'bag_items': bag_ctx['bag_items'],
+        'product_count': bag_ctx['product_count'],
+        'total': subtotal,
+        'delivery': delivery,
+        'free_delivery_delta': bag_ctx['free_delivery_delta'],
+        'free_delivery_threshold': bag_ctx['free_delivery_threshold'],
+        'applied_coupons': applied_data,
+        'coupon_discount': total_discount,
+        'grand_total': grand_total,
+    }
+    html = render_to_string('checkout/order_summary_fragment.html', context, request=request)
+    return HttpResponse(html)
+
+
 def checkout(request):
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
     stripe_secret_key = settings.STRIPE_SECRET_KEY
@@ -227,21 +291,16 @@ def checkout(request):
         bag = request.session.get('bag', {})
 
         # ---- Coupon handling ----
-        coupon_codes = []
-        for i in range(1, 4):
-            code = request.POST.get(f'coupon_code_{i}', '').strip()
-            if code:
-                coupon_codes.append(code.upper())
-
+        applied_codes = request.session.get('applied_coupons', [])
         current_bag = bag_contents(request)
         subtotal = current_bag['total']
         coupon_discount = Decimal('0.00')
         applied_coupons = []
         coupon_error = None
 
-        if coupon_codes:
+        if applied_codes:
             coupon_discount, applied_coupons, coupon_error = validate_and_apply_coupons(
-                coupon_codes, subtotal
+                applied_codes, subtotal
             )
             if coupon_error:
                 messages.warning(request, coupon_error)
@@ -326,6 +385,8 @@ def checkout(request):
                 for coupon in applied_coupons:
                     coupon.current_uses += 1
                     coupon.save()
+                # Clear applied coupons from session
+                request.session.pop('applied_coupons', None)
                 # Newsletter signup
                 if 'subscribe_newsletter' in request.POST:
                     _subscribe_newsletter(order.email, order.store)
@@ -343,6 +404,8 @@ def checkout(request):
                 for coupon in applied_coupons:
                     coupon.current_uses += 1
                     coupon.save()
+                # Clear applied coupons from session
+                request.session.pop('applied_coupons', None)
                 # Newsletter signup
                 if 'subscribe_newsletter' in request.POST:
                     _subscribe_newsletter(order.email, order.store)
@@ -359,6 +422,8 @@ def checkout(request):
                 for coupon in applied_coupons:
                     coupon.current_uses += 1
                     coupon.save()
+                # Clear applied coupons from session
+                request.session.pop('applied_coupons', None)
                 # Newsletter signup
                 if 'subscribe_newsletter' in request.POST:
                     _subscribe_newsletter(order.email, order.store)
@@ -405,11 +470,25 @@ def checkout(request):
                     order_form = OrderForm()
             else:
                 order_form = OrderForm()
+            # Compute coupon context for order summary
+            applied_codes = request.session.get('applied_coupons', [])
+            subtotal = current_bag['total']
+            total_discount, applied_coupons_ctx, coupon_error = validate_and_apply_coupons(applied_codes, subtotal)
+            delivery = current_bag['delivery']
+            if any(c.discount_type == 'free_shipping' for c in applied_coupons_ctx):
+                delivery = Decimal('0.00')
+            grand_total = subtotal + delivery - total_discount
+            applied_data = [{'code': c.code, 'discount': c.calculate_discount(subtotal)} for c in applied_coupons_ctx]
+
             template = 'checkout/checkout.html'
             context = {
                 'order_form': order_form,
                 'stripe_public_key': stripe_public_key,
                 'client_secret': intent.client_secret,
+                'coupon_discount': total_discount,
+                'applied_coupons': applied_data,
+                'delivery': delivery,
+                'grand_total': grand_total,
             }
             return render(request, template, context)
     else:
@@ -452,11 +531,25 @@ def checkout(request):
         messages.warning(request, 'Stripe public key is missing. \
             Did you forget to set it in your environment?')
 
+    # Compute coupon context for order summary
+    applied_codes = request.session.get('applied_coupons', [])
+    subtotal = current_bag['total']
+    total_discount, applied_coupons_ctx, coupon_error = validate_and_apply_coupons(applied_codes, subtotal)
+    delivery = current_bag['delivery']
+    if any(c.discount_type == 'free_shipping' for c in applied_coupons_ctx):
+        delivery = Decimal('0.00')
+    grand_total = subtotal + delivery - total_discount
+    applied_data = [{'code': c.code, 'discount': c.calculate_discount(subtotal)} for c in applied_coupons_ctx]
+
     template = 'checkout/checkout.html'
     context = {
         'order_form': order_form,
         'stripe_public_key': stripe_public_key,
         'client_secret': intent.client_secret,
+        'coupon_discount': total_discount,
+        'applied_coupons': applied_data,
+        'delivery': delivery,
+        'grand_total': grand_total,
     }
 
     return render(request, template, context)

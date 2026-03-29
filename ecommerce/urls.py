@@ -14,7 +14,7 @@ from tracking import views as tracking_views
 # from affiliates import views as affiliate_views  # Not ready yet
 from . import views as ecommerce_views
 from .sitemaps import ProductSitemap, CategorySitemap, BlogSitemap
-# from analytics import views as analytics_views  # Not ready yet
+from analytics import views as analytics_views
 
 urlpatterns = [
     # Root serves the home page
@@ -86,6 +86,7 @@ urlpatterns = [
     path('products/', include('products.urls')),
     path('bag/', include('bag.urls')),
     path('wishlist/', include('wishlist.urls')),
+    path('', include('comparison.urls')),
     path('checkout/', include('checkout.urls')),
     path('blog/', include('blog.urls')),
     path('about/', include('about.urls')),
@@ -103,6 +104,7 @@ urlpatterns = [
     # path('accounts/affiliate/create/', affiliate_views.become_affiliate, name='become_affiliate'),
     # path('affiliate/<str:code>/', affiliate_views.affiliate_landing, name='affiliate_landing'),
     # path("admin/analytics/", analytics_views.analytics_dashboard, name="analytics_dashboard"),  # Not ready
+    path("admin/analytics/", analytics_views.analytics_dashboard, name="analytics_dashboard"),
     path('admin/', admin.site.urls),
     path('sitemap.xml', sitemap, {'sitemaps': {
         'products': ProductSitemap,
