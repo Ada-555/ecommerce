@@ -71,9 +71,15 @@ def _fuzzy_match(query, candidates, threshold=0.6):
 
 def all_products(request):
     """ A view to show all products, including sorting and search queries """
-    active_store = request.session.get('active_store', 'orderimo')
-    print(f"DEBUG: Filtering products by store={active_store}")
-    products = Product.objects.filter(store=active_store).select_related('category').order_by('id')
+    # Detect store from URL path
+    path = request.path
+    if "/petshop/" in path:
+        store_filter = "petshop-ie"
+    elif "/digital/" in path:
+        store_filter = "digitalhub"
+    else:
+        store_filter = "orderimo"
+    products = Product.objects.filter(store=store_filter).select_related('category').order_by('id')
     query = None
     categories = None
     sort = None
@@ -228,85 +234,135 @@ def category_detail(request, slug):
 
 
 def product_detail(request, product_id):
-    """ A view to show individual product details """
-    active_store = request.session.get('active_store', 'orderimo')
-    print(f"DEBUG: Filtering products by store={active_store}")
+    """Show individual product details, auto-detecting store from URL."""
+    # Detect store from URL path
+    path = request.path
+    if "/petshop/" in path:
+        store_slug = "petshop"
+        db_store = "petshop-ie"
+    elif "/digital/" in path:
+        store_slug = "digital"
+        db_store = "digitalhub"
+    elif "/orderimo/" in path:
+        store_slug = "orderimo"
+        db_store = "orderimo"
+    else:
+        db_store = request.session.get("active_store", "orderimo")
+        store_slug = db_store
 
-    product = get_object_or_404(Product.objects.select_related('category'), pk=product_id, store=active_store)
+    product = get_object_or_404(
+        Product.objects.select_related("category"),
+        pk=product_id,
+        store=db_store
+    )
 
-    # Track recently viewed (store up to 4 product IDs in session)
-    recently_viewed = request.session.get('recently_viewed', [])
-    # Remove current product if already in list
+    # Track recently viewed
+    recently_viewed = request.session.get("recently_viewed", [])
     if product_id in recently_viewed:
         recently_viewed.remove(product_id)
-    # Prepend current product
     recently_viewed.insert(0, product_id)
-    # Keep only last 4
     recently_viewed = recently_viewed[:4]
-    request.session['recently_viewed'] = recently_viewed
+    request.session["recently_viewed"] = recently_viewed
 
-    # Increment views
-    Product.objects.filter(pk=product_id).update(views_count=product.views_count + 1)
+    # Increment views (using F() to avoid race conditions)
+    from django.db.models import F
+    Product.objects.filter(pk=product_id).update(views_count=F("views_count") + 1)
+    product.views_count = (product.views_count or 0) + 1
 
-    # Related products (same category, same store)
+    # Related products
     related_products = list(
-        Product.objects.filter(category=product.category, store=active_store).exclude(
-            pk=product_id
-        ).select_related('category').order_by('-views_count')[:4]
+        Product.objects.filter(category=product.category, store=db_store)
+        .exclude(pk=product_id)
+        .select_related("category")
+        .order_by("-views_count")[:4]
     )
 
-    # Recently viewed products (from session, excluding current product, same store)
-    recently_viewed_ids = request.session.get('recently_viewed', [])
-    recently_viewed = list(
-        Product.objects.filter(pk__in=[p for p in recently_viewed_ids if p != product_id], store=active_store)
-        .select_related('category')[:4]
+    # Recently viewed
+    recently_viewed_ids = request.session.get("recently_viewed", [])
+    recently_viewed_products = list(
+        Product.objects.filter(
+            pk__in=[p for p in recently_viewed_ids if p != product_id],
+            store=db_store
+        ).select_related("category")[:4]
     )
 
-    # Build JSON-LD Product schema
+    # Store metadata for template
+    from stores.store_views import STORE_META, STORE_NAME_MAP
+    store_name = STORE_NAME_MAP.get(store_slug, "Orderimo")
+    meta = STORE_META.get(db_store, STORE_META["orderimo"])
+
+    # Build product schema
     product_schema = {
         "@context": "https://schema.org",
         "@type": "Product",
         "name": product.name,
         "description": product.description,
         "sku": product.sku or str(product.id),
-        "brand": {
-            "@type": "Brand",
-            "name": product.brand or "Orderimo"
-        },
+        "brand": {"@type": "Brand", "name": product.brand or store_name},
         "image": request.build_absolute_uri(product.image.url) if product.image else None,
         "url": request.build_absolute_uri(request.path),
         "offers": {
             "@type": "Offer",
             "price": str(product.price),
             "priceCurrency": "EUR",
-            "availability": (
-                "https://schema.org/InStock" if product.is_in_stock
-                else "https://schema.org/OutOfStock"
-            ),
-            "seller": {
-                "@type": "Organization",
-                "name": "Orderimo"
-            }
+            "availability": "https://schema.org/InStock" if product.is_in_stock else "https://schema.org/OutOfStock",
+            "seller": {"@type": "Organization", "name": store_name},
         },
     }
-    if product.rating:
+    if getattr(product, "rating", None):
         product_schema["aggregateRating"] = {
             "@type": "AggregateRating",
             "ratingValue": str(product.rating),
             "bestRating": "5",
             "worstRating": "1",
-            "reviewCount": "1"
+            "reviewCount": "1",
         }
 
+    # Check if user has already reviewed this product
+    from products.models import Review
+    has_user_reviewed = (
+        request.user.is_authenticated and
+        Review.objects.filter(product=product, user=request.user).exists()
+    )
+
     context = {
-        'product': product,
-        'related_products': related_products,
-        'recently_viewed': recently_viewed,
-        'product_schema': product_schema,
-        'review_form': ReviewForm(),
+        "product": product,
+        "related_products": related_products,
+        "recently_viewed": recently_viewed_products,
+        "product_schema": product_schema,
+        "review_form": ReviewForm(),
+        "has_user_reviewed": has_user_reviewed,
+        # Store context
+        "store": db_store,
+        "store_slug": store_slug,
+        "store_name": store_name,
+        "store_primary": meta["primary"],
+        "store_secondary": meta["secondary"],
+        "store_accent": meta["accent"],
+        "store_dark": meta["dark"],
+        "store_card": meta["card"],
+        "store_text": meta["text"],
+        "store_muted": meta["muted"],
+        "store_border": meta["border"],
+        "store_shadow": meta["shadow"],
+        "store_card_shadow": meta["card_shadow"],
+        "store_dropdown_hover": meta["dropdown_hover"],
+        "store_nav_bg": meta["nav_bg"],
+        "store_switcher_bg": meta["switcher_bg"],
+        "store_google_fonts_url": meta["google_fonts"],
+        "store_nav_font": meta["nav_font"],
+        "store_body_font": meta["body_font"],
+        "store_heading_font": meta["heading_font"],
+        "store_icon": meta["icon"],
+        "store_promo_text": meta["promo_text"],
+        "store_tagline": meta["tagline"],
+        "store_copyright": meta["copyright"],
+        "nav_items": meta["nav_items"],
+        "footer_columns": meta["footer_columns"],
+        "store_css_class": f"store-{db_store}",
     }
 
-    return render(request, 'products/product_detail.html', context)
+    return render(request, "products/product_detail.html", context)
 
 
 @login_required

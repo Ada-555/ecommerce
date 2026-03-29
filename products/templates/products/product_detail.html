@@ -8,16 +8,16 @@
     <div class="container">
         <ol class="breadcrumb mb-0 small">
             <li class="breadcrumb-item">
-                <a href="{% url 'home' %}" class="text-cyan text-decoration-none">
-                    <i class="fa-solid fa-house me-1"></i>Home
+                <a href="/{{ store_slug }}/" class="text-cyan text-decoration-none">
+                    <i class="fa-solid fa-house me-1"></i>{{ store_name }}
                 </a>
             </li>
             <li class="breadcrumb-item">
-                <a href="{% url 'products' %}" class="text-cyan text-decoration-none">Products</a>
+                <a href="/{{ store_slug }}/products/" class="text-cyan text-decoration-none">Products</a>
             </li>
             {% if product.category %}
             <li class="breadcrumb-item">
-                <a href="{% url 'category_detail' product.category.name %}"
+                <a href="/{{ store_slug }}/products/category/{{ product.category.name }}/"
                    class="text-cyan text-decoration-none">
                     {{ product.category.friendly_name|default:product.category.name }}
                 </a>
@@ -100,7 +100,7 @@
                     </span>
                     {% endif %}
                     {% if product.category %}
-                    <a href="{% url 'category_detail' product.category.name %}"
+                    <a href="/{{ store_slug }}/products/category/{{ product.category.name }}/"
                         class="badge badge-purple text-decoration-none align-self-center">
                         <i class="fa-solid fa-folder me-1"></i>
                         {{ product.category.friendly_name|default:product.category.name }}
@@ -134,7 +134,7 @@
                 <!-- Admin actions -->
                 {% if request.user.is_superuser %}
                 <div class="mb-3 d-flex gap-2">
-                    <a href="{% url 'edit_product' product.id %}" class="btn btn-sm btn-outline-warning rounded-pill">
+                    <a href="/{{ store_slug }}/products/edit/{{ product.id }}/" class="btn btn-sm btn-outline-warning rounded-pill">
                         <i class="fa-solid fa-pen me-1"></i>Edit
                     </a>
                     <button type="button" class="btn btn-sm btn-outline-danger rounded-pill"
@@ -145,7 +145,7 @@
                 {% endif %}
 
                 <!-- Add to Bag form -->
-                <form action="{% url 'add_to_bag' product.id %}" method="POST" class="add-to-bag-form">
+                <form action="/{{ store_slug }}/bag/add/{{ product.id }}/" method="POST" class="add-to-bag-form">
                     {% csrf_token %}
                     <input type="hidden" name="redirect_url" value="{{ request.path }}">
 
@@ -250,10 +250,10 @@
 
                 <!-- Back / Continue shopping -->
                 <div class="mt-4 d-flex gap-3">
-                    <a href="{% url 'products' %}" class="btn btn-outline-light rounded-pill">
+                    <a href="/{{ store_slug }}/products/" class="btn btn-outline-light rounded-pill">
                         <i class="fa-solid fa-chevron-left me-2"></i>Continue Shopping
                     </a>
-                    <a href="{% url 'view_bag' %}" class="btn btn-purple rounded-pill">
+                    <a href="/{{ store_slug }}/bag/" class="btn btn-purple rounded-pill">
                         <i class="fa-solid fa-bag-shopping me-2"></i>View Bag
                     </a>
                 </div>
@@ -364,7 +364,7 @@
             <div class="col-6 col-md-3">
                 <div class="card product-card h-100 border-0 rounded-4 overflow-hidden bg-darker">
                     <div class="position-relative">
-                        <a href="{% url 'product_detail' rp.id %}" class="d-block">
+                        <a href="/{{ store_slug }}/products/{{ rp.id }}/" class="d-block">
                             {% if rp.image %}
                             
                             <img src="{{ rp.image.url }}" class="card-img-top" loading="lazy"
@@ -395,7 +395,7 @@
                             </span>
                             {% endif %}
                         </div>
-                        <a href="{% url 'product_detail' rp.id %}"
+                        <a href="/{{ store_slug }}/products/{{ rp.id }}/"
                            class="btn btn-sm btn-purple rounded-pill w-100 mt-2">
                             View
                         </a>
@@ -420,7 +420,7 @@
             {% for rp in recently_viewed %}
             <div class="col-6 col-md-3 col-lg-2">
                 <div class="card product-card h-100 border-0 rounded-4 overflow-hidden bg-darker">
-                    <a href="{% url 'product_detail' rp.id %}" class="d-block">
+                    <a href="/{{ store_slug }}/products/{{ rp.id }}/" class="d-block">
                         {% if rp.image %}
                         
                             <img src="{{ rp.image.url }}" class="card-img-top" loading="lazy"
@@ -508,13 +508,7 @@
 
         {# Review form for logged-in users #}
         {% if request.user.is_authenticated %}
-            {% has_user_reviewed=False %}
-            {% for review in product.reviews.all %}
-                {% if review.user == request.user %}
-                    {% with has_user_reviewed=True %}{% endwith %}
-                {% endif %}
-            {% endfor %}
-
+            {# Check if user already reviewed - handled by view context #}
             {% if has_user_reviewed %}
             <div class="col-12 mt-3">
                 <div class="bg-darker rounded-4 p-3">
@@ -530,7 +524,7 @@
                     <h5 class="text-white mb-3">
                         <i class="fa-solid fa-pen me-2"></i>Write a Review
                     </h5>
-                    <form method="POST" action="{% url 'add_review' product.id %}">
+                    <form method="POST" action="/{{ store_slug }}/products/add_review/{{ product.id }}/">
                         {% csrf_token %}
                         <div class="mb-3">
                             <label for="id_rating" class="form-label text-silver">Your Rating</label>

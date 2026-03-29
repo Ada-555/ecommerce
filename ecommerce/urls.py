@@ -3,18 +3,24 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
+from django.views.generic import RedirectView
 
 from stores import store_views
 from home import views as home_views
 from about import views as about_views
+from products import views as product_views
 from .sitemaps import ProductSitemap, CategorySitemap, BlogSitemap
 
 urlpatterns = [
+    # Root redirects to orderimo store
+    path('', RedirectView.as_view(url='/orderimo/', permanent=False), name='home'),
+
     # ========================
     # ORDERIMO STORE
     # ========================
     path('orderimo/', store_views.orderimo_home, name='orderimo_home'),
     path('orderimo/products/', store_views.store_products, {'store_slug': 'orderimo'}, name='orderimo_products'),
+    path('orderimo/products/<int:product_id>/', product_views.product_detail, name='orderimo_product_detail'),
     path('orderimo/bag/', include('bag.urls')),
     path('orderimo/checkout/', include('checkout.urls')),
     path('orderimo/about/', about_views.about, name='orderimo_about'),
@@ -31,6 +37,7 @@ urlpatterns = [
     # ========================
     path('petshop/', store_views.petshop_home, name='petshop_home'),
     path('petshop/products/', store_views.store_products, {'store_slug': 'petshop'}, name='petshop_products'),
+    path('petshop/products/<int:product_id>/', product_views.product_detail, name='petshop_product_detail'),
     path('petshop/bag/', include('bag.urls')),
     path('petshop/checkout/', include('checkout.urls')),
     path('petshop/about/', about_views.about, name='petshop_about'),
@@ -47,6 +54,7 @@ urlpatterns = [
     # ========================
     path('digital/', store_views.digital_home, name='digital_home'),
     path('digital/products/', store_views.store_products, {'store_slug': 'digital'}, name='digital_products'),
+    path('digital/products/<int:product_id>/', product_views.product_detail, name='digital_product_detail'),
     path('digital/bag/', include('bag.urls')),
     path('digital/checkout/', include('checkout.urls')),
     path('digital/about/', about_views.about, name='digital_about'),
@@ -59,9 +67,8 @@ urlpatterns = [
     path('digital/accept-cookies/', about_views.accept_cookies, name='digital_accept_cookies'),
 
     # ========================
-    # GLOBAL / LEGACY ROUTES
+    # GLOBAL / LEGACY (redirect to orderimo store)
     # ========================
-    path('', home_views.index, name='home'),
     path('products/', include('products.urls')),
     path('bag/', include('bag.urls')),
     path('checkout/', include('checkout.urls')),

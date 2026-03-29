@@ -1,39 +1,45 @@
-<div class="product-card h-100">
-    <div class="position-relative overflow-hidden">
-        {% if product.image %}
-        <img src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">
-        {% else %}
-        <div class="bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
-            <i class="fa-solid fa-image text-white fa-3x"></i>
+<div class="product-card h-100 d-flex flex-column">
+    <a href="/{{ store_slug }}/products/{{ product.id }}/" class="text-decoration-none flex-grow-1 d-flex flex-column">
+        <div class="position-relative overflow-hidden">
+            {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">
+            {% else %}
+            <div class="bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
+                <i class="fa-solid fa-image text-white fa-3x"></i>
+            </div>
+            {% endif %}
+            {% if product.stock_quantity == 0 %}
+            <span class="position-absolute badge bg-danger top-0 start-0 m-2">Out of Stock</span>
+            {% elif product.stock_quantity and product.stock_quantity < 5 %}
+            <span class="position-absolute badge top-0 start-0 m-2" style="background: #e76f51; color: #fff;">Only {{ product.stock_quantity }} left!</span>
+            {% endif %}
+            {% if product.is_digital %}
+            <span class="position-absolute badge top-0 end-0 m-2" style="background: #800080; color: #fff;">
+                <i class="fa-solid fa-download me-1"></i>Digital
+            </span>
+            {% endif %}
         </div>
-        {% endif %}
-        {% if product.stock_quantity == 0 %}
-        <span class="position-absolute badge bg-danger top-0 start-0 m-2">Out of Stock</span>
-        {% elif product.stock_quantity and product.stock_quantity < 5 %}
-        <span class="position-absolute badge top-0 start-0 m-2" style="background: #e76f51; color: #fff;">Only {{ product.stock_quantity }} left!</span>
-        {% endif %}
-        {% if product.is_digital %}
-        <span class="position-absolute badge top-0 end-0 m-2" style="background: #800080; color: #fff;">
-            <i class="fa-solid fa-download me-1"></i>Digital
-        </span>
-        {% endif %}
-    </div>
-    <div class="p-3">
-        {% if product.category %}
-        <p class="small mb-1" style="color: var(--muted);">{{ product.category.friendly_name|default:product.category.name }}</p>
-        {% endif %}
-        <h6 class="text-white mb-2" style="font-size: 0.95rem; line-height: 1.3;">{{ product.name }}</h6>
-        {% if product.rating %}
-        <p class="small mb-2">
-            <i class="fa-solid fa-star" style="color: #FFD700;"></i>
-            <span style="color: var(--muted);">{{ product.rating|floatformat:1 }}/5</span>
-        </p>
-        {% endif %}
-        <div class="d-flex justify-content-between align-items-center mt-2">
-            <span class="fw-bold fs-5" style="color: var(--primary);">€{{ product.price }}</span>
-            <a href="/{{ store_slug }}/bag/add/{{ product.id }}/" class="btn btn-sm btn-store">
-                <i class="fa-solid fa-cart-plus"></i>
-            </a>
+        <div class="p-3 flex-grow-1 d-flex flex-column justify-content-between">
+            <div>
+                {% if product.category %}
+                <p class="small mb-1" style="color: var(--muted);">{{ product.category.friendly_name|default:product.category.name }}</p>
+                {% endif %}
+                <h6 class="text-white mb-2" style="font-size: 0.95rem; line-height: 1.3;">{{ product.name }}</h6>
+                {% if product.rating %}
+                <p class="small mb-2">
+                    <i class="fa-solid fa-star" style="color: #FFD700;"></i>
+                    <span style="color: var(--muted);">{{ product.rating|floatformat:1 }}/5</span>
+                </p>
+                {% endif %}
+            </div>
+            <div class="d-flex justify-content-between align-items-center mt-2">
+                <span class="fw-bold fs-5" style="color: var(--primary);">€{{ product.price }}</span>
+            </div>
         </div>
+    </a>
+    <div class="p-3 pt-0">
+        <a href="/{{ store_slug }}/bag/add/{{ product.id }}/" class="btn btn-sm btn-store w-100">
+            <i class="fa-solid fa-cart-plus me-1"></i>Add to Cart
+        </a>
     </div>
 </div>

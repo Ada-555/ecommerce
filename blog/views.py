@@ -9,7 +9,14 @@ from .forms import BlogPageForm
 
 def blog(request):
     """ Display list of blog posts """
-    active_store = request.session.get('active_store', 'orderimo')
+    # Detect store from URL path
+    path = request.path
+    if "/petshop/" in path:
+        active_store = "petshop-ie"
+    elif "/digital/" in path:
+        active_store = "digitalhub"
+    else:
+        active_store = "orderimo"
     blog_pages = BlogPage.objects.filter(store=active_store).order_by('-created_at')
     template = 'blog/blog.html'
     paginate_by = 3  # paginate by posts (sets posts per page)
@@ -50,7 +57,14 @@ def create_blog_page(request):
 
 def blog_page_detail(request, pk):
     """ Display a blog post """
-    active_store = request.session.get('active_store', 'orderimo')
+    # Detect store from URL path
+    path = request.path
+    if "/petshop/" in path:
+        active_store = "petshop-ie"
+    elif "/digital/" in path:
+        active_store = "digitalhub"
+    else:
+        active_store = "orderimo"
     blog_page = get_object_or_404(BlogPage, pk=pk, store=active_store)
 
     # Get all blog pages ordered by created_at (same store)

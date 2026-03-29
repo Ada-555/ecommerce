@@ -2,6 +2,13 @@ from django.shortcuts import render
 from products.models import Product
 
 
+STORE_NAME_MAP = {
+    'orderimo': 'Orderimo',
+    'petshop-ie': 'PetShop Ireland',
+    'digitalhub': 'DigitalHub',
+}
+
+
 STORE_META = {
     'orderimo': {
         'primary': '#00b4d8', 'secondary': '#0077b6', 'accent': '#90e0ef',
