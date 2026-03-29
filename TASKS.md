@@ -1,72 +1,76 @@
 # Plurino / Orderimo — Build Task Dashboard
 
 ## 🚦 Status Legend
-- 🟡 **IN PROGRESS** — actively being built
 - ✅ **DONE** — completed and merged
-- ⏳ **NEXT** — queued up
+- 🟡 **IN PROGRESS** — actively being built
+- ⏳ **QUEUED** — next to spawn
 - 🔜 **SOON** — planned
 
 ---
 
-## 🔧 Fixes & Polish (This Week)
+## ✅ Completed This Session
 
-| # | Task | Status | Agent | Notes |
-|---|------|--------|-------|-------|
-| 1 | Per-store admin | ✅ DONE | per-store-admin | Store-scoped admin views |
-| 2 | Phase 12 Reviews — star ratings, moderation, verified buyer | 🟡 IN PROGRESS | phase12-frontend | Backend exists, new frontend-only agent spawned |
-| 3 | Order tracking page — trackable link after purchase | 🟡 IN PROGRESS | order-tracking-retry | Respawning with 30m timeout |
-| 4 | Email notifications — confirmation, shipping, delivery | 🟡 IN PROGRESS | email-notifications-retry | Respawning with 30m timeout |
-| 5 | Wishlist / Save for later — heart icon | 🟡 IN PROGRESS | wishlist-retry | Respawning with 30m timeout |
-| 6 | Store-specific search — scoped to active store | ✅ DONE | store-search | Search per store (orderimo/petshop/digital/search/) |
+| Task | Commit | Lines |
+|------|--------|-------|
+| Store-scoped search | `6e12240` | — |
+| Email notifications (full) | `5a07479` | 1,851 |
+| Order tracking (full) | `5a07479` | (with email) |
+| Crypto payments (BTC/USDC/XMR) | `dd1084b` | — |
 
 ---
 
-## 🚀 Features (This Month)
+## 🟡 In Progress (Partitioned by Directory)
 
-| # | Task | Status | Agent | Notes |
-|---|------|--------|-------|-------|
-| 7 | Product comparisons — side-by-side 2-3 products | ⏳ NEXT | — | |
-| 8 | Abandoned cart emails | ⏳ NEXT | — | |
-| 9 | Multi-coupon system — credits, % off, free shipping | ⏳ NEXT | — | |
-| 10 | PDF invoices — auto-generation per order | ⏳ NEXT | — | |
+| # | Task | Agent | Owns | Status |
+|---|------|-------|------|--------|
+| 1 | Wishlist — heart icon, save for later | wishlist-retry | `wishlist/` | 🟡 Running |
+| 2 | Phase 12 Reviews — templates, star rating, verified buyer | phase12-frontend | `products/templates/` | 🟡 Running |
+| 3 | Multi-coupon + Subscriptions | agent-payments | `coupons/`, `subscriptions/` | 🟡 Running |
+| 4 | Order Tracking — verify + finish | order-tracking-retry | `tracking/` | 🟡 Running |
 
 ---
 
-## 💰 Revenue Features
+## ⏳ Queued (spawn as slots free)
 
-| # | Task | Status | Agent | Notes |
-|---|------|--------|-------|-------|
-| 11 | **Crypto payments — BTC, USDC, XMR via Stripe** | ✅ DONE | crypto-payments | BTC/USDC via Stripe Checkout Session, XMR via CoinGate redirect; crypto fields added to Order model; payment method selector in checkout; crypto info on success page; CoinGate callback handler; admin updated |
-| 12 | Newsletter signup — Mailchimp or equivalent | ⏳ NEXT | — | |
-| 13 | Subscription products — recurring billing | 🔜 SOON | — | |
-| 14 | GA4 analytics dashboard — revenue, conversions, top products | 🔜 SOON | — | |
-| 15 | Affiliate program — per-store affiliate links | 🔜 SOON | — | |
-| 16 | Multi-currency — EUR, USD, GBP | 🔜 SOON | — | |
+| # | Task | Agent | Owns |
+|---|------|-------|------|
+| 5 | Product Comparisons + GA4 Dashboard | agent-seo | `comparison/`, `analytics/` |
+| 6 | Newsletter (Mailchimp) + Abandoned Cart Emails | agent-ops | `notifications/`, emails |
+| 7 | PDF Invoices | agent-ops | new `invoices/` |
+| 8 | Multi-Currency (EUR/USD/GBP) | next-free | settings + templates |
+| 9 | Affiliate Program | next-free | `affiliates/` |
+
+---
+
+## 🔜 Soon (not started)
+
+| # | Task |
+|---|------|
+| 10 | GA4 External API (optional, on top of ORM dashboard) |
+| 11 | Stripe Customer Portal for subscriptions |
+| 12 | Multi-currency price conversion |
 
 ---
 
 ## 📋 Agent Log
 
-| Timestamp | Agent | Action | Status |
-|-----------|-------|--------|--------|
-| 2026-03-29 07:00 | per-store-admin | Committed store-scoped admin | ✅ Done |
-| 2026-03-29 07:46 | qa-test-sweep | Fixed profile URL, bag URL param, all 101 tests pass | ✅ Done |
-| 2026-03-29 08:16 | store-search | Added store-scoped search URLs & templates | ✅ Done |
-| 2026-03-29 08:00 | order-tracking, email, wishlist | Initial runs timed out (10m) | ⚠️ Timeout |
-| 2026-03-29 08:18 | order-tracking-retry, email-notifications-retry, wishlist-retry | Respawning with 30min timeouts — resuming from partial work | 🟡 Running |
-| 2026-03-29 08:19 | crypto-payments | Starting crypto payments (BTC, USDC, XMR) | 🟩 Started |
-| 2026-03-29 08:31 | crypto-payments | Verified implementation complete; updated TASKS.md | ✅ Done |
-| 2026-03-29 08:30 | orderimo-phase12-reviews | KILLED — 2.5h stuck in git loop, Review model already existed | ❌ Killed |
-| 2026-03-29 08:32 | phase12-frontend | Spawned frontend-only agent (20min) — templates only | 🟡 Running |
+| Time | Agent | Action |
+|------|-------|--------|
+| 08:44 | email-notifications | ✅ Committed 1,851 lines — full email system |
+| 08:44 | crypto-payments | ✅ Committed — BTC/USDC via Stripe, XMR via CoinGate |
+| 08:44 | store-search | ✅ Committed — store-scoped search |
+| 08:44 | orderimo-phase12-reviews | ❌ KILLED — stuck in git loop 2.5h |
+| 08:44 | phase12-frontend | 🟡 Running — templates only |
+| 08:44 | agent-payments | 🟡 Started — coupons + subscriptions |
+| 08:45 | wishlist-retry | 🟡 Running — wishlist app |
+| 08:45 | order-tracking-retry | 🟡 Running — tracking app |
 
 ---
 
 ## 📊 Site Health
-- All 3 stores: ✅ 200 OK on all pages
+- All 3 stores: ✅ 200 OK
 - Tests: ✅ 101/101 passing
-- Django check: ✅ passing
 
 ---
 
-_Last updated: 2026-03-29 08:19 GMT+1_
-
+_Last updated: 2026-03-29 08:45 GMT+1_
