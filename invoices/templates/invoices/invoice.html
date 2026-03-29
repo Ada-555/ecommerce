@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice {{ order.order_number }}</title>
+    <style>
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
+            }
+            body {
+                margin: 0;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .invoice-container {
+            max-width: 210mm;
+            min-height: 297mm;
+            margin: 0 auto;
+            padding: 20mm;
+            background: #fff;
+            box-sizing: border-box;
+        }
+
+        /* Header */
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding-bottom: 30px;
+            border-bottom: 2px solid #00b4d8;
+            margin-bottom: 30px;
+        }
+
+        .store-info h1 {
+            margin: 0;
+            font-size: 28px;
+            color: #00b4d8;
+            font-weight: 700;
+        }
+
+        .store-info p {
+            margin: 5px 0 0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .invoice-details {
+            text-align: right;
+        }
+
+        .invoice-details h2 {
+            margin: 0 0 10px;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .invoice-details p {
+            margin: 3px 0;
+            font-size: 14px;
+        }
+
+        .invoice-number {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #00b4d8;
+        }
+
+        /* Addresses */
+        .addresses {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            gap: 40px;
+        }
+
+        .address-box {
+            flex: 1;
+        }
+
+        .address-box h3 {
+            margin: 0 0 15px;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #00b4d8;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 8px;
+        }
+
+        .address-box p {
+            margin: 3px 0;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Items Table */
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        .items-table th {
+            background: #00b4d8;
+            color: #fff;
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+        }
+
+        .items-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        .items-table tr:last-child td {
+            border-bottom: 2px solid #00b4d8;
+        }
+
+        .items-table .text-right {
+            text-align: right;
+        }
+
+        .items-table .text-center {
+            text-align: center;
+        }
+
+        .item-name {
+            font-weight: 500;
+        }
+
+        .item-size {
+            color: #888;
+            font-size: 12px;
+        }
+
+        /* Totals */
+        .totals-section {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 40px;
+        }
+
+        .totals-box {
+            width: 300px;
+        }
+
+        .totals-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        .totals-row.total {
+            border-bottom: 2px solid #00b4d8;
+            font-size: 18px;
+            font-weight: 700;
+            color: #00b4d8;
+            margin-top: 10px;
+            padding-top: 15px;
+        }
+
+        .totals-row.discount {
+            color: #28a745;
+        }
+
+        /* Footer */
+        .invoice-footer {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #eee;
+            margin-top: 40px;
+            color: #888;
+            font-size: 13px;
+        }
+
+        .invoice-footer p {
+            margin: 5px 0;
+        }
+
+        /* Store-specific colors (can be overridden inline) */
+        .store-orderimo { --primary-color: #00b4d8; }
+        .store-petshop { --primary-color: #ff6b6b; }
+        .store-digital { --primary-color: #6f42c1; }
+
+        .store-orderimo .store-info h1,
+        .store-orderimo .invoice-number,
+        .store-orderimo .address-box h3,
+        .store-orderimo .items-table th,
+        .store-orderimo .totals-row.total { color: #00b4d8; }
+
+        .store-orderimo .items-table th { background: #00b4d8; }
+        .store-orderimo .invoice-footer { border-top-color: #00b4d8; }
+
+        .store-petshop .store-info h1,
+        .store-petshop .invoice-number,
+        .store-petshop .address-box h3,
+        .store-petshop .items-table th,
+        .store-petshop .totals-row.total { color: #ff6b6b; }
+
+        .store-petshop .items-table th { background: #ff6b6b; }
+        .store-petshop .invoice-footer { border-top-color: #ff6b6b; }
+
+        .store-digital .store-info h1,
+        .store-digital .invoice-number,
+        .store-digital .address-box h3,
+        .store-digital .items-table th,
+        .store-digital .totals-row.total { color: #6f42c1; }
+
+        .store-digital .items-table th { background: #6f42c1; }
+        .store-digital .invoice-footer { border-top-color: #6f42c1; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .addresses {
+                flex-direction: column;
+            }
+            .totals-box {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body class="store-{{ order.store }}">
+    <div class="invoice-container">
+        <!-- Header -->
+        <header class="invoice-header">
+            <div class="store-info">
+                <h1>{{ store_name }}</h1>
+                <p>Thank you for your business!</p>
+            </div>
+            <div class="invoice-details">
+                <h2>INVOICE</h2>
+                <p><span class="invoice-number">{{ order.order_number }}</span></p>
+                <p><strong>Date:</strong> {{ order.date|date:"d F Y" }}</p>
+                {% if order.status %}
+                <p><strong>Status:</strong> {{ order.get_status_display }}</p>
+                {% endif %}
+            </div>
+        </header>
+
+        <!-- Addresses -->
+        <section class="addresses">
+            <div class="address-box">
+                <h3>From</h3>
+                <p><strong>{{ store_name }}</strong></p>
+                <p>{{ store_address|default:"Contact us for store address" }}</p>
+                <p>{{ store_email|default:"info@example.com" }}</p>
+                <p>{{ store_phone|default:"N/A" }}</p>
+            </div>
+            <div class="address-box">
+                <h3>Bill To</h3>
+                <p><strong>{{ order.full_name }}</strong></p>
+                <p>{{ order.email }}</p>
+                <p>{{ order.phone_number }}</p>
+                <p>{{ order.street_address1 }}</p>
+                {% if order.street_address2 %}
+                <p>{{ order.street_address2 }}</p>
+                {% endif %}
+                <p>{{ order.town_or_city }}{% if order.county %}, {{ order.county }}{% endif %}</p>
+                <p>{{ order.country.name }}{% if order.postcode %}, {{ order.postcode }}{% endif %}</p>
+            </div>
+        </section>
+
+        <!-- Items Table -->
+        <table class="items-table">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th class="text-center">Qty</th>
+                    <th class="text-right">Price</th>
+                    <th class="text-right">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in order.lineitems.all %}
+                <tr>
+                    <td>
+                        <span class="item-name">{{ item.product.name }}</span>
+                        {% if item.product_size %}
+                        <br><span class="item-size">Size: {{ item.product_size|upper }}</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-center">{{ item.quantity }}</td>
+                    <td class="text-right">€{{ item.product.price|floatformat:2 }}</td>
+                    <td class="text-right">€{{ item.lineitem_total|floatformat:2 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Totals -->
+        <section class="totals-section">
+            <div class="totals-box">
+                <div class="totals-row">
+                    <span>Subtotal</span>
+                    <span>€{{ order.order_total|floatformat:2 }}</span>
+                </div>
+                <div class="totals-row">
+                    <span>Delivery</span>
+                    <span>€{{ order.delivery_cost|floatformat:2 }}</span>
+                </div>
+                {% if order.coupon_discount and order.coupon_discount > 0 %}
+                <div class="totals-row discount">
+                    <span>Discount</span>
+                    <span>-€{{ order.coupon_discount|floatformat:2 }}</span>
+                </div>
+                {% endif %}
+                <div class="totals-row total">
+                    <span>Grand Total</span>
+                    <span>€{{ order.grand_total|floatformat:2 }}</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="invoice-footer">
+            <p><strong>Payment Method:</strong>
+                {% if order.payment_method == 'card' %}
+                    Credit/Debit Card
+                {% elif order.payment_method == 'stripe_crypto' %}
+                    Cryptocurrency via Stripe (BTC/USDC)
+                {% elif order.payment_method == 'coingate_xmr' %}
+                    Monero (XMR) via CoinGate
+                {% else %}
+                    {{ order.get_payment_method_display }}
+                {% endif %}
+            </p>
+            {% if order.crypto_txid %}
+            <p><strong>Transaction ID:</strong> <code>{{ order.crypto_txid }}</code></p>
+            {% endif %}
+            {% if order.tracking_number %}
+            <p><strong>Tracking:</strong> {{ order.carrier|default:"Carrier" }} - {{ order.tracking_number }}</p>
+            {% endif %}
+            <p style="margin-top: 15px;">Thank you for shopping with us!</p>
+            <p>&copy; {{ order.date|date:"Y" }} {{ store_name }}. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
