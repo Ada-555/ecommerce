@@ -1,15 +1,19 @@
-{% extends "base.html" %}
+{% extends "stores/store_base.html" %}
 {% load static %}
 
-{% block title %}{{ store_name }}{% endblock %}
+{% block store_custom_css %}
+.header-section {
+    background: linear-gradient(135deg, var(--dark), color-mix(in srgb, var(--primary) 10%, var(--dark)));
+}
+{% endblock %}
 
 {% block content %}
-<div class="py-5 text-center" style="background: linear-gradient(135deg, #0a0a0f, #0f1520);">
+<div class="header-section py-5 text-center">
     <div class="container py-4">
-        <h1 class="display-5 fw-bold text-white mb-2" style="font-family: 'Space Grotesk', sans-serif;">
+        <h1 class="display-5 fw-bold text-white mb-2" style="font-family:var(--heading-font),sans-serif;">
             {{ store_name }}
         </h1>
-        <p class="text-muted">{{ products.count }} products available</p>
+        <p class="text-muted">{{ products.count }} product{{ products.count|pluralize }} available</p>
     </div>
 </div>
 
@@ -27,7 +31,7 @@
         <i class="fa-solid fa-boxes-stacked fa-4x mb-3 text-muted"></i>
         <h3 class="text-white mb-2">No products yet</h3>
         <p class="text-muted">Check back soon — we're adding new products daily.</p>
-        <a href="/" class="btn btn-primary-custom mt-2">Back to Home</a>
+        <a href="/{{ store_slug }}/" class="btn btn-outline-store mt-2">Back to Store</a>
     </div>
     {% endif %}
 </div>

@@ -67,6 +67,7 @@ urlpatterns = [
     path('checkout/', include('checkout.urls')),
     path('blog/', include('blog.urls')),
     path('about/', include('about.urls')),
+    path('stores/', include('stores.urls')),
     path('accounts/', include('allauth.urls')),
     path('admin/', admin.site.urls),
     path('sitemap.xml', sitemap, {'sitemaps': {

@@ -4,27 +4,144 @@ from products.models import Product
 
 STORE_META = {
     'orderimo': {
-        'primary': '#00b4d8',
-        'secondary': '#0077b6',
-        'accent': '#90e0ef',
-        'dark': '#0a0a0f',
-        'card': '#12121a',
+        'primary': '#00b4d8', 'secondary': '#0077b6', 'accent': '#90e0ef',
+        'dark': '#0a0a0f', 'card': '#12121a', 'text': '#e0e0e0', 'muted': '#888',
+        'border': 'rgba(255,255,255,0.07)', 'shadow': 'rgba(0,180,216,0.4)',
+        'card_shadow': 'rgba(0,180,216,0.15)', 'dropdown_hover': 'rgba(0,180,216,0.12)',
+        'nav_bg': '10,10,15', 'switcher_bg': '#111118',
+        'google_fonts': "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600&display=swap",
+        'nav_font': "'Outfit', sans-serif", 'body_font': "'Outfit', sans-serif",
+        'heading_font': "'Space Grotesk', sans-serif",
+        'icon': 'fa-solid fa-store',
+        'promo_text': '🚚 Free delivery over €80',
+        'tagline': 'One platform. Multiple curated stores. Shop tech, home, fashion and more.',
+        'copyright': '© 2026 Orderimo',
+        'nav_items': [
+            {'label': 'Home', 'url': '/orderimo/'},
+            {'label': 'Products', 'url': '/orderimo/products/'},
+            {'label': 'Blog', 'url': '/orderimo/blog/'},
+            {'label': 'About', 'url': '/orderimo/about/'},
+        ],
+        'footer_columns': [
+            {'title': 'Shop', 'links': [
+                {'label': 'All Products', 'url': '/orderimo/products/'},
+                {'label': 'Electronics', 'url': '/orderimo/products/?category=electronics'},
+                {'label': 'Home & Living', 'url': '/orderimo/products/?category=home'},
+                {'label': 'Fashion', 'url': '/orderimo/products/?category=fashion'},
+            ]},
+            {'title': 'Company', 'links': [
+                {'label': 'About', 'url': '/orderimo/about/'},
+                {'label': 'Blog', 'url': '/orderimo/blog/'},
+                {'label': 'Contact', 'url': '/orderimo/contact/'},
+            ]},
+        ],
     },
     'petshop-ie': {
-        'primary': '#228B22',
-        'secondary': '#2d9a3e',
-        'accent': '#90EE90',
-        'dark': '#0f1a0f',
-        'card': '#1a2a1a',
+        'primary': '#228B22', 'secondary': '#2d9a3e', 'accent': '#90EE90',
+        'dark': '#0a150a', 'card': '#111a11', 'text': '#e8f5e9', 'muted': '#7a9a7a',
+        'border': 'rgba(34,139,34,0.15)', 'shadow': 'rgba(34,139,34,0.4)',
+        'card_shadow': 'rgba(34,139,34,0.15)', 'dropdown_hover': 'rgba(34,139,34,0.15)',
+        'nav_bg': '10,15,10', 'switcher_bg': '#080f08',
+        'google_fonts': "https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap",
+        'nav_font': "'Nunito', sans-serif", 'body_font': "'Nunito', sans-serif",
+        'heading_font': "'Poppins', sans-serif",
+        'icon': 'fa-solid fa-paw',
+        'promo_text': '🚚 Fast delivery across Ireland — all 32 counties',
+        'tagline': "Ireland's best pet supplies. Fast delivery across all 32 counties.",
+        'copyright': '© 2026 PetShop Ireland — Delivering to Ireland 🇮🇪',
+        'nav_items': [
+            {'label': 'Home', 'url': '/petshop/'},
+            {'label': 'Dogs', 'url': '/petshop/products/?category=dogs'},
+            {'label': 'Cats', 'url': '/petshop/products/?category=cats'},
+            {'label': 'Fish', 'url': '/petshop/products/?category=fish_aquatics'},
+            {'label': 'Birds', 'url': '/petshop/products/?category=birds'},
+            {'label': 'All', 'url': '/petshop/products/'},
+        ],
+        'footer_columns': [
+            {'title': 'Pets', 'links': [
+                {'label': 'Dogs', 'url': '/petshop/products/?category=dogs'},
+                {'label': 'Cats', 'url': '/petshop/products/?category=cats'},
+                {'label': 'Fish', 'url': '/petshop/products/?category=fish_aquatics'},
+                {'label': 'Birds', 'url': '/petshop/products/?category=birds'},
+            ]},
+            {'title': 'Info', 'links': [
+                {'label': 'About', 'url': '/petshop/about/'},
+                {'label': 'Contact', 'url': '/petshop/contact/'},
+                {'label': 'FAQ', 'url': '/petshop/faq/'},
+            ]},
+        ],
     },
     'digitalhub': {
-        'primary': '#800080',
-        'secondary': '#da70d6',
-        'accent': '#ff69b4',
-        'dark': '#08080f',
-        'card': '#10101a',
+        'primary': '#800080', 'secondary': '#da70d6', 'accent': '#ff69b4',
+        'dark': '#06060f', 'card': '#0e0e1a', 'text': '#e8e8f0', 'muted': '#8888aa',
+        'border': 'rgba(128,0,128,0.15)', 'shadow': 'rgba(128,0,128,0.5)',
+        'card_shadow': 'rgba(128,0,128,0.25)', 'dropdown_hover': 'rgba(128,0,128,0.15)',
+        'nav_bg': '6,6,15', 'switcher_bg': '#04040c',
+        'google_fonts': "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap",
+        'nav_font': "'Inter', sans-serif", 'body_font': "'Inter', sans-serif",
+        'heading_font': "'JetBrains Mono', monospace",
+        'icon': 'fa-solid fa-bolt',
+        'promo_text': '⚡ Instant delivery — lifetime access',
+        'tagline': 'Instant delivery. Lifetime access. Download immediately after purchase.',
+        'copyright': '© 2026 DigitalHub — Instant Digital Delivery',
+        'nav_items': [
+            {'label': 'Home', 'url': '/digital/'},
+            {'label': 'Products', 'url': '/digital/products/'},
+            {'label': 'About', 'url': '/digital/about/'},
+            {'label': 'Contact', 'url': '/digital/contact/'},
+        ],
+        'footer_columns': [
+            {'title': 'Products', 'links': [
+                {'label': 'All Products', 'url': '/digital/products/'},
+                {'label': 'E-books', 'url': '/digital/products/?category=ebooks'},
+                {'label': 'Courses', 'url': '/digital/products/?category=courses'},
+                {'label': 'Software', 'url': '/digital/products/?category=software'},
+            ]},
+            {'title': 'Info', 'links': [
+                {'label': 'About', 'url': '/digital/about/'},
+                {'label': 'Contact', 'url': '/digital/contact/'},
+                {'label': 'FAQ', 'url': '/digital/faq/'},
+            ]},
+        ],
     },
 }
+
+
+def _build_context(store_slug, db_store, store_name, extra=None):
+    """Build the shared context dict for any store page."""
+    meta = STORE_META.get(db_store, STORE_META['orderimo'])
+    ctx = {
+        'store': db_store,
+        'store_slug': store_slug,
+        'store_name': store_name,
+        'store_description': f"{store_name} — Official Store",
+        'store_primary': meta['primary'],
+        'store_secondary': meta['secondary'],
+        'store_accent': meta['accent'],
+        'store_dark': meta['dark'],
+        'store_card': meta['card'],
+        'store_text': meta['text'],
+        'store_muted': meta['muted'],
+        'store_border': meta['border'],
+        'store_shadow': meta['shadow'],
+        'store_card_shadow': meta['card_shadow'],
+        'store_dropdown_hover': meta['dropdown_hover'],
+        'store_nav_bg': meta['nav_bg'],
+        'store_switcher_bg': meta['switcher_bg'],
+        'store_google_fonts_url': meta['google_fonts'],
+        'store_nav_font': meta['nav_font'],
+        'store_body_font': meta['body_font'],
+        'store_heading_font': meta['heading_font'],
+        'store_icon': meta['icon'],
+        'store_promo_text': meta['promo_text'],
+        'store_tagline': meta['tagline'],
+        'store_copyright': meta['copyright'],
+        'nav_items': meta['nav_items'],
+        'footer_columns': meta['footer_columns'],
+    }
+    if extra:
+        ctx.update(extra)
+    return ctx
 
 
 def orderimo_home(request):
@@ -33,12 +150,11 @@ def orderimo_home(request):
     new_arrivals = list(products[:8])
     if not featured:
         featured = list(products[:4])
-    return render(request, 'stores/orderimo/home.html', {
+    ctx = _build_context('orderimo', 'orderimo', 'Orderimo', {
         'featured': featured,
         'new_arrivals': new_arrivals,
-        'store': 'orderimo',
-        'store_name': 'Orderimo',
     })
+    return render(request, 'stores/orderimo/home.html', ctx)
 
 
 def petshop_home(request):
@@ -47,12 +163,11 @@ def petshop_home(request):
     new_arrivals = list(products[:8])
     if not featured:
         featured = list(products[:4])
-    return render(request, 'stores/petshop/home.html', {
+    ctx = _build_context('petshop', 'petshop-ie', 'PetShop Ireland', {
         'featured': featured,
         'new_arrivals': new_arrivals,
-        'store': 'petshop-ie',
-        'store_name': 'PetShop Ireland',
     })
+    return render(request, 'stores/petshop/home.html', ctx)
 
 
 def digital_home(request):
@@ -61,28 +176,18 @@ def digital_home(request):
     new_arrivals = list(products[:8])
     if not featured:
         featured = list(products[:4])
-    return render(request, 'stores/digital/home.html', {
+    ctx = _build_context('digital', 'digitalhub', 'DigitalHub', {
         'featured': featured,
         'new_arrivals': new_arrivals,
-        'store': 'digitalhub',
-        'store_name': 'DigitalHub',
     })
+    return render(request, 'stores/digital/home.html', ctx)
 
 
 def store_products(request, store_slug):
     store_map = {'orderimo': 'orderimo', 'petshop': 'petshop-ie', 'digital': 'digitalhub'}
     store_name_map = {'orderimo': 'Orderimo', 'petshop': 'PetShop Ireland', 'digital': 'DigitalHub'}
     db_store = store_map.get(store_slug, 'orderimo')
-    meta = STORE_META.get(db_store, STORE_META['orderimo'])
+    store_name = store_name_map.get(store_slug, store_slug.title())
     products = Product.objects.filter(store=db_store).select_related('category')
-    return render(request, 'stores/products.html', {
-        'products': products,
-        'store': db_store,
-        'store_name': store_name_map.get(store_slug, store_slug.title()),
-        'store_slug': store_slug,
-        'store_primary': meta['primary'],
-        'store_secondary': meta['secondary'],
-        'store_accent': meta['accent'],
-        'store_dark': meta['dark'],
-        'store_card': meta['card'],
-    })
+    ctx = _build_context(store_slug, db_store, store_name, {'products': products})
+    return render(request, 'stores/products.html', ctx)

@@ -31,7 +31,7 @@
         {% endif %}
         <div class="d-flex justify-content-between align-items-center mt-2">
             <span class="fw-bold fs-5" style="color: var(--primary);">€{{ product.price }}</span>
-            <a href="/bag/add/{{ product.id }}/" class="btn btn-sm btn-primary-custom">
+            <a href="/{{ store_slug }}/bag/add/{{ product.id }}/" class="btn btn-sm btn-store">
                 <i class="fa-solid fa-cart-plus"></i>
             </a>
         </div>
