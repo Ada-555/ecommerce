@@ -75,8 +75,9 @@
                                     {{ blog_page.content|striptags|truncatewords:25|safe }}
                                 </p>
                                 <a href="{% url 'blog_page_detail' pk=blog_page.pk %}"
-                                   class="btn btn-sm btn-outline-cyan rounded-pill">
-                                    Read More <i class="fa-solid fa-arrow-right ms-1"></i>
+                                   class="btn btn-sm btn-outline-cyan rounded-pill"
+                                   aria-label="Read: {{ blog_page.title }}">
+                                    Read: {{ blog_page.title|truncatewords:2 }} <i class="fa-solid fa-arrow-right ms-1"></i>
                                 </a>
                             </div>
                         </div>
@@ -133,8 +134,9 @@
                         {{ blog_page.content|striptags|truncatewords:20|safe }}
                     </p>
                     <a href="{% url 'blog_page_detail' pk=blog_page.pk %}"
-                       class="btn btn-sm btn-outline-cyan rounded-pill">
-                        Read More <i class="fa-solid fa-arrow-right ms-1"></i>
+                       class="btn btn-sm btn-outline-cyan rounded-pill"
+                       aria-label="Read: {{ blog_page.title }}">
+                        Read: {{ blog_page.title|truncatewords:2 }} <i class="fa-solid fa-arrow-right ms-1"></i>
                     </a>
                 </div>
             </div>
@@ -150,13 +152,15 @@
                 <ul class="pagination justify-content-center flex-wrap gap-1">
                     {% if page_obj.has_previous %}
                     <li class="page-item">
-                        <a href="?page=1" class="page-link bg-purple text-white border-0 rounded-pill px-3">
+                        <a href="?page=1" class="page-link bg-purple text-white border-0 rounded-pill px-3"
+                           aria-label="First page">
                             <i class="fa-solid fa-backward-fast"></i>
                         </a>
                     </li>
                     <li class="page-item">
                         <a href="?page={{ page_obj.previous_page_number }}"
-                           class="page-link bg-purple text-white border-0 rounded-pill px-3">
+                           class="page-link bg-purple text-white border-0 rounded-pill px-3"
+                           aria-label="Previous page">
                             <i class="fa-solid fa-backward-step"></i>
                         </a>
                     </li>
@@ -169,13 +173,15 @@
                     {% if page_obj.has_next %}
                     <li class="page-item">
                         <a href="?page={{ page_obj.next_page_number }}"
-                           class="page-link bg-purple text-white border-0 rounded-pill px-3">
+                           class="page-link bg-purple text-white border-0 rounded-pill px-3"
+                           aria-label="Next page">
                             <i class="fa-solid fa-forward-step"></i>
                         </a>
                     </li>
                     <li class="page-item">
                         <a href="?page={{ page_obj.paginator.num_pages }}"
-                           class="page-link bg-purple text-white border-0 rounded-pill px-3">
+                           class="page-link bg-purple text-white border-0 rounded-pill px-3"
+                           aria-label="Last page">
                             <i class="fa-solid fa-forward-fast"></i>
                         </a>
                     </li>
