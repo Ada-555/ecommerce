@@ -288,7 +288,7 @@ def product_detail(request, product_id):
 
     # Store metadata for template
     from stores.store_views import STORE_META, STORE_NAME_MAP
-    store_name = STORE_NAME_MAP.get(store_slug, "Orderimo")
+    store_name = STORE_NAME_MAP.get(db_store, "Orderimo")
     meta = STORE_META.get(db_store, STORE_META["orderimo"])
 
     # Build product schema
