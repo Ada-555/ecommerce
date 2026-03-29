@@ -29,7 +29,7 @@ def _fuzzy_match(query, candidates, threshold=0.6):
 def all_products(request):
     """ A view to show all products, including sorting and search queries """
 
-    products = Product.objects.order_by('id')
+    products = Product.objects.select_related('category').order_by('id')
     query = None
     categories = None
     sort = None
@@ -123,7 +123,7 @@ def category_detail(request, slug):
     sort = request.GET.get('sort', None)
     direction = request.GET.get('direction', None)
 
-    products = Product.objects.filter(category=category)
+    products = Product.objects.filter(category=category).select_related('category')
 
     if sort:
         sortkey = sort
@@ -184,7 +184,7 @@ def category_detail(request, slug):
 def product_detail(request, product_id):
     """ A view to show individual product details """
 
-    product = get_object_or_404(Product, pk=product_id)
+    product = get_object_or_404(Product.objects.select_related('category'), pk=product_id)
 
     # Track recently viewed (store up to 4 product IDs in session)
     recently_viewed = request.session.get('recently_viewed', [])
@@ -204,20 +204,15 @@ def product_detail(request, product_id):
     related_products = list(
         Product.objects.filter(category=product.category).exclude(
             pk=product_id
-        ).order_by('-views_count')[:4]
+        ).select_related('category').order_by('-views_count')[:4]
     )
 
     # Recently viewed products (from session, excluding current product)
     recently_viewed_ids = request.session.get('recently_viewed', [])
-    recently_viewed = []
-    for pid in recently_viewed_ids:
-        if pid != product_id:
-            try:
-                recently_viewed.append(Product.objects.get(pk=pid))
-            except Product.DoesNotExist:
-                pass
-        if len(recently_viewed) >= 4:
-            break
+    recently_viewed = list(
+        Product.objects.filter(pk__in=[p for p in recently_viewed_ids if p != product_id])
+        .select_related('category')[:4]
+    )
 
     # Build JSON-LD Product schema
     product_schema = {

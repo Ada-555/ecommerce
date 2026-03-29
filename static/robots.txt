@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Disallow admin area
+Disallow: /admin/
+Disallow: /accounts/
+Disallow: /checkout/
+Disallow: /profile/
+
+# Sitemap
+Sitemap: https://orderimo.com/sitemap.xml

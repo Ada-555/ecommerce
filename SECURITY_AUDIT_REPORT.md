@@ -240,4 +240,68 @@ def checkout(request):
 
 ---
 
-*Audit completed by Ada — Orderimo Security Agent, Phase 8*
+---
+
+## 10. Functional HTTP Tests (curl)
+
+**Server:** `http://localhost:8023` | **Date:** 2026-03-29
+
+### GET Page Availability
+
+| URL | Expected | Actual | Status |
+|-----|----------|--------|--------|
+| `/` | 200 | 200 | ✅ |
+| `/products/` | 200 | 200 | ✅ |
+| `/bag/` | 200 | 200 | ✅ |
+| `/checkout/` | 302 → 200 | 302 → 200 | ✅ (auth redirect) |
+| `/blog/` | 200 | 200 | ✅ |
+| `/about/` | 200 | 200 | ✅ |
+| `/accounts/dashboard/` | 302 → 200 | 302 → 200 | ✅ (auth redirect) |
+| `/admin/` | 302 → 200 | 302 → 200 | ✅ (auth redirect) |
+| `/admin/login/` | 200 | 200 | ✅ |
+| `/accounts/login/` | 200 | 200 | ✅ |
+
+### POST Operations (CSRF Protection)
+
+| Test | Expected | Actual | Status |
+|------|----------|--------|--------|
+| `POST /products/` (no CSRF token) | 403 | 403 | ✅ |
+| `POST /bag/` (no CSRF token) | 403 | 403 | ✅ |
+| `POST /checkout/` (no CSRF token) | 403 | 403 | ✅ |
+
+**Result:** ✅ All POST requests without CSRF tokens are correctly rejected with 403. This confirms Django's CSRF middleware is active and protecting forms.
+
+### Auth Redirect Behavior
+
+- `/checkout/` → redirects unauthenticated users to login ✅
+- `/accounts/dashboard/` → redirects unauthenticated users to login ✅
+- `/admin/` → redirects unauthenticated users to login ✅
+
+All protected pages correctly redirect unauthenticated users and return 200 after following the redirect chain.
+
+---
+
+## 11. Additional Bug Fixes Found During Audit
+
+During testing, two pre-existing bugs were discovered and fixed:
+
+| Bug | File | Issue | Fix |
+|-----|------|--------|-----|
+| `BlogPage.save()` signature | `blog/models.py` | Missing `*args, **kwargs` — incompatible with Django 5.2 ORM | Added `*args, **kwargs` to `save()` and `super().save()` |
+| `adjust_bag` KeyError | `bag/views.py` | Calling adjust on item not in bag causes `KeyError` | Added guard check: `if item_id not in bag` before accessing |
+
+---
+
+## 12. Remaining Risks
+
+| Risk | Severity | Description | Mitigation |
+|------|----------|-------------|------------|
+| CKEditor 4 bundled | MEDIUM | django-ckeditor bundles CKEditor 4.22.1 which has known unfixed security issues | Migrate to django-ckeditor-5 |
+| LocMemCache for rate limiting | MEDIUM | django-ratelimit requires a shared cache (Redis) for multi-process deployments | Configure Redis cache in production |
+| Wildcard ALLOWED_HOSTS | LOW | `.orderimo.com` and `.herokuapp.com` are broad | Narrow to specific production domains |
+| DEBUG=True in development | INFO | Expected in dev, but must be False in production | Ensure `DEVELOPMENT` env var is unset in production |
+| No HSTS in development | INFO | HSTS settings are production-only (wrapped in `if not DEBUG:`) | Verify they activate correctly on deployment |
+
+---
+
+*Audit completed by Ada — Orderimo Security Agent, Phase 8 | Updated: 2026-03-29 02:41*
