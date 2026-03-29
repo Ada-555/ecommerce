@@ -24,7 +24,25 @@ class BlogPage(models.Model):
 
     def get_absolute_url(self):
         from django.urls import reverse
-        return reverse('blog_page_detail', kwargs={'pk': self.pk})
+        return reverse('blog_post', kwargs={'slug': self.slug})
+
+    @property
+    def excerpt(self):
+        """Return a plain-text excerpt of the content."""
+        from django.utils.html import strip_tags
+        text = strip_tags(self.content or '')
+        words = text.split()
+        if len(words) <= 30:
+            return text
+        return ' '.join(words[:30]) + '...'
+
+    def reading_time(self):
+        """Return estimated reading time in minutes."""
+        from django.utils.html import strip_tags
+        text = strip_tags(self.content or '')
+        word_count = len(text.split())
+        minutes = max(1, round(word_count / 200))
+        return f"{minutes} min read"
 
 
 class BlogSubscriber(models.Model):
