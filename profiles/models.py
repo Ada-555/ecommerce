@@ -27,6 +27,9 @@ class UserProfile(models.Model):
         blank_label='Country', null=True, blank=True)
     default_postcode = models.CharField(
         max_length=20, null=True, blank=True)
+    referred_by = models.ForeignKey(
+        'affiliates.Affiliate', on_delete=models.SET_NULL,
+        null=True, blank=True, related_name='referred_profiles')
 
     def __str__(self):
         return self.user.username

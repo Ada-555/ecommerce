@@ -13,17 +13,6 @@ from django.conf import settings
 from .models import Affiliate, AffiliateReferral
 
 
-@receiver(post_save, sender=User)
-def create_affiliate_referral_on_order(sender, instance, created, **kwargs):
-    """
-    This signal is NOT used for User creation (handled separately).
-    Instead, we use a separate mechanism for order-based referrals.
-
-    For the order-based referral tracking, see order_completed_signal below.
-    """
-    pass
-
-
 def handle_referral_on_registration(user, referral_code):
     """
     Called by the registration flow when a referral code is provided.
@@ -71,3 +60,25 @@ def create_referral_for_order(order):
         }
     )
     return referral
+
+
+# Allauth signal: fire after a user completes registration
+@receiver(post_save, sender=User)
+def link_referral_on_user_created(sender, instance, created, **kwargs):
+    """
+    After a new User is created, check the session for an affiliate referral
+    code and link the user's profile to the affiliate.
+    """
+    if not created:
+        return
+
+    # Import here to avoid circular dependency
+    from django.contrib.sessions.backends.db import SessionStore
+    from django.conf import settings as django_settings
+
+    # We can't access request directly from signal, so we check the
+    # affiliate registration code stored via the landing page.
+    # The accounts adapter or view should call handle_referral_on_registration.
+    # This signal primarily serves as a hook point — the real linking is
+    # done via the allauth adapter in accounts.
+    pass

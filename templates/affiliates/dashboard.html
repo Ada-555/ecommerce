@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_title %} | Affiliate Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-5" style="background-color: #0d0d0d; min-height: 100vh;">
+    <div class="container">
+
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold" style="color: #800080;">Affiliate Dashboard</h2>
+                <p class="text-muted mb-0">Welcome back, {{ affiliate.user.username }}</p>
+            </div>
+            <div>
+                <span class="badge bg-success px-3 py-2">
+                    <i class="fas fa-circle me-1"></i> Active
+                </span>
+            </div>
+        </div>
+
+        <!-- Referral Link Card -->
+        <div class="card border-0 shadow-sm mb-4" style="background-color: #1a1a1a;">
+            <div class="card-body p-4">
+                <h5 class="card-title text-white mb-3">
+                    <i class="fas fa-link me-2" style="color: #800080;"></i>Your Referral Link
+                </h5>
+                <div class="input-group" style="background-color: #2a2a2a;">
+                    <input type="text" class="form-control border-0 text-white"
+                           id="referral-link" value="{{ referral_link }}"
+                           readonly style="background-color: #2a2a2a;">
+                    <button class="btn btn-outline-secondary border-0"
+                            type="button" id="copy-btn"
+                            onclick="copyReferralLink()"
+                            style="color: #800080; border-color: #800080;">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
+                </div>
+                <small class="text-muted mt-2 d-block">
+                    Share this link to earn {{ affiliate.commission_rate|floatformat:0 }}% commission on all referred orders.
+                </small>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100" style="background-color: #1a1a1a;">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3">
+                            <i class="fas fa-euro-sign fa-2x" style="color: #800080;"></i>
+                        </div>
+                        <h3 class="text-white fw-bold mb-1">&euro;{{ total_earnings|floatformat:2 }}</h3>
+                        <p class="text-muted mb-0">Total Earnings</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100" style="background-color: #1a1a1a;">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3">
+                            <i class="fas fa-clock fa-2x" style="color: #f0ad4e;"></i>
+                        </div>
+                        <h3 class="text-white fw-bold mb-1">&euro;{{ pending_earnings|floatformat:2 }}</h3>
+                        <p class="text-muted mb-0">Pending Earnings</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100" style="background-color: #1a1a1a;">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3">
+                            <i class="fas fa-users fa-2x" style="color: #17a2b8;"></i>
+                        </div>
+                        <h3 class="text-white fw-bold mb-1">{{ total_referrals }}</h3>
+                        <p class="text-muted mb-0">Successful Referrals</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Referral Code Info -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100" style="background-color: #1a1a1a;">
+                    <div class="card-body p-4">
+                        <h5 class="card-title text-white mb-3">
+                            <i class="fas fa-tag me-2" style="color: #800080;"></i>Affiliate Details
+                        </h5>
+                        <table class="table table-dark table-borderless mb-0">
+                            <tbody>
+                                <tr>
+                                    <td class="text-muted" style="width: 40%;">Referral Code</td>
+                                    <td class="text-white fw-bold">{{ affiliate.referral_code }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">Commission Rate</td>
+                                    <td class="text-white">{{ affiliate.commission_rate|floatformat:2 }}%</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">Member Since</td>
+                                    <td class="text-white">{{ affiliate.created_at|date:"d M Y" }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Referrals Table -->
+        <div class="card border-0 shadow-sm" style="background-color: #1a1a1a;">
+            <div class="card-header border-0 py-3" style="background-color: #1a1a1a;">
+                <h5 class="text-white mb-0">
+                    <i class="fas fa-list me-2" style="color: #800080;"></i>Recent Referrals
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                {% if referrals %}
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover mb-0">
+                        <thead style="background-color: #2a2a2a;">
+                            <tr>
+                                <th class="border-0 py-3 px-4 text-muted">Order</th>
+                                <th class="border-0 py-3 text-muted">Date</th>
+                                <th class="border-0 py-3 text-muted">Commission</th>
+                                <th class="border-0 py-3 text-muted">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for referral in referrals %}
+                            <tr>
+                                <td class="py-3 px-4">
+                                    <span class="text-white">{{ referral.order.order_number }}</span>
+                                </td>
+                                <td class="py-3 text-white">{{ referral.created_at|date:"d M Y" }}</td>
+                                <td class="py-3 text-white">&euro;{{ referral.commission_amount|floatformat:2 }}</td>
+                                <td class="py-3">
+                                    {% if referral.status == 'paid' %}
+                                    <span class="badge bg-success">Paid</span>
+                                    {% elif referral.status == 'pending' %}
+                                    <span class="badge bg-warning text-dark">Pending</span>
+                                    {% else %}
+                                    <span class="badge bg-danger">Cancelled</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                    <p class="text-muted mb-0">No referrals yet. Share your link to start earning!</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block postload_js %}
+{{ block.super }}
+<script>
+function copyReferralLink() {
+    var copyText = document.getElementById("referral-link");
+    copyText.select();
+    copyText.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(copyText.value);
+    var btn = document.getElementById("copy-btn");
+    btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+    btn.classList.remove('btn-outline-secondary');
+    btn.classList.add('btn-success');
+    setTimeout(function() {
+        btn.innerHTML = '<i class="fas fa-copy"></i> Copy';
+        btn.classList.add('btn-outline-secondary');
+        btn.classList.remove('btn-success');
+    }, 2000);
+}
+</script>
+{% endblock %}
