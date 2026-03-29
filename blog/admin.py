@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django import forms
 from ckeditor.widgets import CKEditorWidget
-from .models import BlogPage
+from .models import BlogPage, BlogSubscriber
 from django.utils.html import format_html
 from django.template.defaultfilters import truncatechars
 from datetime import datetime
@@ -20,11 +20,12 @@ class BlogPageAdmin(admin.ModelAdmin):
     """ Admin for blog page """
     form = BlogPageAdminForm
     list_display = [
-        'pk', 'title', 'store_badge', 'created_at_days_ago', 'short_content', 'preview_image']
+        'pk', 'title', 'store_badge', 'is_published', 'newsletter_sent_at_display', 'created_at_days_ago', 'short_content', 'preview_image']
     list_display_links = ['pk', 'title']
     readonly_fields = ['preview_image']
     search_fields = ['title', 'content']
-    list_filter = ['store', 'created_at']
+    list_filter = ['store', 'is_published', 'created_at']
+    list_editable = ['is_published']
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -69,7 +70,46 @@ class BlogPageAdmin(admin.ModelAdmin):
         return "No Image"
     preview_image.short_description = 'Preview Image'
 
+    def is_published_badge(self, obj):
+        color = '#00b4d8' if obj.is_published else '#555'
+        label = 'Published' if obj.is_published else 'Draft'
+        return format_html(
+            '<span style="background:{}22; color:{}; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:bold;">{}</span>',
+            color, color, label
+        )
+    is_published_badge.short_description = 'Status'
+
+    def newsletter_sent_at_display(self, obj):
+        if obj.newsletter_sent_at:
+            return obj.newsletter_sent_at.strftime('%Y-%m-%d %H:%M')
+        return '—'
+    newsletter_sent_at_display.short_description = 'Newsletter Sent'
+
     ordering = ('-created_at', )
 
 
 admin.site.register(BlogPage, BlogPageAdmin)
+
+
+class BlogSubscriberAdmin(admin.ModelAdmin):
+    """ Admin for blog newsletter subscribers """
+    list_display = ['email', 'name', 'store_badge', 'is_active', 'subscribed_at']
+    list_filter = ['store', 'is_active', 'subscribed_at']
+    search_fields = ['email', 'name']
+    list_editable = ['is_active']
+
+    def store_badge(self, obj):
+        colors = {
+            'orderimo': '#00FFFF',
+            'petshop-ie': '#90EE90',
+            'digitalhub': '#DDA0DD',
+        }
+        color = colors.get(obj.store, '#cccccc')
+        return format_html(
+            '<span style="background:{}22; color:{}; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:bold;">{}</span>',
+            color, color, obj.store or 'orderimo'
+        )
+    store_badge.short_description = 'Store'
+
+
+admin.site.register(BlogSubscriber, BlogSubscriberAdmin)

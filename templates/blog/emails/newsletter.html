@@ -1,0 +1,72 @@
+{% load i18n %}{% spaceless %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title }}</title>
+  <style>
+    body { background-color: #0a0a0f; margin: 0; padding: 0; font-family: 'Helvetica Neue', Arial, sans-serif; }
+    .wrapper { background-color: #12121a; max-width: 600px; margin: 0 auto; }
+    .header { background: linear-gradient(135deg, {{ primary_color }} 0%, {{ secondary_color }} 100%); padding: 32px 40px; text-align: center; }
+    .header-icon { font-size: 40px; color: #fff; margin-bottom: 8px; }
+    .header-name { color: #fff; font-size: 26px; font-weight: 700; margin: 0; }
+    .header-sub { color: rgba(255,255,255,0.85); font-size: 13px; margin: 6px 0 0; }
+    .body { padding: 40px; color: #e0e0e0; font-size: 15px; line-height: 1.7; }
+    .post-title { font-size: 24px; font-weight: 700; color: {{ primary_color }}; margin: 0 0 24px; line-height: 1.3; }
+    .post-excerpt { color: #ccc; font-size: 15px; line-height: 1.7; margin: 0 0 32px; }
+    .post-image { width: 100%; max-height: 300px; object-fit: cover; border-radius: 8px; margin: 0 0 32px; }
+    .cta-btn { display: inline-block; background: linear-gradient(135deg, {{ primary_color }} 0%, {{ secondary_color }} 100%); color: #fff !important; text-decoration: none; padding: 14px 32px; border-radius: 6px; font-weight: 600; font-size: 15px; margin: 8px 0 24px; }
+    .divider { border: none; border-top: 1px solid rgba(255,255,255,0.07); margin: 32px 0; }
+    .footer { background: #0a0a0f; padding: 24px 40px; text-align: center; }
+    .footer-copy { color: #555; font-size: 12px; margin-top: 8px; }
+    .footer-link { color: {{ primary_color }}; text-decoration: none; margin: 0 10px; font-size: 13px; }
+    @media only screen and (max-width: 600px) {
+      .wrapper { width: 100% !important; }
+      .header { padding: 24px 20px !important; }
+      .body { padding: 24px 20px !important; }
+      .footer { padding: 20px !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <!-- Header -->
+    <div class="header">
+      <div class="header-icon">📬</div>
+      <h1 class="header-name">{{ store_name }}</h1>
+      <p class="header-sub">New blog post just published</p>
+    </div>
+
+    <!-- Body -->
+    <div class="body">
+      <h2 class="post-title">{{ title }}</h2>
+
+      {% if post_image %}
+      <img src="{{ post_image }}" alt="{{ title }}" class="post-image">
+      {% endif %}
+
+      <div class="post-excerpt">
+        {{ content|truncatewords:60 }}
+      </div>
+
+      <hr class="divider">
+
+      <p style="margin: 0 0 24px; color: #888; font-size: 13px;">
+        You're receiving this because you subscribed to the {{ store_name }} blog newsletter.
+        <br><a href="{{ unsubscribe_url|default:"#" }}" style="color: {{ primary_color }};">Unsubscribe</a>
+      </p>
+
+      <a href="{{ post_url }}" class="cta-btn">Read the full post →</a>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <a href="{{ live_link|default:"#" }}" class="footer-link">🌐 Website</a>
+      <a href="mailto:hello@orderimo.com" class="footer-link">✉️ Contact</a>
+      <p class="footer-copy">© 2026 {{ store_name }}</p>
+    </div>
+  </div>
+</body>
+</html>
+{% endspaceless %}
