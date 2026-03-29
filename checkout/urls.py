@@ -8,11 +8,10 @@ urlpatterns = [
         '',
         views.checkout,
         name='checkout'),
-    # Disabled: apply_coupon view not implemented; coupons handled in checkout view
-    # path(
-    #     'apply_coupon/',
-    #     views.apply_coupon,
-    #     name='apply_coupon'),
+    path(
+        'apply_coupon/',
+        views.apply_coupon,
+        name='apply_coupon'),
     path(
         'checkout_success/<order_number>/',
         views.checkout_success,

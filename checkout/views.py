@@ -235,7 +235,7 @@ def apply_coupon(request):
             'applied_coupons': [],
             'coupon_discount': Decimal('0.00'),
         }
-        html = render_to_string('checkout/order_summary_fragment.html', context, request=request)
+        html = render_to_string('checkout/includes/order_summary.html', context, request=request)
         return HttpResponse(html)
 
     bag_ctx = bag_contents(request)
@@ -255,7 +255,7 @@ def apply_coupon(request):
             'applied_coupons': [],
             'coupon_discount': Decimal('0.00'),
         }
-        html = render_to_string('checkout/order_summary_fragment.html', context, request=request)
+        html = render_to_string('checkout/includes/order_summary.html', context, request=request)
         return HttpResponse(html)
 
     valid_codes = [c.code for c in valid_coupons]
@@ -278,7 +278,7 @@ def apply_coupon(request):
         'coupon_discount': total_discount,
         'grand_total': grand_total,
     }
-    html = render_to_string('checkout/order_summary_fragment.html', context, request=request)
+    html = render_to_string('checkout/includes/order_summary.html', context, request=request)
     return HttpResponse(html)
 
 
@@ -598,6 +598,23 @@ def checkout_success(request, order_number):
     # Read crypto payment indicator from query string
     payment_type = request.GET.get('payment', order.payment_method)
 
+    # Prepare coupon display data: list of (code, discount_amount)
+    coupon_display = []
+    if order.coupon_codes:
+        from coupons.models import Coupon
+        codes = [c.strip() for c in order.coupon_codes.split(',') if c.strip()]
+        for code in codes:
+            try:
+                coupon = Coupon.objects.get(code=code)
+                # Calculate discount based on order_total (subtotal before delivery/discounts)
+                discount = coupon.calculate_discount(order.order_total)
+                coupon_display.append({
+                    'code': code,
+                    'discount': discount,
+                })
+            except Coupon.DoesNotExist:
+                pass
+
     if request.user.is_authenticated:
         profile = UserProfile.objects.get(user=request.user)
         # Attach the user's profile to the order
@@ -649,6 +666,7 @@ def checkout_success(request, order_number):
     context = {
         'order': order,
         'payment_type': payment_type,
+        'coupon_display': coupon_display,
     }
 
     return render(request, template, context)

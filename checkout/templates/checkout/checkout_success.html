@@ -61,6 +61,16 @@
                     </div>
                     {% endif %}
 
+                    {% if order.coupon_codes %}
+                    <hr class="custom-hr">
+                    <p class="text-muted small mb-1">Discount Codes Used</p>
+                    <p class="text-white mb-0">
+                        {% for item in coupon_display %}
+                            {{ item.code }} (-€{{ item.discount|floatformat:2 }}){% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                    {% endif %}
+
                     {% if order.user_profile %}
                     <hr class="custom-hr">
                     <p class="text-muted small mb-1">Delivery Address</p>
@@ -81,8 +91,8 @@
                     <a href="{% url 'track_order' order.order_number %}" class="btn btn-outline-cyan rounded-pill px-4">
                         <i class="fa-solid fa-truck-fast me-2"></i>Track Order
                     </a>
-                    <a href="{% url 'download_invoice' order.order_number %}" class="btn btn-outline-light rounded-pill px-4">
-                        <i class="fa-solid fa-file-pdf me-2"></i>Download Invoice
+                    <a href="{% url 'download_invoice' order.order_number %}" class="btn btn-outline-secondary btn-sm">
+                        View Invoice
                     </a>
                 </div>
             </div>

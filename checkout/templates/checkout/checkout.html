@@ -164,16 +164,6 @@
                         </div>
                     </fieldset>
 
-                    <!-- Coupon codes -->
-                    <div class="coupon-section mb-3">
-                        <label class="text-cyan fw-bold mb-2 d-block">Discount code</label>
-                        <div class="input-group">
-                            <input type="text" name="coupon_code" id="coupon-code" class="form-control" placeholder="Enter code">
-                            <button class="btn btn-outline-secondary" type="button" hx-post="{% url 'apply_coupon' %}" hx-vals='{"coupon_code": document.getElementById("coupon-code").value}' hx-target="#order-summary" hx-swap="innerHTML">Apply</button>
-                        </div>
-                        <div id="coupon-message" class="mt-1"></div>
-                    </div>
-
                     <!-- Save info + payment -->
                     <fieldset class="mb-4">
                         <legend class="text-cyan fw-bold mb-3">
@@ -265,8 +255,25 @@
 
         <!-- Order Summary (right — sticky sidebar on desktop) -->
         <div class="col-12 col-lg-5">
+            <!-- Coupon Card (above order summary) -->
+            <div class="card product-card p-3 mb-3">
+                <div class="card-body">
+                    <label class="form-label text-cyan fw-bold">Discount code</label>
+                    <div class="input-group">
+                        <input type="text" id="coupon-code" class="form-control" placeholder="Enter code">
+                        <button class="btn btn-outline-secondary" type="button"
+                                hx-post="{% url 'apply_coupon' %}"
+                                hx-vals='{"coupon_code": document.getElementById("coupon-code").value}'
+                                hx-target="#order-summary"
+                                hx-swap="innerHTML">Apply</button>
+                    </div>
+                    <div id="coupon-message" class="mt-2 small"></div>
+                </div>
+            </div>
+
+            <!-- Order Summary Card -->
             <div class="card product-card p-3 sticky-lg-top" style="top: 80px;" id="order-summary">
-                {% include "checkout/order_summary_fragment.html" %}
+                {% include "checkout/includes/order_summary.html" %}
             </div>
         </div>
     </div>
