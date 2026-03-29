@@ -1,39 +1,32 @@
-# Plurino / Orderimo — Build Task Dashboard
+# Orderimo Build Dashboard
 
-## 🚦 Status (2026-03-29 10:00 GMT+1)
+Status: **112/112 tests passing** | Last updated: 10:05 GMT+1
 
-- **Tests:** ✅ 112/112 passing
-- **Stores:** ✅ Orderimo, PetShop Ireland, DigitalHub (200 OK)
-- **GitHub:** auto-updating with each feature commit
+## Completed
 
----
-
-## ✅ Completed Features
-
-| Feature | Commit |
-|---------|--------|
-| Store-scoped search | `6e12240` |
-| Email notifications | `5a07479` |
-| Order tracking page | `dd6886b` |
-| Wishlist (heart icon) | `5bfc59a` |
-| Crypto payments | `dd1084b` |
-| Phase 12 Reviews (frontend) | `2d8192b` |
-| Multi-currency (EUR/USD/GBP) | `35bc9fe` |
-| Affiliate program | `a504dbf` |
-| Newsletter signup with Mailchimp | `236b781` |
-| Stabilization (set_currency, URL fixes) | `5ad684e` |
+- ✅ Store-scoped search
+- ✅ Email notifications (order confirmation/shipped/delivered)
+- ✅ Order tracking page + status
+- ✅ Wishlist (heart icon + HTMX)
+- ✅ Crypto payments (BTC/USDC via Stripe, XMR via CoinGate)
+- ✅ Phase 12 Reviews (star ratings, verified buyer)
+- ✅ Multi-currency (EUR/USD/GBP)
+- ✅ Affiliate program (referral tracking + commissions)
+- ✅ Newsletter signup (Mailchimp) + checkout checkbox
+- ✅ Subscriptions checkout (Stripe recurring)
+- ✅ Stabilization (URL fixes, set_currency view)
 
 ---
 
-## 🟡 Final Sprint — Currently Running
+## In Progress (final sprint)
 
 | Agent | Task |
 |-------|------|
-| agent-coupon-ui | Multi-coupon checkout integration (apply button, discount line) |
-| agent-subscriptions-checkout | Stripe subscription mode + management page |
+| agent-coupon-ui | Checkout coupon code input + discount display |
 | agent-abandoned-cart | Abandoned cart email management command |
-| agent-invoices-finish | PDF invoice generation with ReportLab |
+| agent-invoices-finish | PDF invoice generation (ReportLab) |
+| agent-comparisons-ga4-finish | Comparison page + GA4 dashboard |
 
 ---
 
-_Last updated: 2026-03-29 10:00_
+Next: Spawn agent-product-comparisons-page and agent-analytics-template to finish remaining templates.
