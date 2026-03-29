@@ -70,15 +70,34 @@
             <div class="ps-md-3">
                 <!-- Name & Price -->
                 <h2 class="display-6 text-white mb-2">{{ product.name }}</h2>
-                <div class="d-flex align-items-center gap-3 mb-3">
+                <div class="d-flex align-items-center gap-3 mb-3 flex-wrap">
                     <span class="display-5 fw-bold text-cyan">€{{ product.price }}</span>
                     {% if product.category %}
                     <a href="{% url 'products' %}?category={{ product.category.name }}"
-                        class="badge badge-purple text-decoration-none">
+                        class="badge badge-purple text-decoration-none align-self-center">
                         <i class="fa-solid fa-tag me-1"></i>
                         {{ product.category.friendly_name|default:product.category.name }}
                     </a>
                     {% endif %}
+                </div>
+
+                <!-- Stock Status -->
+                <div class="mb-3">
+                    {% with product.stock_status as status %}
+                    {% if status == "In Stock" %}
+                    <span class="badge bg-success rounded-pill px-3 py-2">
+                        <i class="fa-solid fa-circle-check me-1"></i>In Stock
+                    </span>
+                    {% elif status == "Low Stock" %}
+                    <span class="badge bg-warning text-dark rounded-pill px-3 py-2">
+                        <i class="fa-solid fa-circle-exclamation me-1"></i>Low Stock — Only {{ product.stock_quantity }} left!
+                    </span>
+                    {% else %}
+                    <span class="badge bg-danger rounded-pill px-3 py-2">
+                        <i class="fa-solid fa-circle-xmark me-1"></i>Out of Stock
+                    </span>
+                    {% endif %}
+                    {% endwith %}
                 </div>
 
                 <!-- Admin actions -->
@@ -160,6 +179,90 @@
             </div>
         </div>
     </div>
+
+    <!-- Product Details Accordion -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <h3 class="text-white mb-3">Product Details</h3>
+            <div class="accordion" id="productAccordion">
+                <div class="accordion-item bg-dark border-0 mb-2 rounded-4 overflow-hidden">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button bg-purple text-white collapsed" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#descAccordion">
+                            <i class="fa-solid fa-align-left me-2"></i>Description
+                        </button>
+                    </h2>
+                    <div id="descAccordion" class="accordion-collapse collapse" data-bs-parent="#productAccordion">
+                        <div class="accordion-body text-silver">
+                            {{ product.description|linebreaks }}
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item bg-dark border-0 mb-2 rounded-4 overflow-hidden">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button bg-purple text-white collapsed" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#shippingAccordion">
+                            <i class="fa-solid fa-truck me-2"></i>Shipping & Delivery
+                        </button>
+                    </h2>
+                    <div id="shippingAccordion" class="accordion-collapse collapse" data-bs-parent="#productAccordion">
+                        <div class="accordion-body text-silver">
+                            <p class="mb-1"><i class="fa-solid fa-truck-fast text-cyan me-2"></i>Standard delivery: 3-5 business days</p>
+                            <p class="mb-1"><i class="fa-solid fa-box text-cyan me-2"></i>Express delivery: 1-2 business days</p>
+                            <p class="mb-0"><i class="fa-solid fa-gift text-cyan me-2"></i>Free delivery on orders over €{{ free_delivery_threshold }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item bg-dark border-0 mb-2 rounded-4 overflow-hidden">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button bg-purple text-white collapsed" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#returnsAccordion">
+                            <i class="fa-solid fa-rotate-left me-2"></i>Returns Policy
+                        </button>
+                    </h2>
+                    <div id="returnsAccordion" class="accordion-collapse collapse" data-bs-parent="#productAccordion">
+                        <div class="accordion-body text-silver">
+                            <p class="mb-1"><i class="fa-solid fa-check text-success me-2"></i>30-day return policy</p>
+                            <p class="mb-1"><i class="fa-solid fa-box-open text-success me-2"></i>Items must be in original condition</p>
+                            <p class="mb-0"><i class="fa-solid fa-euro-sign text-success me-2"></i>Full refund to original payment method</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Products -->
+    {% if related_products %}
+    <div class="row mt-5">
+        <div class="col-12">
+            <h3 class="text-white mb-3">
+                <i class="fa-solid fa-rotate-right me-2"></i>You May Also Like
+            </h3>
+            <div class="row g-3">
+                {% for rp in related_products %}
+                <div class="col-6 col-md-3">
+                    <div class="card product-card h-100 border-0">
+                        <div class="product-card-img-wrapper position-relative">
+                            <a href="{% url 'product_detail' rp.id %}" class="d-block">
+                                {% if rp.image %}
+                                <img src="{{ rp.image.url }}" class="card-img-top product-card-img" alt="{{ rp.name }}">
+                                {% else %}
+                                <img src="{{ MEDIA_URL }}noimage.png" class="card-img-top product-card-img" alt="{{ rp.name }}">
+                                {% endif %}
+                            </a>
+                        </div>
+                        <div class="card-body p-2">
+                            <h6 class="text-white small mb-1 text-truncate">{{ rp.name }}</h6>
+                            <span class="text-cyan fw-bold">€{{ rp.price }}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
 </div>
 
 {% endblock %}

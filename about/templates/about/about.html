@@ -4,48 +4,112 @@
 {% block extra_title %}| About{% endblock %}
 
 {% block page_header %}
-<div class="container header-container">
-  <div class="row">
-    <div class="col"></div>
-  </div>
+<div class="page-header w-100">
+    <div class="container">
+        <div class="row">
+            <div class="col text-center">
+                <h1 class="display-6">
+                    <i class="fa-solid fa-circle-info me-2"></i>About Orderimo
+                </h1>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
 {% block content %}
-<div class="overlay"></div>
-<div class="container mb-4">
-  <div class="py-4">
-    <div class="row mb-4">
-      <div class="col-12">
-        <h1 class="text-black mb-4 typewriter-text"><i class="fa-solid fa-circle-info"></i> About</h1>
-        <hr>
-        <p>Check out our about us pages to find out more information. Feel free to contact us if you need anything
-          further.</p>
-      </div>
-      <!-- List of About Pages -->
-      <div class="col-10 mx-auto">
-        {% for about_page in about_pages|dictsort:"title" %}
-        <div class="card my-3 border-0 shadow-sm">
-          <div class="card-body">
-            <h5 class="mb-0">
-              <a class="text-black hover-bg stretched-link"
-                href="{% url 'about_page_detail' pk=about_page.pk %}">{{ about_page.title }}</a>
-            </h5>
-          </div>
+<div class="container mb-5">
+    <div class="row g-4">
+
+        <!-- Mission Section -->
+        <div class="col-lg-8">
+            <div class="card product-card p-4 mb-4">
+                <h2 class="text-white mb-3">
+                    <i class="fa-solid fa-rocket text-cyan me-2"></i>Our Mission
+                </h2>
+                <p class="text-silver lead">
+                    Orderimo is a multi-store e-commerce platform that powers independent brands under one roof.
+                    We believe every store deserves a premium shopping experience — without the enterprise price tag.
+                </p>
+                <p class="text-silver mb-0">
+                    Whether you're looking for cutting-edge tech from <strong class="text-cyan">Plurino</strong>,
+                    curated home essentials from <strong class="text-warning">HomeNest</strong>, or bold streetwear from
+                    <strong class="text-pink">StyleVault</strong> — Orderimo brings them all together in one seamless destination.
+                </p>
+            </div>
+
+            <!-- Info Pages -->
+            <div class="card product-card p-4">
+                <h3 class="text-white mb-3">
+                    <i class="fa-solid fa-file-lines text-cyan me-2"></i>Information Pages
+                </h3>
+                {% for about_page in about_pages|dictsort:"title" %}
+                <div class="d-flex align-items-center gap-3 mb-3 p-3 rounded-3"
+                     style="background: rgba(128,0,128,0.1); border: 1px solid rgba(128,0,128,0.2);">
+                    <i class="fa-solid fa-file text-cyan fa-lg"></i>
+                    <div>
+                        <a href="{% url 'about_page_detail' pk=about_page.pk %}"
+                           class="text-white text-decoration-none fw-bold">
+                            {{ about_page.title }}
+                        </a>
+                        {% if about_page.content %}
+                        <p class="text-muted small mb-0">{{ about_page.content|striptags|truncatechars:80 }}</p>
+                        {% endif %}
+                    </div>
+                    <a href="{% url 'about_page_detail' pk=about_page.pk %}"
+                       class="btn btn-sm btn-outline-light rounded-pill ms-auto">
+                        Read More <i class="fa-solid fa-arrow-right ms-1"></i>
+                    </a>
+                </div>
+                {% empty %}
+                <p class="text-muted">No information pages available yet.</p>
+                {% endfor %}
+
+                {% if user.is_superuser %}
+                <a href="{% url 'create_about_page' %}" class="btn btn-sm btn-outline-warning rounded-pill mt-2">
+                    <i class="fa-solid fa-plus me-1"></i>Add New Page
+                </a>
+                {% endif %}
+            </div>
         </div>
-        {% empty %}
-        <p class="text-danger">No about pages yet.</p>
-        {% endfor %}
-      </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Contact -->
+            <div class="card product-card p-4 mb-4">
+                <h4 class="text-white mb-3">
+                    <i class="fa-solid fa-envelope text-cyan me-2"></i>Contact Us
+                </h4>
+                <p class="text-silver small mb-2">
+                    <i class="fa-solid fa-envelope text-info me-2"></i>hello@orderimo.com
+                </p>
+                <p class="text-silver small mb-2">
+                    <i class="fa-solid fa-globe text-info me-2"></i>www.orderimo.com
+                </p>
+                <p class="text-silver small mb-0">
+                    <i class="fa-solid fa-clock text-info me-2"></i>Mon-Fri: 9am - 6pm (Dublin)
+                </p>
+            </div>
+
+            <!-- Stores -->
+            <div class="card product-card p-4">
+                <h4 class="text-white mb-3">
+                    <i class="fa-solid fa-store text-cyan me-2"></i>Our Stores
+                </h4>
+                <div class="d-flex flex-column gap-2">
+                    <a href="{% url 'products' %}?store=plurino" class="btn btn-outline-cyan rounded-pill text-start">
+                        <i class="fa-solid fa-microchip me-2"></i>Plurino — Tech Gadgets
+                    </a>
+                    <a href="{% url 'products' %}?store=homenest" class="btn btn-outline-warning rounded-pill text-start">
+                        <i class="fa-solid fa-house me-2"></i>HomeNest — Home & Living
+                    </a>
+                    <a href="{% url 'products' %}?store=stylevault" class="btn btn-outline-pink rounded-pill text-start">
+                        <i class="fa-solid fa-shirt me-2"></i>StyleVault — Fashion
+                    </a>
+                </div>
+            </div>
+        </div>
+
     </div>
-    <div class="row">
-      <div class="col text-end">
-        <a href="{% url 'home' %}" class="btn btn-primary">Home Page</a>
-        {% if user.is_superuser %}
-        <a href="{% url 'create_about_page' %}" class="btn btn-secondary float-right">Create New</a>
-        {% endif %}
-      </div>
-    </div>
-  </div>
 </div>
 {% endblock %}

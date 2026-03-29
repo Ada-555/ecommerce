@@ -1,62 +1,95 @@
-<footer class="small mt-auto pt-3 pb-2 bg-purple text-light footer">
-    <!-- Footer Container -->
-    <div class="container text-center mx-auto">
-        <div class="row justify-content-center">
-            <!-- Column 1: About Pages -->
-            <div class="col-md-4 pb-1">
-                <hr class="custom-hr">
-                <h5><a href="{% url 'about' %}" aria-label="About Pages" class="text-white text-hover-gold footer-heading">🔍 Find out more</a></h5>
-                <ul class="social-icons list-inline text-center">
-                    <li class="list-inline-item"><a href="{% url 'about' %}" class="text-cyan text-hover-gold"
-                        aria-label="About Us"><i class="fas fa-info-circle fa-2x"></i> About</a></li>
-                    <li class="list-line-item"><a href="{% url 'about_page_detail' pk='9' %}" class="text-cyan text-hover-gold"
-                        aria-label="Contact Us"><i class="fas fa-envelope fa-2x"></i> Contact</a></li>
-                    <li class="list-inline-item"><a href="{% url 'about_page_detail' pk='7' %}" class="text-cyan text-hover-gold"
-                        aria-label="FAQ"><i class="fas fa-question-circle fa-2x"></i> FAQ</a></li>
-                    <li class="list-inline-item"><a href="{% url 'about_page_detail' pk='6' %}" class="text-cyan text-hover-gold"
-                        aria-label="Privacy Policy"><i class="fas fa-lock fa-2x"></i> Privacy</a></li>
+<footer class="small mt-auto pt-4 pb-3 bg-purple text-light footer">
+    <div class="container">
+        <div class="row g-4 mb-4">
+            <!-- Column 1: Shop -->
+            <div class="col-6 col-md-3">
+                <h6 class="text-white fw-bold mb-3 text-uppercase tracking-wide">
+                    <i class="fa-solid fa-shop me-1 text-cyan"></i> Shop
+                </h6>
+                <ul class="list-unstyled mb-0 footer-links">
+                    <li><a href="{% url 'products' %}" class="text-silver text-decoration-none footer-link">All Products</a></li>
+                    <li><a href="{% url 'products' %}?store=plurino" class="text-silver text-decoration-none footer-link">Plurino — Tech</a></li>
+                    <li><a href="{% url 'products' %}?store=homenest" class="text-silver text-decoration-none footer-link">HomeNest — Home</a></li>
+                    <li><a href="{% url 'products' %}?store=stylevault" class="text-silver text-decoration-none footer-link">StyleVault — Fashion</a></li>
+                    <li><a href="{% url 'products' %}?sort=price&direction=asc" class="text-silver text-decoration-none footer-link">By Price</a></li>
+                    <li><a href="{% url 'products' %}?sort=rating&direction=desc" class="text-silver text-decoration-none footer-link">By Rating</a></li>
                 </ul>
             </div>
-            <!-- Column 2: Blog Posts -->
-            <div class="col-md-2 pb-1">
-                <hr class="custom-hr">
-                <h5><a href="{% url 'blog' %}" aria-label="Blog Posts" class="text-white text-hover-gold footer-heading">😁 Blog</a></h5>
-                <ul class="social-icons list-inline justify-content-center">
-                    <li class="list-inline-item">
-                        <a href="{% url 'blog' %}" aria-label="Blog Posts" class="text-cyan text-hover-gold">
-                            <i class="fas fa-blog fa-2x"></i> Blog<span class="text-purple">_</span>Posts</a>
-                    </li>
+            <!-- Column 2: Company -->
+            <div class="col-6 col-md-3">
+                <h6 class="text-white fw-bold mb-3 text-uppercase tracking-wide">
+                    <i class="fa-solid fa-building me-1 text-cyan"></i> Company
+                </h6>
+                <ul class="list-unstyled mb-0 footer-links">
+                    <li><a href="{% url 'about' %}" class="text-silver text-decoration-none footer-link">About Orderimo</a></li>
+                    <li><a href="{% url 'blog' %}" class="text-silver text-decoration-none footer-link">Blog</a></li>
+                    <li><a href="{% url 'about_page_detail' pk='9' %}" class="text-silver text-decoration-none footer-link">Contact Us</a></li>
+                    <li><a href="{% url 'about_page_detail' pk='7' %}" class="text-silver text-decoration-none footer-link">FAQ</a></li>
                 </ul>
             </div>
-            <!-- Column 3: Social Links -->
-            <div class="col-md-4 pb-1">
-                <hr class="custom-hr">
-                <h5><a href="#" target="_blank" rel="noopener noreferrer"
-                    aria-label="Facebook" class="text-white text-hover-gold footer-heading">📲 Follow Us</a></h5>
-                <ul class="social-icons list-inline text-center">
-                    <li class="list-inline-item"><a href="#" target="_blank" class="text-cyan text-hover-gold"
-                            rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook fa-2x"></i> Facebook</a>
-                    </li>
-                    <li class="list-inline-item"><a href="https://twitter.com/" target="_blank" class="text-cyan text-hover-gold"
-                            rel="noopener noreferrer" aria-label="Twitter"><i class="fab fa-twitter fa-2x"></i> Twitter</a>
-                    </li>
-                    <li class="list-inline-item"><a href="https://www.discord.com/" target="_blank" class="text-cyan text-hover-gold"
-                            rel="noopener noreferrer" aria-label="Discord"><i class="fa-brands fa-discord fa-2x"></i> Discord</a>
-                    </li>
-                    <li class="list-inline-item"><a href="https://github.com/Ada-555/Orderimo" target="_blank" class="text-cyan text-hover-gold"
-                            rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github fa-2x"></i> GitHub</a>
-                    </li>
+            <!-- Column 3: Support -->
+            <div class="col-6 col-md-3">
+                <h6 class="text-white fw-bold mb-3 text-uppercase tracking-wide">
+                    <i class="fa-solid fa-headset me-1 text-cyan"></i> Support
+                </h6>
+                <ul class="list-unstyled mb-0 footer-links">
+                    <li><a href="{% url 'about_page_detail' pk='6' %}" class="text-silver text-decoration-none footer-link">Privacy Policy</a></li>
+                    <li><a href="{% url 'about_page_detail' pk='8' %}" class="text-silver text-decoration-none footer-link">Returns Policy</a></li>
+                    <li><a href="{% url 'about_page_detail' pk='7' %}" class="text-silver text-decoration-none footer-link">FAQ</a></li>
+                    <li><a href="#" class="text-silver text-decoration-none footer-link">Track Your Order</a></li>
+                </ul>
+            </div>
+            <!-- Column 4: Legal -->
+            <div class="col-6 col-md-3">
+                <h6 class="text-white fw-bold mb-3 text-uppercase tracking-wide">
+                    <i class="fa-solid fa-scale me-1 text-cyan"></i> Legal
+                </h6>
+                <ul class="list-unstyled mb-0 footer-links">
+                    <li><a href="#" class="text-silver text-decoration-none footer-link">Terms & Conditions</a></li>
+                    <li><a href="#" class="text-silver text-decoration-none footer-link">Privacy Policy</a></li>
+                    <li><a href="#" class="text-silver text-decoration-none footer-link">Cookie Policy</a></li>
                 </ul>
             </div>
         </div>
-    </div>
-    <!-- Logo at end of footer -->
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-10">
-                <hr class="custom-hr">
-                <p class="text-center text-small mb-0 text-white">
-                    <small>© 2026 Orderimo — Multi-Store Platform</small>
+
+        <!-- Social + Payment + Copyright -->
+        <hr class="custom-hr my-3">
+        <div class="row align-items-center g-3">
+            <!-- Social icons -->
+            <div class="col-md-4 text-center text-md-start">
+                <div class="d-flex gap-3 justify-content-center justify-content-md-start">
+                    <a href="#" class="text-silver text-decoration-none footer-social" aria-label="Facebook">
+                        <i class="fab fa-facebook-f fa-lg"></i>
+                    </a>
+                    <a href="#" class="text-silver text-decoration-none footer-social" aria-label="Twitter/X">
+                        <i class="fa-brands fa-x-twitter fa-lg"></i>
+                    </a>
+                    <a href="#" class="text-silver text-decoration-none footer-social" aria-label="Instagram">
+                        <i class="fab fa-instagram fa-lg"></i>
+                    </a>
+                    <a href="#" class="text-silver text-decoration-none footer-social" aria-label="TikTok">
+                        <i class="fab fa-tiktok fa-lg"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- Payment icons -->
+            <div class="col-md-4 text-center">
+                <div class="d-flex gap-2 justify-content-center align-items-center">
+                    <span class="badge bg-dark px-2 py-1 rounded text-silver small">
+                        <i class="fa-brands fa-cc-visa fa-lg text-info me-1"></i> Visa
+                    </span>
+                    <span class="badge bg-dark px-2 py-1 rounded text-silver small">
+                        <i class="fa-brands fa-cc-mastercard fa-lg text-danger me-1"></i> Mastercard
+                    </span>
+                    <span class="badge bg-dark px-2 py-1 rounded text-silver small">
+                        <i class="fa-brands fa-paypal fa-lg text-primary me-1"></i> PayPal
+                    </span>
+                </div>
+            </div>
+            <!-- Copyright -->
+            <div class="col-md-4 text-center text-md-end">
+                <p class="text-silver small mb-0">
+                    &copy; 2026 <span class="text-white fw-bold">Orderimo</span> &mdash; All Rights Reserved
                 </p>
             </div>
         </div>

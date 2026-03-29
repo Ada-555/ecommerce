@@ -346,6 +346,20 @@ h1, h2, h3, h4, h5, h6,
     border-bottom: 1px solid rgba(128, 0, 128, 0.2);
 }
 
+.quick-add-overlay {
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+}
+
+.product-card:hover .quick-add-overlay {
+    opacity: 1;
+}
+
+.quick-add-overlay .btn {
+    font-size: 0.75rem;
+}
+
 /* ---- Forms ---- */
 .form-control, .form-select {
     border-radius: 10px;

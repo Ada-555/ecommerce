@@ -2,7 +2,7 @@ from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
+from django.db.models import Q, F
 from django.db.models.functions import Lower
 
 from .models import Product, Category
@@ -72,8 +72,21 @@ def product_detail(request, product_id):
 
     product = get_object_or_404(Product, pk=product_id)
 
+    # Increment views count
+    Product.objects.filter(pk=product_id).update(views_count=models.F('views_count') + 1)
+
+    # Related products (same category, excluding self)
+    related_products = []
+    if product.category:
+        related_products = list(
+            Product.objects.filter(category=product.category)
+            .exclude(pk=product_id)
+            .order_by('?')[:4]
+        )
+
     context = {
         'product': product,
+        'related_products': related_products,
     }
 
     return render(request, 'products/product_detail.html', context)

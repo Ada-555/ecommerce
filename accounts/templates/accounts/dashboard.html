@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_title %}| My Account{% endblock %}
+
+{% block page_header %}
+<div class="page-header w-100">
+    <div class="container">
+        <div class="row">
+            <div class="col text-center">
+                <h1 class="display-6 text-cyan">
+                    <i class="fa-solid fa-user me-2"></i>My Account
+                </h1>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container mb-5">
+    <div class="row g-4">
+
+        <!-- Sidebar / Quick Links -->
+        <div class="col-12 col-md-4 col-lg-3">
+            <div class="card product-card p-3">
+                <h5 class="text-cyan mb-3">Quick Links</h5>
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2">
+                        <a href="{% url 'dashboard' %}" class="text-white text-decoration-none">
+                            <i class="fa-solid fa-house me-2 text-cyan"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="{% url 'wishlist' %}" class="text-white text-decoration-none">
+                            <i class="fa-solid fa-heart me-2 text-cyan"></i>My Wishlist
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="{% url 'profile' %}" class="text-white text-decoration-none">
+                            <i class="fa-solid fa-user-pen me-2 text-cyan"></i>My Profile
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Account Settings -->
+            <div class="card product-card p-3 mt-3">
+                <h5 class="text-cyan mb-3">Account Settings</h5>
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2">
+                        <a href="{% url 'account_email' %}" class="text-white text-decoration-none">
+                            <i class="fa-solid fa-envelope me-2 text-muted"></i>Email Settings
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="{% url 'account_change_password' %}" class="text-white text-decoration-none">
+                            <i class="fa-solid fa-lock me-2 text-muted"></i>Change Password
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-12 col-md-8 col-lg-9">
+
+            <!-- Welcome -->
+            <div class="card product-card p-4 mb-4">
+                <h4 class="text-white">Hello, <span class="text-cyan">{{ user.username }}</span>!</h4>
+                <p class="text-muted mb-0">Welcome to your Orderimo account. Here's an overview of your recent activity.</p>
+            </div>
+
+            <!-- Recent Orders -->
+            <div class="card product-card p-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="text-cyan mb-0"><i class="fa-solid fa-receipt me-2"></i>Recent Orders</h5>
+                    <a href="#" class="btn btn-sm btn-outline-cyan">View All</a>
+                </div>
+
+                {% if orders %}
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Order #</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th class="text-end">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'order_status' order.order_number %}" class="text-cyan text-decoration-none">
+                                        {{ order.order_number|truncatechars:16 }}
+                                    </a>
+                                </td>
+                                <td>{{ order.date|date:"d M Y" }}</td>
+                                <td>
+                                    {% if order.status == 'pending' %}
+                                        <span class="badge" style="background:#ffc107; color:#000;">Pending</span>
+                                    {% elif order.status == 'processing' %}
+                                        <span class="badge" style="background:#0d6efd;">Processing</span>
+                                    {% elif order.status == 'shipped' %}
+                                        <span class="badge" style="background:#6f42c1;">Shipped</span>
+                                    {% elif order.status == 'delivered' %}
+                                        <span class="badge" style="background:#198754;">Delivered</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{{ order.status }}</span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-end text-white">€{{ order.grand_total }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-4">
+                    <i class="fa-solid fa-bag-shopping text-muted fa-3x mb-3"></i>
+                    <p class="text-muted mb-0">No orders yet. <a href="{% url 'products' %}" class="text-cyan">Start shopping!</a></p>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Wishlist Preview -->
+            <div class="card product-card p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="text-cyan mb-0"><i class="fa-solid fa-heart me-2"></i>My Wishlist</h5>
+                    <a href="{% url 'wishlist' %}" class="btn btn-sm btn-outline-cyan">View Wishlist</a>
+                </div>
+                <p class="text-muted mb-0">Save items you love and buy them later.</p>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

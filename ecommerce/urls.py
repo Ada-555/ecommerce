@@ -30,6 +30,8 @@ urlpatterns = [
         'profile/', include('profiles.urls')),
     path(
         'avatar/', include('avatar.urls')),
+    path(
+        'accounts/', include('accounts.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler404 = 'ecommerce.views.handler404'

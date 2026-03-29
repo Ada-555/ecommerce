@@ -46,6 +46,12 @@ class Order(models.Model):
         null=False, blank=False, default='')
     stripe_pid = models.CharField(
         max_length=254, null=False, blank=False, default='')
+    status = models.CharField(max_length=20, choices=[
+        ('pending', 'Pending'),
+        ('processing', 'Processing'),
+        ('shipped', 'Shipped'),
+        ('delivered', 'Delivered'),
+    ], default='pending')
 
     def _generate_order_number(self):
         """

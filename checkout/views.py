@@ -4,6 +4,8 @@ from django.shortcuts import (
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.conf import settings
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 
 from .forms import OrderForm
 from .models import Order, OrderLineItem
@@ -182,9 +184,31 @@ def checkout_success(request, order_number):
     if 'bag' in request.session:
         del request.session['bag']
 
+    # Send order confirmation email
+    send_order_email(order)
+
     template = 'checkout/checkout_success.html'
     context = {
         'order': order,
     }
 
     return render(request, template, context)
+
+
+def send_order_email(order):
+    """Send order confirmation email."""
+    send_mail(
+        subject=f'Order #{order.order_number} Confirmed — Orderimo',
+        message=f'Your order #{order.order_number} has been confirmed.',
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=[order.email],
+        html_message=render_to_string('emails/order_confirmation.html', {'order': order}),
+        fail_silently=True,
+    )
+
+
+def order_status(request, order_number):
+    """Order status page for tracking orders."""
+    order = get_object_or_404(Order, order_number=order_number)
+    context = {'order': order}
+    return render(request, 'checkout/order_status.html', context)
